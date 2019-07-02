@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.touchkiss.mybatis.base.mapper.auto.TUserAutoMapper">
+        <cache
+                eviction="FIFO"
+                flushInterval="60000"
+                readOnly="true"
+                size="512" />
+    <resultMap id="baseResultMap" type="com.touchkiss.mybatis.base.bean.TUser">
+        <id column="id" property="id"
+            jdbcType="BIGINT"/>
+        <result column="group_id" property="groupId"
+                jdbcType="BIGINT"/>
+        <result column="user_name" property="userName"
+                jdbcType="VARCHAR"/>
+        <result column="age" property="age"
+                jdbcType="INTEGER"/>
+        <result column="last_modify_time" property="lastModifyTime"
+                jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime"
+                jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select
+        <foreach collection="meta.fields" item="item" index="index" separator=",">
+            <if test="item.table.aliasTable != null and item.isFunction == false">${item.table.aliasTable}.
+            </if>${item.field} </foreach>
+        from
+        <if test="meta.from.getSchema() != null">$
+            {meta.from.getSchema()}.
+        </if>${meta.from.table}
+        <if test="meta.from.aliasTable != null">${meta.from.aliasTable}</if>
+        <if test="meta.joinTable != null">
+            <foreach collection="meta.joinTable" item="item" index="index" separator=" ">
+            ${item.join} join
+                <if test="item.getSchema() != null">${item.getSchema()}.
+                </if>${item.table} ${item.aliasTable}
+                <if test="item.conditions != null">on
+                    <foreach collection="item.conditions" item="condition" index="i">
+                        <if test="i &gt; 0">${item.sqlLogic}</if>
+                        <if test="condition.isRelateField == true">
+                        ${item.aliasTable}.${condition.joinField} ${condition.operator} ${condition.relateTableAlias}.${condition.relateField}
+                        </if>
+                        <if test="condition.isRelateField == false">
+                        ${item.aliasTable}.${condition.joinField} ${condition.operator} #{condition.relateValue}
+                        </if>
+                    </foreach>
+                </if>
+            </foreach>
+        </if>
+        <if test="meta.wheres != null">
+            WHERE
+            <foreach collection="meta.wheres" item="item" index="index" separator=" ">
+                <if test="item.prefix != null">${item.prefix}</if>
+                <if test="item.value != null">#{item.value}</if>
+                <if test="item.suffix != null">${item.suffix}</if>
+            </foreach>
+        </if>
+        <if test="meta.groupFields != null">
+            group by
+            <foreach collection="meta.groupFields" item="item" index="index" separator=",">
+                <if test="item.table.aliasTable != null and item.isFunction == false">${item.table.aliasTable}.
+                </if>${item.field}
+            </foreach>
+        </if>
+        <if test="meta.sortFields != null">
+            order by
+            <foreach collection="meta.sortFields" item="item" index="index" separator=",">
+                <if test="item.table.aliasTable != null and item.isFunction == false">${item.table.aliasTable}.
+                </if>${item.field} ${item.order}
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="whereSql">
+        <if test="wheres != null">
+            WHERE
+            <foreach collection="wheres" item="item" index="index" separator=" ">
+                <if test="item.prefix != null">${item.prefix}</if>
+                <if test="item.value != null">#{item.value}</if>
+                <if test="item.suffix != null">${item.suffix}</if>
+            </foreach>
+        </if>
+    </sql>
+
+    <select id="selectAll"
+            resultMap="baseResultMap"
+            useCache="true">
+        SELECT
+        <include refid="allFields"/>
+        FROM t_user
+    </select>
+
+    <select id="select" parameterType="com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata"
+            resultMap="baseResultMap" 
+            useCache="true">
+        <include refid="selectSql"/>
+    </select>
+    <select id="selectPage" parameterType="com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata"
+            resultMap="baseResultMap" 
+            useCache="true">
+        <include refid="selectSql"/>
+    </select>
+    <select id="selectRow" parameterType="com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata"
+            resultMap="baseResultMap" 
+            useCache="true">
+        <include refid="selectSql"/>
+    </select>
+
+    <select id="selectForMapAll"
+            resultType="map" 
+            useCache="true">
+        SELECT <include refid="allFields"/>
+        FROM t_user
+    </select>
+    <select id="selectForMap" parameterType="com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata"
+            resultType="map" 
+            useCache="true">
+        <include refid="selectSql"/>
+    </select>
+    <select id="selectForListMap" resultType="map"
+            parameterType="com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata" 
+            useCache="true">
+        <include refid="selectSql"/>
+    </select>
+    <select id="selectPageForListMap" resultType="map"
+            parameterType="com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata" 
+            useCache="true">
+        <include refid="selectSql"/>
+    </select>
+
+    <sql id="allFields">
+        id,group_id,user_name,age,last_modify_time,create_time
+    </sql>
+
+    <insert id="insert"
+            parameterType="com.touchkiss.mybatis.base.bean.TUser"
+            flushCache="true"
+            useGeneratedKeys="true"
+            keyColumn="id"
+            keyProperty="id">
+        insert into t_user(id
+        ,group_id
+        ,user_name
+        ,age
+        ,last_modify_time
+        ,create_time)
+        values(#{id
+        ,jdbcType=BIGINT},#{groupId
+        ,jdbcType=BIGINT},#{userName
+        ,jdbcType=VARCHAR},#{age
+        ,jdbcType=INTEGER},#{lastModifyTime
+        ,jdbcType=TIMESTAMP},#{createTime
+        ,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective"
+            parameterType="com.touchkiss.mybatis.base.bean.TUser"
+            flushCache="true"
+            useGeneratedKeys="true"
+            keyColumn="id"
+            keyProperty="id">
+        insert into t_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>            <if test="groupId != null">group_id,</if>            <if test="userName != null">user_name,</if>            <if test="age != null">age,</if>            <if test="lastModifyTime != null">last_modify_time,</if>            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id
+                ,jdbcType=BIGINT},
+            </if>            <if test="groupId != null">#{groupId
+                ,jdbcType=BIGINT},
+            </if>            <if test="userName != null">#{userName
+                ,jdbcType=VARCHAR},
+            </if>            <if test="age != null">#{age
+                ,jdbcType=INTEGER},
+            </if>            <if test="lastModifyTime != null">#{lastModifyTime
+                ,jdbcType=TIMESTAMP},
+            </if>            <if test="createTime != null">#{createTime
+                ,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="map"
+            flushCache="true">
+        update t_user set
+          id = #
+            {record.id,jdbcType=BIGINT}
+          ,group_id = #
+            {record.groupId,jdbcType=BIGINT}
+          ,user_name = #
+            {record.userName,jdbcType=VARCHAR}
+          ,age = #
+            {record.age,jdbcType=INTEGER}
+          ,last_modify_time = #
+            {record.lastModifyTime,jdbcType=TIMESTAMP}
+          ,create_time = #
+            {record.createTime,jdbcType=TIMESTAMP}
+        <include refid="whereSql"/>
+    </update>
+
+    <update id="updateSelective"
+            parameterType="map"
+            flushCache="true">
+        update t_user
+        <set>
+            <if test="record.id != null">
+            id = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.groupId != null">
+            group_id = #{record.groupId,jdbcType=BIGINT},
+            </if>
+            <if test="record.userName != null">
+            user_name = #{record.userName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.age != null">
+            age = #{record.age,jdbcType=INTEGER},
+            </if>
+            <if test="record.lastModifyTime != null">
+            last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.createTime != null">
+            create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <include refid="whereSql"/>
+    </update>
+
+    <delete id="delete" parameterType="map"
+            flushCache="true">
+        delete from t_user
+        <include refid="whereSql"/>
+    </delete>
+
+</mapper>
