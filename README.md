@@ -9,14 +9,13 @@ A toy project for mybatis generator and admin.实现部分django admin的功能�
 1. 删除/base/src/main/目录下的内容
 2. 配置/base/src/test/java/Generator.java
 
-`
- String root = "D:\\document\\java\\mybatis-demo\\base\\src\\main";
+`  
+
+        String root = "D:\\document\\java\\mybatis-demo\\base\\src\\main";
         //工程java根目录
         String rootPath = root + File.separator + "java";
         //工程resources根目录
-        String xmlPath = root + File.separator + "resources";
-
-        //初始化数据库连接
+        String xmlPath = root + File.separator + "resources";//初始化数据库连接
         JDBCConnectionConfiguration dataConfig = new JDBCConnectionConfiguration();
         dataConfig.setDriverClass("com.mysql.jdbc.Driver");
         dataConfig.setUrl("jdbc:mysql://127.0.0.1:3306/ai");
