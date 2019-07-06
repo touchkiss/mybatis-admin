@@ -41,6 +41,7 @@ public class SelectResolver {
 
         Map<String, Table> tableMap = this.initName(selector);
         this.selectMetadata.from = selector.getTable();
+        this.selectMetadata.distinct=selector.getDistinct();
         this.selectMetadata.fields = new ArrayList(selector.getFields());
         List<JoinTable> joinTables = selector.getJoinTables();
         Iterator var6;

@@ -10,6 +10,7 @@ import com.touchkiss.mybatis.sqlbuild.condition.original.PreparedCondition;
 import java.util.List;
 
 public class SelectMetadata {
+    protected Boolean distinct;
     protected List<Field> fields;
     protected Table from;
     protected List<JoinTable> joinTable;
@@ -18,6 +19,14 @@ public class SelectMetadata {
     protected List<GroupField> groupFields;
 
     public SelectMetadata() {
+    }
+
+    public Boolean getDistinct() {
+        return distinct;
+    }
+
+    public void setDistinct(Boolean distinct) {
+        this.distinct = distinct;
     }
 
     public List<Field> getFields() {

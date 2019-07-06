@@ -29,6 +29,7 @@
 
     <sql id="selectSql">
         select
+        <if test="meta.distinct != null and meta.distinct == true"> distinct </if>
         <foreach collection="meta.fields" item="item" index="index" separator=",">
             <if test="item.table.aliasTable != null and item.isFunction == false">${r'$'}{item.table.aliasTable}.
             </if><#if context.getUseMark()>

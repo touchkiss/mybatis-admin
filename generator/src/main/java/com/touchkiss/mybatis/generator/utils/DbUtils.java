@@ -287,7 +287,7 @@ public class DbUtils {
 
         @Override
         public String toString() {
-            return "DbUtils.MetaProperties(columnName=" + this.getColumnName() + ", columnType=" + this.getColumnType() + ", columnTypeName=" + this.getColumnTypeName() + ", columnDisplaySize=" + this.getColumnDisplaySize() + ", columnLabel=" + this.getColumnLabel() + ", precision=" + this.getPrecision() + ", scale=" + this.getScale() + ", tableName=" + this.getTableName() + ")";
+            return "DbUtils.MetaProperties(columnName=" + this.getColumnName() + ", columnType=" + this.getColumnType() + ", columnTypeName=" + this.getColumnTypeName() + ", columnDisplaySize=" + this.getColumnDisplaySize() + ", columnLabel=" + this.getColumnLabel() + ", precision=" + this.getPrecision() + ", scale=" + this.getScale() + ", name=" + this.getTableName() + ")";
         }
     }
 }
