@@ -2,6 +2,7 @@
 A toy project for mybatis generator and admin.实现部分django admin的功能，仅需少量代码即可对数据库元数据进行管理。
 
 使用Generator自动生成数据库表对应的bean、mapper、dao、service和mapper.xml文件，然后再向AdminConfig里面注册需要管理的类名，启动即可实现对数据库原始数据的管理。搜索条件支持空格（and）、or（或者）和括号进行高级搜索。
+即使你不使用该admin示例项目，也可以使用其中的mybatis代码生成工具，该工具能够生成selectById、selectAll、selectPage、select、selectForMap、selectForListMapo、selectPageForListMap、insert、insertSelective、update、updateSelective、delete等方法。
 
 演示地址  http://mybatis.touchkiss.com/admin
 
@@ -71,8 +72,10 @@ A toy project for mybatis generator and admin.实现部分django admin的功能�
 
 3. 配置/demo/src/main/java/com/touchkiss/mybatis/demo/Config，将需要管理的类加入
 
-`
- RegisterInfo userRegisterInfo = new RegisterInfo("users", "用户", "t_user", "用户信息", TUser.class, TUserServiceImpl.class);
+`  
+
+        RegisterInfo userRegisterInfo = new RegisterInfo("users", "用户", "t_user", "用户信息", TUser.class, TUserServiceImpl.class);
+        //自定义类中要显示的属性名
         userRegisterInfo.getBeanInfo().setBeanPropertyInfos(new BeanPropertyInfo[]{
                 new BeanPropertyInfo("id", "id", "java.lang.Integer"),
                 new BeanPropertyInfo("groupId", "组id", "java.lang.String"),
@@ -81,6 +84,7 @@ A toy project for mybatis generator and admin.实现部分django admin的功能�
                 new BeanPropertyInfo("lastModifyTime", "上次修改时间", "java.util.Date"),
                 new BeanPropertyInfo("createTime", "创建时间", "java.util.Date")
         });
+        //自定义显示要在列表页展示的列
         userRegisterInfo.getBeanInfo().showAllFields();
         registerInfoMap.put("user", userRegisterInfo);
         registerInfoMap.put("category", new RegisterInfo("categorys", "类目", "category", "分类信息", Category.class, CategoryServiceImpl.class));
@@ -88,6 +92,6 @@ A toy project for mybatis generator and admin.实现部分django admin的功能�
         RegisterInfo user2RegisgerInfo = new RegisterInfo("users", "用户", "user", "用户信息", User.class, UserServiceImpl.class);
         user2RegisgerInfo.getBeanInfo().setIdColumnName("uid");
         registerInfoMap.put("user2", user2RegisgerInfo);
-`
+                
 
 4. 修改application.properties运行DemoApplication.java即可使用。
