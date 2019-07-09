@@ -19,6 +19,7 @@
 
     <sql id="selectSql">
         select
+        <if test="meta.distinct != null and meta.distinct == true"> distinct </if>
         <foreach collection="meta.fields" item="item" index="index" separator=",">
             <if test="item.table.aliasTable != null and item.isFunction == false">${item.table.aliasTable}.
             </if>${item.field} </foreach>
@@ -140,11 +141,11 @@
         ,group_name
         ,last_modify_time
         ,create_time)
-        values(#{id
-        ,jdbcType=BIGINT},#{groupName
-        ,jdbcType=VARCHAR},#{lastModifyTime
-        ,jdbcType=TIMESTAMP},#{createTime
-        ,jdbcType=TIMESTAMP})
+        values(<if test="id != null">#{id
+        ,jdbcType=BIGINT}</if><if test="id == null">null</if>,<if test="groupName != null">#{groupName
+        ,jdbcType=VARCHAR}</if><if test="groupName == null">null</if>,<if test="lastModifyTime != null">#{lastModifyTime
+        ,jdbcType=TIMESTAMP}</if><if test="lastModifyTime == null">null</if>,<if test="createTime != null">#{createTime
+        ,jdbcType=TIMESTAMP}</if><if test="createTime == null">null</if>)
     </insert>
 
     <insert id="insertSelective"
@@ -173,14 +174,10 @@
     <update id="update" parameterType="map"
             flushCache="true">
         update user_group set
-          id = #
-            {record.id,jdbcType=BIGINT}
-          ,group_name = #
-            {record.groupName,jdbcType=VARCHAR}
-          ,last_modify_time = #
-            {record.lastModifyTime,jdbcType=TIMESTAMP}
-          ,create_time = #
-            {record.createTime,jdbcType=TIMESTAMP}
+          id = <if test="record.id != null">#{record.id,jdbcType=BIGINT}</if><if test="record.id == null">null</if>
+          ,group_name = <if test="record.groupName != null">#{record.groupName,jdbcType=VARCHAR}</if><if test="record.groupName == null">null</if>
+          ,last_modify_time = <if test="record.lastModifyTime != null">#{record.lastModifyTime,jdbcType=TIMESTAMP}</if><if test="record.lastModifyTime == null">null</if>
+          ,create_time = <if test="record.createTime != null">#{record.createTime,jdbcType=TIMESTAMP}</if><if test="record.createTime == null">null</if>
         <include refid="whereSql"/>
     </update>
 

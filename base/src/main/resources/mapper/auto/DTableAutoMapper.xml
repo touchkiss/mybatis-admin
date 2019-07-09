@@ -17,6 +17,7 @@
 
     <sql id="selectSql">
         select
+        <if test="meta.distinct != null and meta.distinct == true"> distinct </if>
         <foreach collection="meta.fields" item="item" index="index" separator=",">
             <if test="item.table.aliasTable != null and item.isFunction == false">${item.table.aliasTable}.
             </if>${item.field} </foreach>
@@ -137,10 +138,10 @@
         insert into d_table(id
         ,pid
         ,name)
-        values(#{id
-        ,jdbcType=INTEGER},#{pid
-        ,jdbcType=TIMESTAMP},#{name
-        ,jdbcType=VARCHAR})
+        values(<if test="id != null">#{id
+        ,jdbcType=INTEGER}</if><if test="id == null">null</if>,<if test="pid != null">#{pid
+        ,jdbcType=TIMESTAMP}</if><if test="pid == null">null</if>,<if test="name != null">#{name
+        ,jdbcType=VARCHAR}</if><if test="name == null">null</if>)
     </insert>
 
     <insert id="insertSelective"
@@ -167,12 +168,9 @@
     <update id="update" parameterType="map"
             flushCache="true">
         update d_table set
-          id = #
-            {record.id,jdbcType=INTEGER}
-          ,pid = #
-            {record.pid,jdbcType=TIMESTAMP}
-          ,name = #
-            {record.name,jdbcType=VARCHAR}
+          id = <if test="record.id != null">#{record.id,jdbcType=INTEGER}</if><if test="record.id == null">null</if>
+          ,pid = <if test="record.pid != null">#{record.pid,jdbcType=TIMESTAMP}</if><if test="record.pid == null">null</if>
+          ,name = <if test="record.name != null">#{record.name,jdbcType=VARCHAR}</if><if test="record.name == null">null</if>
         <include refid="whereSql"/>
     </update>
 
