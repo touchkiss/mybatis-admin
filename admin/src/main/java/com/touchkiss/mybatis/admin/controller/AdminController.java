@@ -1,17 +1,19 @@
 package com.touchkiss.mybatis.admin.controller;
 
 import com.github.pagehelper.Page;
+import com.touchkiss.mybatis.admin.bean.BeanPropertyInfo;
+import com.touchkiss.mybatis.admin.bean.ForeignKeyInfo;
+import com.touchkiss.mybatis.admin.bean.PageUtil;
 import com.touchkiss.mybatis.admin.bean.RegisterInfo;
+import com.touchkiss.mybatis.admin.config.AdminConfig;
+import com.touchkiss.mybatis.admin.exception.ErrorCompareValueException;
 import com.touchkiss.mybatis.admin.exception.ErrorParseSelectorException;
 import com.touchkiss.mybatis.admin.exception.NoSuchTableConfigException;
 import com.touchkiss.mybatis.admin.utils.SpringUtil;
-import com.touchkiss.mybatis.admin.bean.BeanPropertyInfo;
-import com.touchkiss.mybatis.admin.bean.PageUtil;
-import com.touchkiss.mybatis.admin.config.AdminConfig;
-import com.touchkiss.mybatis.admin.exception.ErrorCompareValueException;
 import com.touchkiss.mybatis.sqlbuild.selector.Selector;
 import com.touchkiss.mybatis.sqlbuild.service.BaseService;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,7 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author Touchkiss
@@ -48,7 +52,26 @@ public class AdminController extends JQueryDataTableController {
         modelAndView.addObject("name", name);
         modelAndView.addObject("menu", getMenu(httpSession));
         modelAndView.addObject("registerInfo", registerInfo);
+        generateSelectOptions(registerInfo, modelAndView);
         return modelAndView;
+    }
+
+    void generateSelectOptions(RegisterInfo registerInfo, ModelAndView modelAndView) {
+        if (MapUtils.isNotEmpty(registerInfo.getForeignKeyInfoMap())) {
+            Map<String, List> foreignInfoMap = new HashMap<>();
+            for (Map.Entry<String, ForeignKeyInfo> stringForeignKeyInfoEntry : registerInfo.getForeignKeyInfoMap().entrySet()) {
+                ForeignKeyInfo foreignKeyInfo = stringForeignKeyInfoEntry.getValue();
+                String configName = foreignKeyInfo.getName();
+                if (AdminConfig.registerInfoMap.containsKey(configName) && foreignKeyInfo.getSelector() != null) {
+                    BaseService baseService = (BaseService) SpringUtil.getBean(AdminConfig.registerInfoMap.get(configName).getServiceClazz());
+                    List list = baseService.select(foreignKeyInfo.getSelector());
+                    foreignInfoMap.put(stringForeignKeyInfoEntry.getKey(), getSelectOptionList(list, foreignKeyInfo));
+                } else if (CollectionUtils.isNotEmpty(foreignKeyInfo.getOptions())) {
+                    foreignInfoMap.put(stringForeignKeyInfoEntry.getKey(), foreignKeyInfo.getOptions());
+                }
+            }
+            modelAndView.addObject("foreignInfoMap", foreignInfoMap);
+        }
     }
 
     @PostMapping("{group}/{name}")
@@ -82,6 +105,7 @@ public class AdminController extends JQueryDataTableController {
         modelAndView.addObject("menu", getMenu(httpSession));
         modelAndView.addObject("registerInfo", registerInfo);
         modelAndView.addObject("actionPath", "/admin/" + group + "/" + name + "/add");
+        generateSelectOptions(registerInfo, modelAndView);
         return modelAndView;
     }
 
@@ -119,6 +143,7 @@ public class AdminController extends JQueryDataTableController {
         modelAndView.addObject("menu", getMenu(httpSession));
         modelAndView.addObject("registerInfo", registerInfo);
         modelAndView.addObject("processResult", processResult);
+        generateSelectOptions(registerInfo, modelAndView);
         return modelAndView;
     }
 
@@ -163,6 +188,7 @@ public class AdminController extends JQueryDataTableController {
         modelAndView.addObject("menu", getMenu(httpSession));
         modelAndView.addObject("registerInfo", registerInfo);
         modelAndView.addObject("actionPath", "/admin/" + group + "/" + name + "/" + id + "/update");
+        generateSelectOptions(registerInfo, modelAndView);
         return modelAndView;
     }
 
@@ -174,7 +200,7 @@ public class AdminController extends JQueryDataTableController {
         }
         Object obj = getParameter(registerInfo.getBeanClazz(), true);
         BaseService baseService = (BaseService) SpringUtil.getBean(registerInfo.getServiceClazz());
-        int success = baseService.updateSelectiveById(obj);
+        int success = baseService.updateById(obj);
         ProcessResult processResult = null;
         if (success == 1) {
             processResult = ProcessResult.processSuccess(registerInfo.getShowName() + "更新成功");
@@ -187,6 +213,7 @@ public class AdminController extends JQueryDataTableController {
         modelAndView.addObject("menu", getMenu(httpSession));
         modelAndView.addObject("registerInfo", registerInfo);
         modelAndView.addObject("processResult", processResult);
+        generateSelectOptions(registerInfo, modelAndView);
         return modelAndView;
     }
 
@@ -210,6 +237,7 @@ public class AdminController extends JQueryDataTableController {
         modelAndView.addObject("menu", getMenu(httpSession));
         modelAndView.addObject("registerInfo", registerInfo);
         modelAndView.addObject("processResult", processResult);
+        generateSelectOptions(registerInfo, modelAndView);
         return modelAndView;
     }
 
@@ -257,11 +285,12 @@ public class AdminController extends JQueryDataTableController {
         modelAndView.addObject("menu", getMenu(httpSession));
         modelAndView.addObject("registerInfo", registerInfo);
         modelAndView.addObject("processResult", processResult);
+        generateSelectOptions(registerInfo, modelAndView);
         return modelAndView;
     }
 
     public static void main(String[] args) {
         String[] split = "".split(",");
-        System.out.println(split.length);
+        System.out.println("skhdflkjasl_lskdjf_slkdfj_".replaceAll("_([a-z]{1,1})", "$1"));
     }
 }

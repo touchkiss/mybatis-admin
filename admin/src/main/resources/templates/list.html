@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css"/>
     <!-- Ionicons -->
     <link rel="stylesheet" href="/bower_components/Ionicons/css/ionicons.min.css"/>
+    <link rel="stylesheet" href="/bower_components/select2/dist/css/select2.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/css/AdminLTE.min.css"/>
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -95,17 +96,42 @@
                 <div class="box-body" id="searchBox">
                     <th:block
                             th:each="filter:${registerInfo.beanInfo.filterFields}">
+
                         <div class="input-group col-xs-3 col-md-3 form-group col-sm-6"
-                             th:unless="'java.lang.Boolean' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
+                             th:if="'java.lang.Boolean' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or ${foreignInfoMap != null and foreignInfoMap.containsKey(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}"
                              style="float: left;padding-right: 15px">
+                            <div class="input-group-addon"
+                                 th:text="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"></div>
+                            <th:block
+                                    th:if="${foreignInfoMap != null and foreignInfoMap.containsKey(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}">
+                                <select class="form-control select2" multiple="multiple"
+                                        th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'">
+                                    <option value="">全部</option>
+                                    <option th:each="option:${foreignInfoMap.get(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}"
+                                            th:value="${option.value}" th:text="${option.text}"></option>
+                                </select>
+                            </th:block>
+                            <th:block
+                                    th:unless="${foreignInfoMap !=null and foreignInfoMap.containsKey(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}">
+                                <select class="form-control"
+                                        th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'">
+                                    <option value="">全部</option>
+                                    <option value="1">true</option>
+                                    <option value="0">false</option>
+                                </select>
+                            </th:block>
+                        </div>
+                        <div class="input-group col-xs-3 col-md-3 form-group col-sm-6"
+                             th:unless="'java.lang.Boolean' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or ${foreignInfoMap != null and foreignInfoMap.containsKey(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}"
+                             style="float: left;padding-right: 15px">
+                            <div class="input-group-addon"
+                                 th:text="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"></div>
                             <div class="input-group-btn">
-                            <span type="button" class="btn btn-default"
-                                  th:text="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"></span>
                                 <th:block
                                         th:if="'java.lang.Integer' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or 'java.lang.Long' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or 'java.lang.Double' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or 'java.lang.Byte' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">
-                                        <span>=&nbsp;<span class="badge" style="display: none">0</span></span>
+                                        <span>=</span>
                                         <span class="sr-only"></span>
                                     </button>
                                     <ul class="dropdown-menu" style="width: 200px">
@@ -253,44 +279,43 @@
                                     </ul>
                                 </th:block>
                             </div>
-                            <input th:if="'java.util.Date' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
-                                   type="text"
-                                   th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                   th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'"
-                                   class="form-control datetimepicker"
-                                   aria-label="Text input with segmented button dropdown"/>
-                            <input th:if="'java.lang.String' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
-                                   type="text"
-                                   th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                   th:attr="name='_p_'+${filter}+'_cn',id='_p_'+${filter}+'_cn'"
-                                   class="form-control" aria-label="Text input with segmented button dropdown"/>
-                            <input th:unless="'java.lang.String' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or 'java.util.Date' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
-                                   type="text"
-                                   th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                   th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'"
-                                   class="form-control" aria-label="Text input with segmented button dropdown"/>
-                            <span class="input-group-btn clear" title="清空" disabled="true">
-                            <button class="btn btn-default" type="button">X</button>
-                        </span>
-                        </div>
-                        <div class="input-group col-xs-3 col-md-3 form-group col-sm-6"
-                             th:if="'java.lang.Boolean' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
-                             style="float: left;padding-right: 15px">
-                            <div class="input-group-btn">
-                                <span type="button" class="btn btn-default"
-                                      th:text="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"></span>
-                            </div>
-                            <select class="form-control" th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'">
-                                <option value="">全部</option>
-                                <option value="1">true</option>
-                                <option value="0">false</option>
-                            </select>
+                            <th:block
+                                    th:if="${foreignInfoMap !=null and foreignInfoMap.containsKey(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}">
+                                <select class="form-control"
+                                        th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'">
+                                    <option value="">全部</option>
+                                    <option th:each="option:${foreignInfoMap.get(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}"
+                                            th:value="${option.value}" th:text="${option.text}"></option>
+                                </select>
+                            </th:block>
+                            <th:block
+                                    th:unless="${foreignInfoMap !=null and foreignInfoMap.containsKey(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}">
+                                <input th:if="'java.util.Date' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
+                                       type="text"
+                                       th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                       th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'"
+                                       class="form-control datetimepicker"
+                                       aria-label="Text input with segmented button dropdown"/>
+                                <input th:if="'java.lang.String' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
+                                       type="text"
+                                       th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                       th:attr="name='_p_'+${filter}+'_cn',id='_p_'+${filter}+'_cn'"
+                                       class="form-control" aria-label="Text input with segmented button dropdown"/>
+                                <input th:unless="'java.lang.String' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or 'java.util.Date' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
+                                       type="text"
+                                       th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                       th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'"
+                                       class="form-control" aria-label="Text input with segmented button dropdown"/>
+                                <span class="input-group-btn clear" title="清空" disabled="true">
+                                    <button class="btn btn-default" type="button">X</button>
+                                </span>
+                            </th:block>
                         </div>
                     </th:block>
                     <div class="input-group col-xs-3 col-md-3 form-group col-sm-6"
                          style="float: left;padding-right: 15px">
+                        <div class="input-group-addon">全部字段</div>
                         <div class="input-group-btn">
-                            <span type="button" class="btn btn-default">全部字段</span>
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                 <span>包含</span>
@@ -345,8 +370,7 @@
                     </button>
                     &nbsp;&nbsp;&nbsp;
                     <a type="button" class="btn btn-primary"
-                       th:attr="href='/admin/'+${group}+'/'+${name}+'/add'"><i
-                            class="fa fa-plus"></i>&nbsp;添加</a>
+                       th:attr="href='/admin/'+${group}+'/'+${name}+'/add'"><i class="fa fa-plus"></i>&nbsp;添加</a>
                     &nbsp;&nbsp;&nbsp;
                     <button type="button" id="multiDelete" class="btn btn-danger"><i class="fa fa-trash"></i>&nbsp;批量删除
                     </button>
@@ -433,12 +457,13 @@
 <!-- AdminLTE App -->
 <script src="/js/adminlte.min.js"></script>
 <script src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script src="/bower_components/select2/dist/js/select2.full.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="/js/demo.js"></script>
 <script th:inline="javascript">
     var selectAll = false;
     $(function () {
-        var showFields = [[${registerInfo.beanInfo.showFields}]]
+        var showFields = [[${registerInfo.beanInfo.showFields}]];
         var cols = new Array();
         var selectAll = false;
         var idColumnName = [[${registerInfo.beanInfo.idColumnName}]];
@@ -469,7 +494,7 @@
             }
         });
         $(".input-group-btn.clear").click(function () {
-            $(this).prev("input").val("")
+            $(this).prev("input").val("");
         });
         //Date picker
         $('.datetimepicker').datetimepicker({
@@ -496,12 +521,22 @@
             if (id && id != '') {
                 getUrlParams(id);
             }
-        })
+        });
         $.each($("#searchBox select"), function (index, select) {
             var id = $(select).attr("id");
             var value = getQueryString(id);
-            $(select).val(value);
-        })
+            if (value && value.length > 0) {
+                var values = value.split("^");
+                if (values && values.length > 0) {
+                    $.each(values, function (i, va) {
+                        $(select).find("option[value=" + va + "]").attr("selected", true);
+                    });
+                }
+                // $(select).val(value);
+            }
+        });
+
+        $('.select2').select2();
 
         var table = $("#table").DataTable({
             "processing": true,
@@ -515,30 +550,42 @@
                     if (href.indexOf("?") > -1) {
                         href = href.substring(0, href.indexOf("?"));
                     }
-                    href += "?";
                     var n = 0;
                     $.each($("#searchBox input[type=text]"), function (index, input) {
                         var value = $(input).val();
                         if (!$(input).hasClass("datetimepicker")) {
-                            value = getQueryValue(value)
+                            value = getQueryValue(value);
                         }
-                        if (value && value.length > 0) {
-                            d[$(input).attr("id")] = value;
-                            if (n > 0) {
+                        if (value && value != '') {
+                            if (n == 0) {
+                                href += "?";
+                            } else if (n > 0) {
                                 href += "&";
                             }
+                            d[$(input).attr("id")] = value;
                             n++;
                             href += $(input).attr("id") + '=' + encodeURI(value);
                         }
                     })
                     $.each($("#searchBox select"), function (index, select) {
-                        var value = $(select).val();
-                        d[$(select).attr("id")] = value;
-                        if (n > 0) {
-                            href += "&";
+                        var selectedOptions = $(select).find("option:selected");
+                        var values = new Array();
+                        $.each(selectedOptions, function (i, option) {
+                            var ov = $(option).attr("value");
+                            if (ov && ov.length > 0) {
+                                values.push(ov);
+                            }
+                        });
+                        if (values.length > 0) {
+                            if (n == 0) {
+                                href += "?";
+                            } else if (n > 0) {
+                                href += "&";
+                            }
+                            d[$(select).attr("id")] = values.join("^");
+                            n++;
+                            href += $(select).attr("id") + '=' + values.join("%5e");
                         }
-                        n++;
-                        href += $(select).attr("id") + '=' + value;
                     });
                     window.history.pushState({}, 0, href);
                 }
@@ -594,10 +641,10 @@
                 originValue = originValue.replace("^", "%5e");
             }
             while (originValue != originValue.replace(/(\s+or\s+)/, "^")) {
-                originValue = originValue.replace(/(\s+or\s+)/, "^")
+                originValue = originValue.replace(/(\s+or\s+)/, "^");
             }
             while (originValue != originValue.replace(/(\s+)/, "+")) {
-                originValue = originValue.replace(/(\s+)/, "+")
+                originValue = originValue.replace(/(\s+)/, "+");
             }
             return originValue;
         }
@@ -639,7 +686,7 @@
     }
 
     function getUrlParams(paramname) {
-        var value = getQueryString(paramname)
+        var value = getQueryString(paramname);
         if (value && value.length > 0) {
             while (value.indexOf("+") > -1) {
                 value = value.replace("+", " ");

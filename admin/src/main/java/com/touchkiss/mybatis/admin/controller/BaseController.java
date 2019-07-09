@@ -1,12 +1,14 @@
 package com.touchkiss.mybatis.admin.controller;
 
 import com.google.gson.internal.Primitives;
+import com.touchkiss.mybatis.admin.bean.ForeignKeyInfo;
 import com.touchkiss.mybatis.admin.bean.Menu;
 import com.touchkiss.mybatis.admin.bean.RegisterInfo;
+import com.touchkiss.mybatis.admin.bean.SelectOption;
+import com.touchkiss.mybatis.admin.config.AdminConfig;
 import com.touchkiss.mybatis.admin.exception.ErrorCompareValueException;
 import com.touchkiss.mybatis.admin.exception.ErrorParseSelectorException;
 import com.touchkiss.mybatis.admin.exception.NoSuchTableConfigException;
-import com.touchkiss.mybatis.admin.config.AdminConfig;
 import com.touchkiss.mybatis.sqlbuild.condition.ManyCondition;
 import com.touchkiss.mybatis.sqlbuild.condition.SingleCondition;
 import com.touchkiss.mybatis.sqlbuild.keyword.CompareOperator;
@@ -308,7 +310,7 @@ public abstract class BaseController {
                     }
                     while (operatorStack.size() > 0) {
                         Character pop = operatorStack.pop();
-                        if (pop.equals('+')&&chars[i]=='^') {
+                        if (pop.equals('+') && chars[i] == '^') {
                             behindList.add(String.valueOf(pop));
                         } else {
                             operatorStack.push(pop);
@@ -488,7 +490,7 @@ public abstract class BaseController {
         public static ProcessResult processSuccess(String message) {
             ProcessResult processResult = new ProcessResult();
             processResult.status = PROCESS_SUCCEEE;
-            processResult.message=message;
+            processResult.message = message;
             return processResult;
         }
 
@@ -504,5 +506,26 @@ public abstract class BaseController {
             processResult.message = message;
             return processResult;
         }
+    }
+
+    protected List<SelectOption> getSelectOptionList(List list, ForeignKeyInfo foreignKeyInfo) {
+        List<SelectOption> result = new ArrayList<>(list.size());
+        try {
+            Field idField = list.get(0).getClass().getDeclaredField(foreignKeyInfo.getKeyName());
+            Field valueField = list.get(0).getClass().getDeclaredField(foreignKeyInfo.getValueName());
+            idField.setAccessible(true);
+            valueField.setAccessible(true);
+            for (Object o : list) {
+                SelectOption selectOption = new SelectOption();
+                selectOption.setValue(String.valueOf(idField.get(o)));
+                selectOption.setText(String.valueOf(valueField.get(o)));
+                result.add(selectOption);
+            }
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
