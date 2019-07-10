@@ -74,24 +74,45 @@ A toy project for mybatis generator and admin.实现部分django admin的功能�
 
 `  
 
+        //自定义属性名
         RegisterInfo userRegisterInfo = new RegisterInfo("users", "用户", "t_user", "用户信息", TUser.class, TUserServiceImpl.class);
-        //自定义类中要显示的属性名
-        userRegisterInfo.getBeanInfo().setBeanPropertyInfos(new BeanPropertyInfo[]{
-                new BeanPropertyInfo("id", "id", "java.lang.Integer"),
-                new BeanPropertyInfo("groupId", "组id", "java.lang.String"),
-                new BeanPropertyInfo("userName", "姓名", "java.lang.String"),
-                new BeanPropertyInfo("age", "年龄", "java.lang.Integer"),
-                new BeanPropertyInfo("lastModifyTime", "上次修改时间", "java.util.Date"),
-                new BeanPropertyInfo("createTime", "创建时间", "java.util.Date")
-        });
-        //自定义显示要在列表页展示的列
-        userRegisterInfo.getBeanInfo().showAllFields();
-        registerInfoMap.put("user", userRegisterInfo);
-        registerInfoMap.put("category", new RegisterInfo("categorys", "类目", "category", "分类信息", Category.class, CategoryServiceImpl.class));
-        registerInfoMap.put("userGroup", new RegisterInfo("users", "用户", "user_group", "用户组信息", UserGroup.class, UserGroupServiceImpl.class));
-        RegisterInfo user2RegisgerInfo = new RegisterInfo("users", "用户", "user", "用户信息", User.class, UserServiceImpl.class);
-        user2RegisgerInfo.getBeanInfo().setIdColumnName("uid");
-        registerInfoMap.put("user2", user2RegisgerInfo);
+         userRegisterInfo.getBeanInfo().setBeanPropertyInfos(new BeanPropertyInfo[]{
+                 new BeanPropertyInfo("id", "id", "java.lang.Integer"),
+                 new BeanPropertyInfo("groupId", "组id", "java.lang.String"),
+                 new BeanPropertyInfo("userName", "姓名", "java.lang.String"),
+                 new BeanPropertyInfo("age", "年龄", "java.lang.Integer"),
+                 new BeanPropertyInfo("lastModifyTime", "上次修改时间", "java.util.Date"),
+                 new BeanPropertyInfo("createTime", "创建时间", "java.util.Date")
+         });
+         //显示所有列
+         userRegisterInfo.getBeanInfo().showAllFields();
+         registerInfoMap.put("user", userRegisterInfo);
+         RegisterInfo catetoryInfo = new RegisterInfo("categorys", "类目", "category", "分类信息", Category.class, CategoryServiceImpl.class);
+         //自定义外键属性
+         ForeignKeyInfo parentidForkeyInfo = new ForeignKeyInfo();
+         parentidForkeyInfo.setName("category");
+         parentidForkeyInfo.setKeyName("id");
+         parentidForkeyInfo.setValueName("name");
+         //为外键属性添加selector
+         Selector selector = new Selector().addField(CategoryAutoDao.id, CategoryAutoDao.name).distinct(true);
+         parentidForkeyInfo.setSelector(selector);
+         //设置外键是否可编辑添加
+         parentidForkeyInfo.setEditable(true);
+         catetoryInfo.getForeignKeyInfoMap().put("parentid", parentidForkeyInfo);
+         ForeignKeyInfo topSelectOptions = new ForeignKeyInfo();
+         topSelectOptions.setName("top");
+         //添加不可编辑外键属性
+         topSelectOptions.setOptions(new ArrayList() {{
+             add(new SelectOption("1", "是"));
+             add(new SelectOption("0", "否"));
+         }});
+         topSelectOptions.setEditable(false);
+         catetoryInfo.getForeignKeyInfoMap().put("top", topSelectOptions);
+         registerInfoMap.put("category", catetoryInfo);
+         registerInfoMap.put("userGroup", new RegisterInfo("users", "用户", "user_group", "用户组信息", UserGroup.class, UserGroupServiceImpl.class));
+         RegisterInfo user2RegisgerInfo = new RegisterInfo("users", "用户", "user", "用户信息", User.class, UserServiceImpl.class);
+         user2RegisgerInfo.getBeanInfo().setIdColumnName("uid");
+         registerInfoMap.put("user2", user2RegisgerInfo);
                 
 
 4. 修改application.properties运行DemoApplication.java即可使用。
