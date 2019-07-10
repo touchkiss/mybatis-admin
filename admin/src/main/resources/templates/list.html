@@ -47,6 +47,9 @@
         ul.dropdown-menu li .input-group span.input-group-addon {
             width: 40px;
         }
+        table tbody tr td .fa{
+            font-size: 20px;
+        }
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini fixed">
@@ -462,156 +465,158 @@
 <script src="/js/demo.js"></script>
 <script th:inline="javascript">
     var selectAll = false;
-    $(function () {
-        var showFields = [[${registerInfo.beanInfo.showFields}]];
-        var cols = new Array();
-        var selectAll = false;
-        var idColumnName = [[${registerInfo.beanInfo.idColumnName}]];
-        cols.push({
-            "data": null,
-            "defaultContent": "",
-            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                var checkbox = $("<input/>").attr("type", "checkbox").css("display", "block").attr("data-id", sData[idColumnName]);
-                $(nTd).empty().append(checkbox);
-            }
-        });
-        $.each(showFields, function (i, field) {
-            cols.push({
-                "data": field,
-                "defaultContent": ""
-            });
-        });
-        cols.push({
-            "data": null,
-            "defaultContent": "",
-            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                $(nTd).empty();
-                var updateBtn = $("<a></a>").attr("href", "/admin/" + [[${group}]] + "/" + [[${name}]] + "/" + sData[idColumnName] + "/update").addClass("fa").addClass("fa-refresh").attr("title", "更新").appendTo($(nTd));
-                $(nTd).append("&nbsp;").append("&nbsp;");
-                var deleteBtn = $("<a></a>").attr("href", "#").click(function () {
-                    deleteItem("/admin/" + [[${group}]] + "/" + [[${name}]] + "/" + sData[idColumnName] + "/delete");
-                }).addClass("fa").addClass("fa-trash").attr("title", "删除").appendTo($(nTd));
-            }
-        });
-        $(".input-group-btn.clear").click(function () {
-            $(this).prev("input").val("");
-        });
-        //Date picker
-        $('.datetimepicker').datetimepicker({
-            autoclose: true,
-            timePicker: true,
-            minuteStep: 5,
-            format: 'yyyy/mm/dd hh:ii:ss',
-            todayBtn: 'linked',
-            todayHighlight: true,
-            language: 'zh-CN'
-        })
-        $("#addItem").click(function () {
-            window.location.href = '/admin/' + [[${group}]] + '/' + [[${name}]] + '/add';
-        });
-
-        setMenuActive();
-
-        if ($("#alertTip").length > 0) {
-            window.history.pushState({}, 0, '/admin/' + [[${group}]] + '/' + [[${name}]]);
+    // $(function () {
+    var showFields = [[${registerInfo.beanInfo.showFields}]];
+    var cols = new Array();
+    var selectAll = false;
+    var idColumnName = [[${registerInfo.beanInfo.idColumnName}]];
+    cols.push({
+        "data": null,
+        "defaultContent": "",
+        "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+            var checkbox = $("<input/>").attr("type", "checkbox").css("display", "block").attr("data-id", sData[idColumnName]);
+            $(nTd).empty().append(checkbox);
         }
-
-        $.each($("#searchBox input[type=text]"), function (index, input) {
-            var id = $(input).attr("id");
-            if (id && id != '') {
-                getUrlParams(id);
-            }
-        });
-        $.each($("#searchBox select"), function (index, select) {
-            var id = $(select).attr("id");
-            var value = getQueryString(id);
-            if (value && value.length > 0) {
-                var values = value.split("^");
-                if (values && values.length > 0) {
-                    $.each(values, function (i, va) {
-                        $(select).find("option[value=" + va + "]").attr("selected", true);
-                    });
-                }
-                // $(select).val(value);
-            }
-        });
-
-        $('.select2').select2();
-
-        var table = $("#table").DataTable({
-            "processing": true,
-            "serverSide": true,
-            "searching": false,
-            "ajax": {
-                "url": "/admin/" + [[${group}]] + "/" + [[${name}]],
-                "type": "post",
-                "data": function (d) {
-                    href = window.location.href;
-                    if (href.indexOf("?") > -1) {
-                        href = href.substring(0, href.indexOf("?"));
-                    }
-                    var n = 0;
-                    $.each($("#searchBox input[type=text]"), function (index, input) {
-                        var value = $(input).val();
-                        if (!$(input).hasClass("datetimepicker")) {
-                            value = getQueryValue(value);
-                        }
-                        if (value && value != '') {
-                            if (n == 0) {
-                                href += "?";
-                            } else if (n > 0) {
-                                href += "&";
-                            }
-                            d[$(input).attr("id")] = value;
-                            n++;
-                            href += $(input).attr("id") + '=' + encodeURI(value);
-                        }
-                    })
-                    $.each($("#searchBox select"), function (index, select) {
-                        var selectedOptions = $(select).find("option:selected");
-                        var values = new Array();
-                        $.each(selectedOptions, function (i, option) {
-                            var ov = $(option).attr("value");
-                            if (ov && ov.length > 0) {
-                                values.push(ov);
-                            }
-                        });
-                        if (values.length > 0) {
-                            if (n == 0) {
-                                href += "?";
-                            } else if (n > 0) {
-                                href += "&";
-                            }
-                            d[$(select).attr("id")] = values.join("^");
-                            n++;
-                            href += $(select).attr("id") + '=' + values.join("%5e");
-                        }
-                    });
-                    window.history.pushState({}, 0, href);
-                }
-            },
-            "columns": cols,
-            "aoColumnDefs": [
-                {
-                    "bSortable": false,
-                    "aTargets": [0, cols.length - 1]
-                }
-            ],
-            "language": {
-                "url": "/js/Chinese.json"
-            }
-        });
-
-        $("#query").click(function () {
-            $("#table").DataTable().ajax.reload();
-        });
-        $("#checkAll").change(function () {
-            toggleSelectAll();
-        });
-        $("#multiDelete").click(function () {
-            multiDelete();
+    });
+    $.each(showFields, function (i, field) {
+        cols.push({
+            "data": field,
+            "defaultContent": ""
         });
     });
+    cols.push({
+        "data": null,
+        "defaultContent": "",
+        "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+            $(nTd).empty();
+            var updateBtn = $("<a></a>").attr("href", "/admin/" + [[${group}]] + "/" + [[${name}]] + "/" + sData[idColumnName] + "/update").addClass("fa").addClass("fa-pencil").attr("title", "编辑").appendTo($(nTd));
+            $(nTd).append("&nbsp;").append("&nbsp;");
+            var deleteBtn = $("<a></a>").attr("href", "#").click(function () {
+                deleteItem("/admin/" + [[${group}]] + "/" + [[${name}]] + "/" + sData[idColumnName] + "/delete");
+            }).addClass("fa").addClass("fa-trash").attr("title", "删除").appendTo($(nTd));
+        }
+    });
+    $(".input-group-btn.clear").click(function () {
+        $(this).prev("input").val("");
+    });
+    //Date picker
+    $('.datetimepicker').datetimepicker({
+        autoclose: true,
+        timePicker: true,
+        minuteStep: 5,
+        format: 'yyyy/mm/dd hh:ii:ss',
+        todayBtn: 'linked',
+        todayHighlight: true,
+        language: 'zh-CN'
+    })
+    $("#addItem").click(function () {
+        window.location.href = '/admin/' + [[${group}]] + '/' + [[${name}]] + '/add';
+    });
+
+    setMenuActive();
+
+    if ($("#alertTip").length > 0) {
+        window.history.pushState({}, 0, '/admin/' + [[${group}]] + '/' + [[${name}]]);
+    }
+
+    $.each($("#searchBox input[type=text]"), function (index, input) {
+        var id = $(input).attr("id");
+        if (id && id != '') {
+            getUrlParams(id);
+        }
+    });
+    $.each($("#searchBox select"), function (index, select) {
+        var id = $(select).attr("id");
+        var value = getQueryString(id);
+        if (value && value.length > 0) {
+            var values = value.split("^");
+            if (values && values.length > 0) {
+                $.each(values, function (i, va) {
+                    $(select).find("option[value=" + va + "]").attr("selected", true);
+                });
+            }
+            // $(select).val(value);
+        }
+    });
+
+    $('.select2').select2();
+
+    var table = $("#table").DataTable({
+        "processing": true,
+        "serverSide": true,
+        "searching": false,
+        "ajax": {
+            "url": "/admin/" + [[${group}]] + "/" + [[${name}]],
+            "type": "post",
+            "data": function (d) {
+                href = window.location.href;
+                if (href.indexOf("?") > -1) {
+                    href = href.substring(0, href.indexOf("?"));
+                }
+                var n = 0;
+                $.each($("#searchBox input[type=text]"), function (index, input) {
+                    var value = $(input).val();
+                    if (!$(input).hasClass("datetimepicker")) {
+                        value = getQueryValue(value);
+                    }
+                    if (value && value != '') {
+                        if (n == 0) {
+                            href += "?";
+                        } else if (n > 0) {
+                            href += "&";
+                        }
+                        d[$(input).attr("id")] = value;
+                        n++;
+                        href += $(input).attr("id") + '=' + encodeURI(value);
+                    }
+                })
+                $.each($("#searchBox select"), function (index, select) {
+                    var selectedOptions = $(select).find("option:selected");
+                    var values = new Array();
+                    $.each(selectedOptions, function (i, option) {
+                        var ov = $(option).attr("value");
+                        if (ov && ov.length > 0) {
+                            values.push(ov);
+                        }
+                    });
+                    if (values.length > 0) {
+                        if (n == 0) {
+                            href += "?";
+                        } else if (n > 0) {
+                            href += "&";
+                        }
+                        d[$(select).attr("id")] = values.join("^");
+                        n++;
+                        href += $(select).attr("id") + '=' + values.join("%5e");
+                    }
+                });
+                window.history.pushState({}, 0, href);
+            }
+        },
+        "columns": cols,
+        "aoColumnDefs": [
+            {
+                "bSortable": false,
+                "aTargets": [0, cols.length - 1]
+            }
+        ],
+        "language": {
+            "url": "/js/Chinese.json"
+        },
+        "pageLength": 10
+    });
+
+    $("#query").click(function () {
+        $("#table").DataTable().ajax.reload();
+    });
+    $("#checkAll").change(function () {
+        toggleSelectAll();
+    });
+    $("#multiDelete").click(function () {
+        multiDelete();
+    });
+
+    // });
 
     function deleteItem(url) {
         if (confirm("真的要删除吗？")) {
