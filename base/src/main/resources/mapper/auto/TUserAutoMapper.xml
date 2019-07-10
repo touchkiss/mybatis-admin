@@ -23,6 +23,7 @@
 
     <sql id="selectSql">
         select
+        <if test="meta.distinct != null and meta.distinct == true"> distinct </if>
         <foreach collection="meta.fields" item="item" index="index" separator=",">
             <if test="item.table.aliasTable != null and item.isFunction == false">${item.table.aliasTable}.
             </if>${item.field} </foreach>
@@ -146,13 +147,13 @@
         ,age
         ,last_modify_time
         ,create_time)
-        values(#{id
-        ,jdbcType=BIGINT},#{groupId
-        ,jdbcType=BIGINT},#{userName
-        ,jdbcType=VARCHAR},#{age
-        ,jdbcType=INTEGER},#{lastModifyTime
-        ,jdbcType=TIMESTAMP},#{createTime
-        ,jdbcType=TIMESTAMP})
+        values(<if test="id != null">#{id
+        ,jdbcType=BIGINT}</if><if test="id == null">null</if>,<if test="groupId != null">#{groupId
+        ,jdbcType=BIGINT}</if><if test="groupId == null">null</if>,<if test="userName != null">#{userName
+        ,jdbcType=VARCHAR}</if><if test="userName == null">null</if>,<if test="age != null">#{age
+        ,jdbcType=INTEGER}</if><if test="age == null">null</if>,<if test="lastModifyTime != null">#{lastModifyTime
+        ,jdbcType=TIMESTAMP}</if><if test="lastModifyTime == null">null</if>,<if test="createTime != null">#{createTime
+        ,jdbcType=TIMESTAMP}</if><if test="createTime == null">null</if>)
     </insert>
 
     <insert id="insertSelective"
@@ -185,18 +186,12 @@
     <update id="update" parameterType="map"
             flushCache="true">
         update t_user set
-          id = #
-            {record.id,jdbcType=BIGINT}
-          ,group_id = #
-            {record.groupId,jdbcType=BIGINT}
-          ,user_name = #
-            {record.userName,jdbcType=VARCHAR}
-          ,age = #
-            {record.age,jdbcType=INTEGER}
-          ,last_modify_time = #
-            {record.lastModifyTime,jdbcType=TIMESTAMP}
-          ,create_time = #
-            {record.createTime,jdbcType=TIMESTAMP}
+          id = <if test="record.id != null">#{record.id,jdbcType=BIGINT}</if><if test="record.id == null">null</if>
+          ,group_id = <if test="record.groupId != null">#{record.groupId,jdbcType=BIGINT}</if><if test="record.groupId == null">null</if>
+          ,user_name = <if test="record.userName != null">#{record.userName,jdbcType=VARCHAR}</if><if test="record.userName == null">null</if>
+          ,age = <if test="record.age != null">#{record.age,jdbcType=INTEGER}</if><if test="record.age == null">null</if>
+          ,last_modify_time = <if test="record.lastModifyTime != null">#{record.lastModifyTime,jdbcType=TIMESTAMP}</if><if test="record.lastModifyTime == null">null</if>
+          ,create_time = <if test="record.createTime != null">#{record.createTime,jdbcType=TIMESTAMP}</if><if test="record.createTime == null">null</if>
         <include refid="whereSql"/>
     </update>
 

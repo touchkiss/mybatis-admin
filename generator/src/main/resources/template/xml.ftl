@@ -29,6 +29,7 @@
 
     <sql id="selectSql">
         select
+        <if test="meta.distinct != null and meta.distinct == true"> distinct </if>
         <foreach collection="meta.fields" item="item" index="index" separator=",">
             <if test="item.table.aliasTable != null and item.isFunction == false">${r'$'}{item.table.aliasTable}.
             </if><#if context.getUseMark()>
@@ -164,8 +165,8 @@
         "</#if>${tableConfig.getSchema()}<#if context.getUseMark()>"</#if>.</#if><#if context.getUseMark()>
         "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if>(<#list columns as column><#if column_index gt 0>
         ,</#if><#if context.getUseMark()>"</#if>${column.getColumnName()}<#if context.getUseMark()>"</#if></#list>)
-        values(<#list columns as column><#if column_index gt 0>,</#if>${r'#'}{${column.getJavaProperty()}
-        ,jdbcType=${column.getJdbcType()}}</#list>)
+        values(<#list columns as column><#if column_index gt 0>,</#if><if test="${column.getJavaProperty()} != null">${r'#'}{${column.getJavaProperty()}
+        ,jdbcType=${column.getJdbcType()}}</if><if test="${column.getJavaProperty()} == null">null</if></#list>)
     </insert>
 
     <insert id="insertSelective"
@@ -202,8 +203,7 @@
         <#assign update_colunm_index = 0/>
         <#list columns as column>
           <#if update_colunm_index gt 0>,</#if><#if context.getUseMark()>
-            "</#if>${column.getColumnName()}<#if context.getUseMark()>"</#if> = ${r'#'}
-            {record.${column.getJavaProperty()},jdbcType=${column.getJdbcType()}}
+            "</#if>${column.getColumnName()}<#if context.getUseMark()>"</#if> = <if test="record.${column.getJavaProperty()} != null">${r'#'}{record.${column.getJavaProperty()},jdbcType=${column.getJdbcType()}}</if><if test="record.${column.getJavaProperty()} == null">null</if>
           <#assign update_colunm_index = update_colunm_index+1/>
         </#list>
         <include refid="whereSql"/>

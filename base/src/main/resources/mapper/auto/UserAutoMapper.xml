@@ -17,6 +17,7 @@
 
     <sql id="selectSql">
         select
+        <if test="meta.distinct != null and meta.distinct == true"> distinct </if>
         <foreach collection="meta.fields" item="item" index="index" separator=",">
             <if test="item.table.aliasTable != null and item.isFunction == false">${item.table.aliasTable}.
             </if>${item.field} </foreach>
@@ -137,10 +138,10 @@
         insert into user(uid
         ,username
         ,password)
-        values(#{uid
-        ,jdbcType=INTEGER},#{username
-        ,jdbcType=VARCHAR},#{password
-        ,jdbcType=VARCHAR})
+        values(<if test="uid != null">#{uid
+        ,jdbcType=INTEGER}</if><if test="uid == null">null</if>,<if test="username != null">#{username
+        ,jdbcType=VARCHAR}</if><if test="username == null">null</if>,<if test="password != null">#{password
+        ,jdbcType=VARCHAR}</if><if test="password == null">null</if>)
     </insert>
 
     <insert id="insertSelective"
@@ -167,12 +168,9 @@
     <update id="update" parameterType="map"
             flushCache="true">
         update user set
-          uid = #
-            {record.uid,jdbcType=INTEGER}
-          ,username = #
-            {record.username,jdbcType=VARCHAR}
-          ,password = #
-            {record.password,jdbcType=VARCHAR}
+          uid = <if test="record.uid != null">#{record.uid,jdbcType=INTEGER}</if><if test="record.uid == null">null</if>
+          ,username = <if test="record.username != null">#{record.username,jdbcType=VARCHAR}</if><if test="record.username == null">null</if>
+          ,password = <if test="record.password != null">#{record.password,jdbcType=VARCHAR}</if><if test="record.password == null">null</if>
         <include refid="whereSql"/>
     </update>
 

@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css"/>
     <!-- Ionicons -->
     <link rel="stylesheet" href="/bower_components/Ionicons/css/ionicons.min.css"/>
+    <link rel="stylesheet" href="/bower_components/select2/dist/css/select2.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/css/AdminLTE.min.css"/>
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -81,21 +82,38 @@
                 <form role="form" th:id="mainForm" th:action="${actionPath}" method="post">
                     <div class="box-body">
                         <th:block th:each="column:${registerInfo.beanInfo.beanPropertyInfos}">
-                            <div th:unless="'java.lang.Double' eq ${column.propertyType}" class="form-group">
+                            <div th:unless="'java.lang.Boolean' eq ${column.propertyType}" class="form-group">
                                 <label th:attr="for=${column.propertyName}"
                                        th:text="${column.propertyShowName}"></label>
-                                <input th:if="'java.lang.String' eq ${column.propertyType}" type="text"
-                                       class="form-control" th:id="${column.propertyName}"
-                                       th:name="${column.propertyName}" th:value="${column.value}"
-                                       th:placeholder="${column.propertyShowName}">
-                                <input th:if="'java.util.Date' eq ${column.propertyType}" type="text"
-                                       class="form-control datetimepicker" th:id="${column.propertyName}"
-                                       th:name="${column.propertyName}" th:value="${column.value}"
-                                       th:placeholder="${column.propertyShowName}">
-                                <input th:if="'java.lang.Integer' eq ${column.propertyType} or 'java.lang.Long' eq ${column.propertyType} or 'java.lang.Double' eq ${column.propertyType} or 'java.lang.Byte' eq ${column.propertyType} or 'java.lang.Short' eq ${column.propertyType}"
-                                       type="number" class="form-control" th:id="${column.propertyName}"
-                                       th:name="${column.propertyName}" th:value="${column.value}"
-                                       th:placeholder="${column.propertyShowName}">
+                                <th:block
+                                        th:if="${foreignInfoMap != null and foreignInfoMap.containsKey(column.propertyName)}">
+                                    <select class="form-control select2"
+                                            th:name="${column.propertyName}">
+                                        <option value="">请选择</option>
+                                        <th:block th:each="option:${foreignInfoMap.get(column.propertyName)}">
+                                            <option th:if="${column.value} eq ${option.value}"
+                                                    selected="selected"
+                                                    th:value="${option.value}" th:text="${option.text}"></option>
+                                            <option th:unless="${column.value} eq ${option.value}"
+                                                    th:value="${option.value}" th:text="${option.text}"></option>
+                                        </th:block>
+                                    </select>
+                                </th:block>
+                                <th:block
+                                        th:unless="${foreignInfoMap != null and foreignInfoMap.containsKey(column.propertyName)}">
+                                    <input th:if="'java.lang.String' eq ${column.propertyType}" type="text"
+                                           class="form-control" th:id="${column.propertyName}"
+                                           th:name="${column.propertyName}" th:value="${column.value}"
+                                           th:placeholder="${column.propertyShowName}">
+                                    <input th:if="'java.util.Date' eq ${column.propertyType}" type="text"
+                                           class="form-control datetimepicker" th:id="${column.propertyName}"
+                                           th:name="${column.propertyName}" th:value="${column.value}"
+                                           th:placeholder="${column.propertyShowName}">
+                                    <input th:if="'java.lang.Integer' eq ${column.propertyType} or 'java.lang.Long' eq ${column.propertyType} or 'java.lang.Double' eq ${column.propertyType} or 'java.lang.Byte' eq ${column.propertyType} or 'java.lang.Short' eq ${column.propertyType}"
+                                           type="number" class="form-control" th:id="${column.propertyName}"
+                                           th:name="${column.propertyName}" th:value="${column.value}"
+                                           th:placeholder="${column.propertyShowName}">
+                                </th:block>
                             </div>
                             <label th:if="'java.lang.Boolean' eq ${column.propertyType}">
                                 <input type="checkbox" th:attr="data-id=${column.propertyName}"
@@ -154,7 +172,7 @@
 <script src="/bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="/js/adminlte.min.js"></script>
-<script src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script src="/bower_components/select2/dist/js/select2.full.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="/js/demo.js"></script>
 <script th:inline="javascript">
@@ -173,6 +191,7 @@
             todayHighlight: true,
             language: 'zh-CN'
         });
+        $('.select2').select2();
     });
 
     function checkSubmit() {

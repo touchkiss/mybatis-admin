@@ -145,6 +145,6 @@ public class Table {
 
     @Override
     public String toString() {
-        return "Table(tableName=" + this.getTableName() + ", tableType=" + this.getTableType() + ", remarks=" + this.getRemarks() + ", imports=" + Arrays.deepToString(this.getImports()) + ", javaForeignTypeImports=" + Arrays.deepToString(this.getJavaForeignTypeImports()) + ", foreignTypeImportsAll=" + Arrays.deepToString(this.getForeignTypeImportsAll()) + ")";
+        return "Table(name=" + this.getTableName() + ", tableType=" + this.getTableType() + ", remarks=" + this.getRemarks() + ", imports=" + Arrays.deepToString(this.getImports()) + ", javaForeignTypeImports=" + Arrays.deepToString(this.getJavaForeignTypeImports()) + ", foreignTypeImportsAll=" + Arrays.deepToString(this.getForeignTypeImportsAll()) + ")";
     }
 }

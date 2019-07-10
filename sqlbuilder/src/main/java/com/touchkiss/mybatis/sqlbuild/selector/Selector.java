@@ -24,6 +24,7 @@ import java.util.Set;
 public final class Selector<TABLE> {
     private static final int initSpace = 5;
     private final Table table = new Table();
+    private Boolean distinct = null;
     private final Set<Field> fields = new LinkedHashSet(5);
     private final List<Field> joinFields = new ArrayList(5);
     private final ManyCondition wheres = new ManyCondition();
@@ -43,8 +44,13 @@ public final class Selector<TABLE> {
         return this;
     }
 
+    public Selector<TABLE> distinct(Boolean distinct) {
+        this.distinct = distinct;
+        return this;
+    }
+
     public Selector<TABLE> addField(QColumn... fields) {
-        for(int i = 0; i < fields.length; ++i) {
+        for (int i = 0; i < fields.length; ++i) {
             Field field = new Field(this.table, fields[i].getColumnName());
             this.fields.add(field);
         }
@@ -74,7 +80,7 @@ public final class Selector<TABLE> {
     }
 
     public Selector<TABLE> where(ICondition... condition) {
-        for(int i = 0; i < condition.length; ++i) {
+        for (int i = 0; i < condition.length; ++i) {
             this.wheres.add(condition[i]);
         }
 
@@ -126,6 +132,10 @@ public final class Selector<TABLE> {
 
     protected Table getTable() {
         return this.table != null && !StringUtils.isBlank(this.table.getTable()) ? this.table : null;
+    }
+
+    public Boolean getDistinct() {
+        return distinct;
     }
 
     protected List<Field> getJoinFields() {
@@ -194,7 +204,7 @@ public final class Selector<TABLE> {
         }
 
         public Selector<TABLE>.JoinBuilder<JoinQTable> addField(QColumn... fields) {
-            for(int i = 0; i < fields.length; ++i) {
+            for (int i = 0; i < fields.length; ++i) {
                 Field field = new Field(fields[i].getColumnName());
                 this.joinFields.add(field);
             }
@@ -229,8 +239,8 @@ public final class Selector<TABLE> {
                 JoinCondition[] joinConditions = new JoinCondition[this.ons.size()];
 
                 int i;
-                for(i = 0; i < this.ons.size(); ++i) {
-                    Selector<TABLE>.JoinBuilder<JoinQTable>.Store<JoinQTable> on = (Selector.JoinBuilder.Store)this.ons.get(i);
+                for (i = 0; i < this.ons.size(); ++i) {
+                    Selector<TABLE>.JoinBuilder<JoinQTable>.Store<JoinQTable> on = (Selector.JoinBuilder.Store) this.ons.get(i);
                     if (on.value != null) {
                         JoinCondition condition = new JoinCondition(on.joinTableColumn.getColumnName(), on.value);
                         condition.setOperator(on.operator);
@@ -244,8 +254,8 @@ public final class Selector<TABLE> {
                 joinTable.setConditions(joinConditions);
                 Selector.this.joinTables.add(joinTable);
 
-                for(i = 0; i < this.joinFields.size(); ++i) {
-                    ((Field)this.joinFields.get(i)).setTable(joinTable);
+                for (i = 0; i < this.joinFields.size(); ++i) {
+                    ((Field) this.joinFields.get(i)).setTable(joinTable);
                     Selector.this.joinFields.add(this.joinFields.get(i));
                 }
             }
