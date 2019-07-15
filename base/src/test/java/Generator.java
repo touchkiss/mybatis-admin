@@ -38,7 +38,7 @@ public class Generator {
         //自动生成文件Map对象
         Map<String, String> packages = Maps.newHashMap();
         packages.put(DaoGenerator.ROOTPATH, rootPath);
-        //service业务层接口
+//        //service业务层接口
         packages.put(ServiceGenerator.PACKAGE, "com.touchkiss.mybatis.base.service");
         //service业务层接口实现
         packages.put(ServiceGenerator.PACKAGEIMPL, "com.touchkiss.mybatis.base.service.impl");
@@ -66,11 +66,12 @@ public class Generator {
         context.setUseMark(false);
         List<TableConfig> tableConfigs = Lists.newArrayList();
 
-        tableConfigs.add(new TableConfig("d_table").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
+//        tableConfigs.add(new TableConfig("d_table").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
         tableConfigs.add(new TableConfig("category").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
-        tableConfigs.add(new TableConfig("t_user").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
-        tableConfigs.add(new TableConfig("user_group").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
-        tableConfigs.add(new TableConfig("user").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
+//        tableConfigs.add(new TableConfig("test_pri").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
+//        tableConfigs.add(new TableConfig("t_user").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
+//        tableConfigs.add(new TableConfig("user_group").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
+//        tableConfigs.add(new TableConfig("user").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
         /*tableConfigs.add(new TableConfig("zq_user_account_today").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));*/
         //  tableConfigs.add(new TableConfig("zq_article_context").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
         MyBatisGenerator myBatisGenerator = new MyBatisGenerator(dataConfig, tableConfigs.toArray(new TableConfig[tableConfigs.size()]), context);
