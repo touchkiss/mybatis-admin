@@ -2151,7 +2151,7 @@ var menu = $.widget( "ui.menu", {
 			my: "left-1 top",
 			at: "right top"
 		},
-		role: "menu",
+		role: "templates.admin.menu",
 
 		// callbacks
 		blur: null,
@@ -12257,7 +12257,7 @@ var selectmenu = $.widget( "ui.selectmenu", {
 			id: this.ids.button,
 			role: "combobox",
 			"aria-expanded": "false",
-			"aria-autocomplete": "list",
+			"aria-autocomplete": "templates.admin.list",
 			"aria-owns": this.ids.menu,
 			"aria-haspopup": "true"
 		})

@@ -61,7 +61,7 @@ gulp.task('bump', function(complete){
 		return versionType + ' (v' + semver.inc(package.version, versionType) + ')';
 	});
 	inquirer.prompt({
-		type: 'list',
+		type: 'templates.admin.list',
 		name: 'version',
 		message: 'What version update would you like?',
 		choices: choices

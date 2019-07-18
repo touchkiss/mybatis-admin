@@ -20,7 +20,7 @@ public class Generator {
     }
 
     public static void DevGenerator() {
-        String root = "D:\\document\\java\\mybatis-demo\\base\\src\\main";
+        String root = "E:\\document\\java\\mybatis-demo\\base\\src\\main";
         //工程java根目录
         String rootPath = root + File.separator + "java";
         //工程resources根目录
@@ -69,7 +69,7 @@ public class Generator {
 //        tableConfigs.add(new TableConfig("d_table").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
         tableConfigs.add(new TableConfig("category").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
 //        tableConfigs.add(new TableConfig("test_pri").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
-//        tableConfigs.add(new TableConfig("t_user").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
+        tableConfigs.add(new TableConfig("user").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
 //        tableConfigs.add(new TableConfig("user_group").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
 //        tableConfigs.add(new TableConfig("user").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
         /*tableConfigs.add(new TableConfig("zq_user_account_today").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));*/

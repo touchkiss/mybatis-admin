@@ -5419,7 +5419,7 @@ wysihtml5.dom.getAsDom = (function() {
    */
   var HTML5_ELEMENTS = [
     "abbr", "article", "aside", "audio", "bdi", "canvas", "command", "datalist", "details", "figcaption",
-    "figure", "footer", "header", "hgroup", "keygen", "mark", "meter", "nav", "output", "progress",
+    "figure", "footer", "templates.admin.header", "hgroup", "keygen", "mark", "meter", "nav", "output", "progress",
     "rp", "rt", "ruby", "svg", "section", "source", "summary", "time", "track", "video", "wbr"
   ];
 
@@ -5983,7 +5983,7 @@ wysihtml5.dom.parse = function(elementOrHtml_current, config_current) {
                 "table", "td", "th",
                 "ul", "ol", "li",
                 "dd", "dl",
-                "footer", "header", "section",
+                "footer", "templates.admin.header", "section",
                 "h1", "h2", "h3", "h4", "h5", "h6"
             ]).contains(oldNode.nodeName.toLowerCase()) && oldNode.parentNode.lastChild !== oldNode) {
                 // add space at first when unwraping non-textflow elements

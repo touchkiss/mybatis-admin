@@ -14,29 +14,37 @@ import java.util.Map;
  */
 public interface BaseMapper<T> {
     //region read
+    T selectOneByID(@Param("ids") Object... ids);
+
     List<T> selectAll();
 
     List<T> select(@Param("meta") SelectMetadata metadata);
 
     Page<T> selectPage(@Param("meta") SelectMetadata metadata);
 
-//    T selectRow(@Param("meta") SelectMetadata metadata);
-
     Map selectForMap(@Param("meta") SelectMetadata metadata);
 
     List<Map> selectForListMap(@Param("meta") SelectMetadata metadata);
 
     Page<Map> selectPageForListMap(@Param("meta") SelectMetadata metadata);
-    //endregion
 
-    //region write
-    int insert(T record);
+    int insert(@Param("record") T record);
 
-    int insertSelective(T record);
+    int insertSelective(@Param("record") T record);
 
     int update(@Param("record") T record, @Param("wheres") List<PreparedCondition> conditions);
 
     int updateSelective(@Param("record") T record, @Param("wheres") List<PreparedCondition> conditions);
 
     int delete(@Param("wheres") List<PreparedCondition> conditions);
+
+    int deleteOneByID(@Param("ids") Object... ids);
+
+    T selectOne(@Param("record") T bean);
+
+    T selectOne(@Param("meta") SelectMetadata metadata);
+
+    int updateOneByID(@Param("record") T bean);
+
+    int updateOneSelectiveByID(@Param("record") T bean);
 }

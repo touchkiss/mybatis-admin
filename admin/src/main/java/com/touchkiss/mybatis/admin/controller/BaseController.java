@@ -509,23 +509,26 @@ public abstract class BaseController {
     }
 
     protected List<SelectOption> getSelectOptionList(List list, ForeignKeyInfo foreignKeyInfo) {
-        List<SelectOption> result = new ArrayList<>(list.size());
-        try {
-            Field idField = list.get(0).getClass().getDeclaredField(foreignKeyInfo.getKeyName());
-            Field valueField = list.get(0).getClass().getDeclaredField(foreignKeyInfo.getValueName());
-            idField.setAccessible(true);
-            valueField.setAccessible(true);
-            for (Object o : list) {
-                SelectOption selectOption = new SelectOption();
-                selectOption.setValue(String.valueOf(idField.get(o)));
-                selectOption.setText(String.valueOf(valueField.get(o)));
-                result.add(selectOption);
+        if (CollectionUtils.isNotEmpty(list)) {
+            List<SelectOption> result = new ArrayList<>(list.size());
+            try {
+                Field idField = list.get(0).getClass().getDeclaredField(foreignKeyInfo.getKeyName());
+                Field valueField = list.get(0).getClass().getDeclaredField(foreignKeyInfo.getValueName());
+                idField.setAccessible(true);
+                valueField.setAccessible(true);
+                for (Object o : list) {
+                    SelectOption selectOption = new SelectOption();
+                    selectOption.setValue(String.valueOf(idField.get(o)));
+                    selectOption.setText(String.valueOf(valueField.get(o)));
+                    result.add(selectOption);
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            return result;
         }
-        return result;
+        return null;
     }
 }

@@ -3233,7 +3233,7 @@
 				cell.html( column.sTitle );
 			}
 	
-			_fnRenderer( oSettings, 'header' )(
+			_fnRenderer( oSettings, 'templates.admin.header' )(
 				oSettings, cell, column, classes
 			);
 		}
@@ -3492,7 +3492,7 @@
 		}
 	
 		/* Header and footer callbacks */
-		_fnCallbackFire( oSettings, 'aoHeaderCallback', 'header', [ $(oSettings.nTHead).children('tr')[0],
+		_fnCallbackFire( oSettings, 'aoHeaderCallback', 'templates.admin.header', [ $(oSettings.nTHead).children('tr')[0],
 			_fnGetDataMaster( oSettings ), iDisplayStart, iDisplayEnd, aiDisplay ] );
 	
 		_fnCallbackFire( oSettings, 'aoFooterCallback', 'footer', [ $(oSettings.nTFoot).children('tr')[0],
@@ -7837,7 +7837,7 @@
 				} );
 			}
 		}
-		else if ( order == 'index' || order == 'original' ) {
+		else if ( order == 'templates.admin.index' || order == 'original' ) {
 			for ( i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
 				if ( search == 'none' ) {
 					a.push( i );

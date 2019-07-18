@@ -41,7 +41,7 @@ public interface ReadBaseDao<T> {
         }
     };
 
-    List<T> selectById(String id);
+    T selectOneByID(Object...ids);
 
     List<T> selectAll();
 
@@ -55,17 +55,9 @@ public interface ReadBaseDao<T> {
 
     List<T> select(Map<String, String[]> map);
 
-//    T selectRow(ICondition... iConditions);
-
-//    T selectRow(Selector<T> selector);
-
-//    T selectRow(T bean);
-
     <Output> List<Output> select(Selector<T> selector, Handle<Map, Output> handle);
 
     <Output> Page<Output> selectPage(Selector<T> selector, Handle<Map, Output> handle, int pageNo, int pageSize);
-
-    <Output> Output selectRow(Selector<T> selector, Handle<Map, Output> handle);
 
     Long selectCount(ICondition... iConditions);
 
@@ -78,4 +70,8 @@ public interface ReadBaseDao<T> {
     Page<T> selectPage(T bean, int pageNo, int pageSize);
 
     Page<T> selectPage(Map<String, String[]> map, int pageNo, int pageSize);
+
+    T selectOne(T bean);
+
+    T selectOne(Selector<T> selector);
 }

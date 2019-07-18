@@ -14,7 +14,7 @@ var http = require('http'), fs = require('fs'), mimeTypes = {
 };
 
 http.createServer(function (req, res) {
-  var file = (req.url === '/') ? 'index.html' : "." + req.url;
+  var file = (req.url === '/') ? 'templates.admin.index.html' : "." + req.url;
   var ext = require('path').extname(file),
     type = (mimeTypes[ext] ? mimeTypes[ext] : '');
 

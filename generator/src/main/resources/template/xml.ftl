@@ -115,7 +115,7 @@
             useCache="true"</#if>>
         <include refid="selectSql"/>
     </select>
-    <select id="selectRow" parameterType="com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata"
+    <select id="selectOne" parameterType="com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata"
             resultMap="baseResultMap" <#if tableConfig.getCache()?? && tableConfig.getCache().getSelectUseCache()>
             useCache="true"</#if>>
         <include refid="selectSql"/>
@@ -163,10 +163,8 @@
         </#if></#list></#if>
         insert into <#if tableConfig.getSchema()??><#if context.getUseMark()>
         "</#if>${tableConfig.getSchema()}<#if context.getUseMark()>"</#if>.</#if><#if context.getUseMark()>
-        "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if>(<#list columns as column><#if column_index gt 0>
-        ,</#if><#if context.getUseMark()>"</#if>${column.getColumnName()}<#if context.getUseMark()>"</#if></#list>)
-        values(<#list columns as column><#if column_index gt 0>,</#if><if test="${column.getJavaProperty()} != null">${r'#'}{${column.getJavaProperty()}
-        ,jdbcType=${column.getJdbcType()}}</if><if test="${column.getJavaProperty()} == null">null</if></#list>)
+        "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if> (<#list columns as column><#if column_index gt 0>,</#if><#if context.getUseMark()>"</#if>${column.getColumnName()}<#if context.getUseMark()>"</#if></#list>)
+        values (<#list columns as column><#if column_index gt 0>,</#if><if test="record.${column.getJavaProperty()} != null">${r'#'}{record.${column.getJavaProperty()},jdbcType=${column.getJdbcType()}}</if><if test="record.${column.getJavaProperty()} == null">null</if></#list>)
     </insert>
 
     <insert id="insertSelective"
@@ -185,26 +183,24 @@
         "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if>
         <trim prefix="(" suffix=")" suffixOverrides=",">
         <#list columns as column>
-            <if test="${column.getJavaProperty()} != null">${column.getColumnName()},</if></#list>
+            <if test="record.${column.getJavaProperty()} != null">${column.getColumnName()},</if>
+        </#list>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
         <#list columns as column>
-            <if test="${column.getJavaProperty()} != null">${r'#'}{${column.getJavaProperty()}
-                ,jdbcType=${column.getJdbcType()}},
-            </if></#list>
+            <if test="record.${column.getJavaProperty()} != null">${r'#'}{record.${column.getJavaProperty()},jdbcType=${column.getJdbcType()}},</if>
+        </#list>
         </trim>
     </insert>
 
     <update id="update" parameterType="map"<#if tableConfig.getCache()?? && tableConfig.getCache().updateFlushCache>
             flushCache="true"</#if>>
-        update <#if tableConfig.getSchema()??><#if context.getUseMark()>
+        UPDATE <#if tableConfig.getSchema()??><#if context.getUseMark()>
         "</#if>${tableConfig.getSchema()}<#if context.getUseMark()>"</#if>.</#if><#if context.getUseMark()>
-        "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if> set
-        <#assign update_colunm_index = 0/>
+        "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if> SET
         <#list columns as column>
-          <#if update_colunm_index gt 0>,</#if><#if context.getUseMark()>
+          <#if column_index gt 0>,</#if><#if context.getUseMark()>
             "</#if>${column.getColumnName()}<#if context.getUseMark()>"</#if> = <if test="record.${column.getJavaProperty()} != null">${r'#'}{record.${column.getJavaProperty()},jdbcType=${column.getJdbcType()}}</if><if test="record.${column.getJavaProperty()} == null">null</if>
-          <#assign update_colunm_index = update_colunm_index+1/>
         </#list>
         <include refid="whereSql"/>
     </update>
@@ -212,9 +208,9 @@
     <update id="updateSelective"
             parameterType="map"<#if tableConfig.getCache()?? && tableConfig.getCache().updateFlushCache>
             flushCache="true"</#if>>
-        update <#if tableConfig.getSchema()??><#if context.getUseMark()>
+        UPDATE <#if tableConfig.getSchema()??><#if context.getUseMark()>
         "</#if>${tableConfig.getSchema()}<#if context.getUseMark()>"</#if>.</#if><#if context.getUseMark()>
-        "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if>
+        "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if> SET
         <set>
         <#list columns as column>
             <if test="record.${column.getJavaProperty()} != null">
@@ -227,10 +223,57 @@
 
     <delete id="delete" parameterType="map"<#if tableConfig.getCache()?? && tableConfig.getCache().deleteFlushCache>
             flushCache="true"</#if>>
-        delete from <#if tableConfig.getSchema()??><#if context.getUseMark()>
+        DELETE FROM <#if tableConfig.getSchema()??><#if context.getUseMark()>
         "</#if>${tableConfig.getSchema()}<#if context.getUseMark()>"</#if>.</#if><#if context.getUseMark()>
         "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if>
         <include refid="whereSql"/>
     </delete>
+    <#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0>
 
+    <sql id="idWhere">
+        WHERE<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0> AND</#if> ${keyColumn.getColumnName()} <if test="ids.length > ${keyColumn_index} and ids[${keyColumn_index}] != null">= ${r'#'}{ids[${keyColumn_index}]}</if><if test="ids == null or ids.length == ${keyColumn_index} or ids[${keyColumn_index}] == null">IS NULL</if></#list>
+    </sql>
+
+    <select id="selectOneByID" resultMap="baseResultMap" <#if tableConfig.getCache()?? && tableConfig.getCache().getSelectUseCache()>
+            useCache="true"</#if>>
+        SELECT <include refid="allFields"/>
+        FROM <#if tableConfig.getSchema()??><#if context.getUseMark()>
+        "</#if>${tableConfig.getSchema()}<#if context.getUseMark()>"</#if>.</#if><#if context.getUseMark()>
+        "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if>
+        <include refid="idWhere"/>
+    </select>
+    
+    <delete id="deleteOneByID"<#if tableConfig.getCache()?? && tableConfig.getCache().deleteFlushCache>
+            flushCache="true"</#if>>
+        DELETE FROM <#if tableConfig.getSchema()??><#if context.getUseMark()>
+        "</#if>${tableConfig.getSchema()}<#if context.getUseMark()>"</#if>.</#if><#if context.getUseMark()>
+        "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if>
+        <include refid="idWhere"/>
+    </delete>
+    
+    <update id="updateOneSelectiveByID"<#if tableConfig.getCache()?? && tableConfig.getCache().deleteFlushCache>
+            flushCache="true"</#if>>
+        UPDATE <#if tableConfig.getSchema()??><#if context.getUseMark()>
+        "</#if>${tableConfig.getSchema()}<#if context.getUseMark()>"</#if>.</#if><#if context.getUseMark()>
+        "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if> SET
+        <#list columns as column>
+            <if test="record.${column.getJavaProperty()} != null">
+            <#if column_index gt 0>, </#if><#if context.getUseMark()>"</#if>${column.getColumnName()}<#if context.getUseMark()>"</#if> = ${r'#'}{record.${column.getJavaProperty()},jdbcType=${column.getJdbcType()}}
+            </if>
+        </#list>
+        WHERE<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0> AND</#if> ${keyColumn.getColumnName()} <if test="record.${keyColumn.getJavaProperty()} != null">= ${r'#'}{record.${keyColumn.getJavaProperty()},jdbcType=${keyColumn.getJdbcType()}}</if><if test="record.${keyColumn.getJavaProperty()} == null"> IS NULL</if> </#list>
+    </update>
+
+    <update id="updateOneByID"<#if tableConfig.getCache()?? && tableConfig.getCache().deleteFlushCache>
+            flushCache="true"</#if>>
+        UPDATE <#if tableConfig.getSchema()??><#if context.getUseMark()>
+        "</#if>${tableConfig.getSchema()}<#if context.getUseMark()>"</#if>.</#if><#if context.getUseMark()>
+        "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if> SET
+        <#list columns as column>
+          <#if column_index gt 0>,</#if><#if context.getUseMark()>
+            "</#if>${column.getColumnName()}<#if context.getUseMark()>"</#if> = <if test="record.${column.getJavaProperty()} != null">${r'#'}{record.${column.getJavaProperty()},jdbcType=${column.getJdbcType()}}</if><if test="record.${column.getJavaProperty()} == null">null</if>
+        </#list>
+        WHERE<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0> AND</#if> ${keyColumn.getColumnName()} <if test="record.${keyColumn.getJavaProperty()} != null">= ${r'#'}{record.${keyColumn.getJavaProperty()},jdbcType=${keyColumn.getJdbcType()}}</if><if test="record.${keyColumn.getJavaProperty()} == null"> IS NULL</if> </#list>
+    </update>
+    </#if></#if>
 </mapper>

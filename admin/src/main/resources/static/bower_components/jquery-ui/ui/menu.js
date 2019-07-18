@@ -39,7 +39,7 @@ return $.widget( "ui.menu", {
 			my: "left-1 top",
 			at: "right top"
 		},
-		role: "menu",
+		role: "templates.admin.menu",
 
 		// callbacks
 		blur: null,

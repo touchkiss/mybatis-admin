@@ -2905,7 +2905,7 @@ exports.rtlDefaults = {
     }
 };
 var complexOptions = [
-    'header',
+    'templates.admin.header',
     'footer',
     'buttonText',
     'buttonIcons',
@@ -11066,7 +11066,7 @@ var Calendar = /** @class */ (function () {
     Calendar.prototype.computeHeaderOptions = function () {
         return {
             extraClasses: 'fc-header-toolbar',
-            layout: this.opt('header')
+            layout: this.opt('templates.admin.header')
         };
     };
     Calendar.prototype.computeFooterOptions = function () {
@@ -15096,24 +15096,24 @@ ViewRegistry_1.defineView('agendaWeek', {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ViewRegistry_1 = __webpack_require__(24);
 var ListView_1 = __webpack_require__(248);
-ViewRegistry_1.defineView('list', {
+ViewRegistry_1.defineView('templates.admin.list', {
     'class': ListView_1.default,
-    buttonTextKey: 'list',
+    buttonTextKey: 'templates.admin.list',
     defaults: {
-        buttonText: 'list',
+        buttonText: 'templates.admin.list',
         listDayFormat: 'LL',
         noEventsMessage: 'No events to display'
     }
 });
 ViewRegistry_1.defineView('listDay', {
-    type: 'list',
+    type: 'templates.admin.list',
     duration: { days: 1 },
     defaults: {
         listDayFormat: 'dddd' // day-of-week is all we need. full date is probably in header
     }
 });
 ViewRegistry_1.defineView('listWeek', {
-    type: 'list',
+    type: 'templates.admin.list',
     duration: { weeks: 1 },
     defaults: {
         listDayFormat: 'dddd',
@@ -15121,14 +15121,14 @@ ViewRegistry_1.defineView('listWeek', {
     }
 });
 ViewRegistry_1.defineView('listMonth', {
-    type: 'list',
+    type: 'templates.admin.list',
     duration: { month: 1 },
     defaults: {
         listDayAltFormat: 'dddd' // day-of-week is nice-to-have
     }
 });
 ViewRegistry_1.defineView('listYear', {
-    type: 'list',
+    type: 'templates.admin.list',
     duration: { year: 1 },
     defaults: {
         listDayAltFormat: 'dddd' // day-of-week is nice-to-have

@@ -44,7 +44,6 @@ public class BeanInfo {
     public BeanInfo(Class clazz) {
         Field[] fields = clazz.getDeclaredFields();
         int length = fields.length;
-        this.idColumnName = "id";
         this.beanPropertyInfos = new BeanPropertyInfo[length];
         this.beanPropertyInfoMap = new HashMap<>();
         this.showFields = new String[length];
@@ -52,17 +51,20 @@ public class BeanInfo {
         this.searchFieldSet = new HashSet<>(length * 2);
         this.filterFields = new String[length];
         this.filterFieldSet = new HashSet<>(length * 2);
-        for (int i = 0; i < length; i++) {
-            Field field = fields[i];
-            String fieldName = field.getName();
-            BeanPropertyInfo beanPropertyInfo = new BeanPropertyInfo(fieldName, field.getType().getName());
-            this.beanPropertyInfoMap.put(fieldName, beanPropertyInfo);
-            this.beanPropertyInfos[i] = beanPropertyInfo;
-            this.showFields[i] = fieldName;
-            this.searchFields[i] = fieldName;
-            this.searchFieldSet.add(fieldName);
-            this.filterFields[i] = fieldName;
-            this.filterFieldSet.add(fieldName);
+        if (length>0){
+            this.idColumnName = fields[0].getName();
+            for (int i = 0; i < length; i++) {
+                Field field = fields[i];
+                String fieldName = field.getName();
+                BeanPropertyInfo beanPropertyInfo = new BeanPropertyInfo(fieldName, field.getType().getName());
+                this.beanPropertyInfoMap.put(fieldName, beanPropertyInfo);
+                this.beanPropertyInfos[i] = beanPropertyInfo;
+                this.showFields[i] = fieldName;
+                this.searchFields[i] = fieldName;
+                this.searchFieldSet.add(fieldName);
+                this.filterFields[i] = fieldName;
+                this.filterFieldSet.add(fieldName);
+            }
         }
     }
 

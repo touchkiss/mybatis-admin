@@ -88,7 +88,7 @@ return $.widget( "ui.selectmenu", {
 			id: this.ids.button,
 			role: "combobox",
 			"aria-expanded": "false",
-			"aria-autocomplete": "list",
+			"aria-autocomplete": "templates.admin.list",
 			"aria-owns": this.ids.menu,
 			"aria-haspopup": "true"
 		})

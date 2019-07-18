@@ -36,7 +36,7 @@ public class AdminController extends JQueryDataTableController {
 
     @RequestMapping("")
     public ModelAndView index(HttpSession httpSession) {
-        ModelAndView modelAndView = new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("admin/index");
         modelAndView.addObject("menu", getMenu(httpSession));
         return modelAndView;
     }
@@ -47,7 +47,7 @@ public class AdminController extends JQueryDataTableController {
         if (registerInfo == null) {
             return null;
         }
-        ModelAndView modelAndView = new ModelAndView("list");
+        ModelAndView modelAndView = new ModelAndView("admin/list");
         modelAndView.addObject("group", group);
         modelAndView.addObject("name", name);
         modelAndView.addObject("menu", getMenu(httpSession));
@@ -99,7 +99,7 @@ public class AdminController extends JQueryDataTableController {
         if (registerInfo == null) {
             return null;
         }
-        ModelAndView modelAndView = new ModelAndView("addItem");
+        ModelAndView modelAndView = new ModelAndView("admin/addItem");
         modelAndView.addObject("group", group);
         modelAndView.addObject("name", name);
         modelAndView.addObject("menu", getMenu(httpSession));
@@ -137,7 +137,7 @@ public class AdminController extends JQueryDataTableController {
         } else {
             processResult = ProcessResult.processFailed(registerInfo.getShowName() + "插入失败");
         }
-        ModelAndView modelAndView = new ModelAndView("list");
+        ModelAndView modelAndView = new ModelAndView("admin/list");
         modelAndView.addObject("group", group);
         modelAndView.addObject("name", name);
         modelAndView.addObject("menu", getMenu(httpSession));
@@ -154,42 +154,36 @@ public class AdminController extends JQueryDataTableController {
             return null;
         }
         BaseService baseService = (BaseService) SpringUtil.getBean(registerInfo.getServiceClazz());
-        List list = baseService.selectById(id);
-        if (CollectionUtils.isNotEmpty(list)) {
-            if (list.size() == 1) {
-                Object o = list.get(0);
-                Class<?> aClass = o.getClass();
-                for (BeanPropertyInfo beanPropertyInfo : registerInfo.getBeanInfo().getBeanPropertyInfos()) {
-                    try {
-                        Field declaredField = aClass.getDeclaredField(beanPropertyInfo.getPropertyName());
-                        declaredField.setAccessible(true);
-                        if ("java.util.Date".equals(beanPropertyInfo.getPropertyType())) {
-                            beanPropertyInfo.setValue(df.format(declaredField.get(o)));
-                        } else {
-                            beanPropertyInfo.setValue(declaredField.get(o));
-                        }
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+        Object o = baseService.selectOneByID(id);
+        if (o != null) {
+            Class<?> aClass = o.getClass();
+            for (BeanPropertyInfo beanPropertyInfo : registerInfo.getBeanInfo().getBeanPropertyInfos()) {
+                try {
+                    Field declaredField = aClass.getDeclaredField(beanPropertyInfo.getPropertyName());
+                    declaredField.setAccessible(true);
+                    if ("java.util.Date".equals(beanPropertyInfo.getPropertyType())) {
+                        beanPropertyInfo.setValue(df.format(declaredField.get(o)));
+                    } else {
+                        beanPropertyInfo.setValue(declaredField.get(o));
                     }
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
-            } else {
-                response.setStatus(HttpServletResponse.SC_MULTIPLE_CHOICES);
-                return null;
             }
+            ModelAndView modelAndView = new ModelAndView("admin/updateItem");
+            modelAndView.addObject("group", group);
+            modelAndView.addObject("name", name);
+            modelAndView.addObject("menu", getMenu(httpSession));
+            modelAndView.addObject("registerInfo", registerInfo);
+            modelAndView.addObject("actionPath", "/admin/" + group + "/" + name + "/" + id + "/update");
+            generateSelectOptions(registerInfo, modelAndView);
+            return modelAndView;
         } else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
-        ModelAndView modelAndView = new ModelAndView("updateItem");
-        modelAndView.addObject("group", group);
-        modelAndView.addObject("name", name);
-        modelAndView.addObject("menu", getMenu(httpSession));
-        modelAndView.addObject("registerInfo", registerInfo);
-        modelAndView.addObject("actionPath", "/admin/" + group + "/" + name + "/" + id + "/update");
-        generateSelectOptions(registerInfo, modelAndView);
-        return modelAndView;
     }
 
     @PostMapping("{group}/{name}/{id}/update")
@@ -200,14 +194,14 @@ public class AdminController extends JQueryDataTableController {
         }
         Object obj = getParameter(registerInfo.getBeanClazz(), true);
         BaseService baseService = (BaseService) SpringUtil.getBean(registerInfo.getServiceClazz());
-        int success = baseService.updateById(obj);
+        int success = baseService.updateOneByID(obj);
         ProcessResult processResult = null;
         if (success == 1) {
             processResult = ProcessResult.processSuccess(registerInfo.getShowName() + "更新成功");
         } else {
             processResult = ProcessResult.processFailed(registerInfo.getShowName() + "更新失败");
         }
-        ModelAndView modelAndView = new ModelAndView("list");
+        ModelAndView modelAndView = new ModelAndView("admin/list");
         modelAndView.addObject("group", group);
         modelAndView.addObject("name", name);
         modelAndView.addObject("menu", getMenu(httpSession));
@@ -224,14 +218,14 @@ public class AdminController extends JQueryDataTableController {
             return null;
         }
         BaseService baseService = (BaseService) SpringUtil.getBean(registerInfo.getServiceClazz());
-        int success = baseService.deleteById(id);
+        int success = baseService.deleteOneByID(id);
         ProcessResult processResult = null;
         if (success == 1) {
             processResult = ProcessResult.processSuccess(registerInfo.getShowName() + "删除成功");
         } else {
             processResult = ProcessResult.processFailed(registerInfo.getShowName() + "删除失败");
         }
-        ModelAndView modelAndView = new ModelAndView("list");
+        ModelAndView modelAndView = new ModelAndView("admin/list");
         modelAndView.addObject("group", group);
         modelAndView.addObject("name", name);
         modelAndView.addObject("menu", getMenu(httpSession));
@@ -263,7 +257,7 @@ public class AdminController extends JQueryDataTableController {
         int n = ids == null ? 0 : ids.length, count = 0;
         if (ids != null) {
             for (String id : ids) {
-                int success = baseService.deleteById(id);
+                int success = baseService.deleteOneByID(id);
                 if (success == 1) {
                     count++;
                 }
@@ -279,7 +273,7 @@ public class AdminController extends JQueryDataTableController {
         } else {
             processResult = ProcessResult.processFailed("提交删除" + n + "个" + registerInfo.getShowName() + ",成功删除" + count + "个");
         }
-        ModelAndView modelAndView = new ModelAndView("list");
+        ModelAndView modelAndView = new ModelAndView("admin/list");
         modelAndView.addObject("group", group);
         modelAndView.addObject("name", name);
         modelAndView.addObject("menu", getMenu(httpSession));
@@ -287,10 +281,5 @@ public class AdminController extends JQueryDataTableController {
         modelAndView.addObject("processResult", processResult);
         generateSelectOptions(registerInfo, modelAndView);
         return modelAndView;
-    }
-
-    public static void main(String[] args) {
-        String[] split = "".split(",");
-        System.out.println("skhdflkjasl_lskdjf_slkdfj_".replaceAll("_([a-z]{1,1})", "$1"));
     }
 }

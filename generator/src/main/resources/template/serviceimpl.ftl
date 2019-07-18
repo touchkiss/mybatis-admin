@@ -2,95 +2,106 @@ package ${implPackageName};
 
 <#if entityPackage??>import ${entityPackage};</#if>
 <#if packageName!=implPackageName>
+import com.github.pagehelper.Page;
 import ${packageName}.${tableConfig.getEntityName()}Service;
 import ${daoPackageName}.${tableConfig.getEntityName()}AutoDao;
+import com.touchkiss.mybatis.sqlbuild.keyword.Sort;
+import com.touchkiss.mybatis.sqlbuild.query.QColumn;
+import com.touchkiss.mybatis.sqlbuild.selector.Selector;
 </#if>
-import com.touchkiss.mybatis.sqlbuild.service.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
 <#list table.imports as im>import ${im};</#list>
 
 /**
  * ${table.getRemarks()}.service业务层实现
  *
- * @author Touchkiss
+ * @author ${tableConfig.getEntityName()}ouchkiss
  **/
 @Service
-public class ${tableConfig.getEntityName()}ServiceImpl extends BaseServiceImpl<${tableConfig.getEntityName()}> implements ${tableConfig.getEntityName()}Service {
-<#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0>
+public class ${tableConfig.getEntityName()}ServiceImpl implements ${tableConfig.getEntityName()}Service {
     @Autowired
-    private ${tableConfig.getEntityName()}AutoDao dao;
-  <#list primaryKeyColumns as keyColumn>
-    <#if keyColumn_index gt 0>
+    private ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao dao;
 
-    /**
-     * 根据主键 查询
-     */
-    @Override
-    public List<${tableConfig.getEntityName()}> selectBy${keyColumn.getJavaPropertyFirstUpper()}(${keyColumn.getJavaType()} ${keyColumn.getJavaProperty()}){
-        return dao.selectBy${keyColumn.getJavaPropertyFirstUpper()}(${keyColumn.getJavaProperty()});
-    }
+	@Override
+	public ${tableConfig.getEntityName()} selectOneByID(Object... ids) {
+		return this.dao.selectOneByID(ids);
+	}
 
-    /**
-     * 根据主键 更新
-     */
-    @Override
-    public int updateBy${keyColumn.getJavaPropertyFirstUpper()}(${tableConfig.getEntityName()} bean){
-        return dao.updateBy${keyColumn.getJavaPropertyFirstUpper()}(bean);
-    }
+	@Override
+	public int deleteOneByID(Object... ids) {
+		return this.dao.deleteOneByID(ids);
+	}
 
-    /**
-     * 根据主键 更新指定字段
-     */
-    @Override
-    public int updateSelectiveBy${keyColumn.getJavaPropertyFirstUpper()}(${tableConfig.getEntityName()} bean){
-        return dao.updateSelectiveBy${keyColumn.getJavaPropertyFirstUpper()}(bean);
-    }
+	@Override
+	public int updateOneByID(${tableConfig.getEntityName()} bean) {
+		return this.dao.updateOneByID(bean);
+	}
 
-    /**
-     * 根据主键 删除
-     */
-    @Override
-    public int deleteBy${keyColumn.getJavaPropertyFirstUpper()}(${keyColumn.getJavaType()} ${keyColumn.getJavaProperty()}){
-        return dao.deleteBy${keyColumn.getJavaPropertyFirstUpper()}(${keyColumn.getJavaProperty()});
-    }
-    </#if>
-  </#list>
-  <#if primaryKeyColumns?size gt 1>
+	@Override
+	public int updateOneSelectiveByID(${tableConfig.getEntityName()} bean) {
+		return this.dao.updateOneSelectiveByID(bean);
+	}
 
-    /**
-     * 根据主键 查询
-     */
-    @Override
-    public List<${tableConfig.getEntityName()}> selectBy<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>And</#if>${keyColumn.getJavaPropertyFirstUpper()}</#list>(<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>, </#if>${keyColumn.getJavaType()} ${keyColumn.getJavaProperty()}</#list>){
-        return dao.selectBy<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>And</#if>${keyColumn.getJavaPropertyFirstUpper()}</#list>(<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>, </#if>${keyColumn.getJavaProperty()}</#list>);
-    }
+	@Override
+	public int insert(${tableConfig.getEntityName()} bean) {
+		return this.dao.insert(bean);
+	}
 
-    /**
-     * 根据主键 更新
-     */
-    @Override
-    public int updateBy<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>And</#if>${keyColumn.getJavaPropertyFirstUpper()}</#list>(${tableConfig.getEntityName()} bean){
-        return dao.updateBy<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>And</#if>${keyColumn.getJavaPropertyFirstUpper()}</#list>(bean);
-    }
+	@Override
+	public int insertSelective(${tableConfig.getEntityName()} bean) {
+		return this.dao.insertSelective(bean);
+	}
 
-    /**
-     * 根据主键 更新指定字段
-     */
-    @Override
-    public int updateSelectiveBy<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>And</#if>${keyColumn.getJavaPropertyFirstUpper()}</#list>(${tableConfig.getEntityName()} bean){
-        return dao.updateSelectiveBy<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>And</#if>${keyColumn.getJavaPropertyFirstUpper()}</#list>(bean);
-    }
+	@Override
+	public List<${tableConfig.getEntityName()}> selectAll() {
+		return this.dao.selectAll();
+	}
 
-    /**
-     * 根据主键 删除
-     */
-    @Override
-    public int deleteBy<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>And</#if>${keyColumn.getJavaPropertyFirstUpper()}</#list>(<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>, </#if>${keyColumn.getJavaType()} ${keyColumn.getJavaProperty()}</#list>){
-        return dao.deleteBy<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>And</#if>${keyColumn.getJavaPropertyFirstUpper()}</#list>(<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>, </#if>${keyColumn.getJavaProperty()}</#list>);
-    }
-  </#if>
-  </#if>
-  </#if>
+	@Override
+	public List<${tableConfig.getEntityName()}> selectAll(QColumn column, Sort sort) {
+		return this.dao.selectAll(column, sort);
+	}
+
+	@Override
+	public List<${tableConfig.getEntityName()}> select(Selector<${tableConfig.getEntityName()}> selector) {
+		return this.dao.select(selector);
+	}
+
+	@Override
+	public List<${tableConfig.getEntityName()}> select(${tableConfig.getEntityName()} bean) {
+		return this.dao.select(bean);
+	}
+
+	@Override
+	public List<${tableConfig.getEntityName()}> select(Map<String, String[]> map) {
+		return this.dao.select(map);
+	}
+
+	@Override
+	public ${tableConfig.getEntityName()} selectOne(${tableConfig.getEntityName()} bean) {
+		return this.dao.selectOne(bean);
+	}
+
+	@Override
+	public ${tableConfig.getEntityName()} selectOne(Selector<${tableConfig.getEntityName()}> selector) {
+		return this.dao.selectOne(selector);
+	}
+
+	@Override
+	public Page<${tableConfig.getEntityName()}> selectPage(Selector<${tableConfig.getEntityName()}> selector, int pageNo, int pageSize) {
+		return this.dao.selectPage(selector, pageNo, pageSize);
+	}
+
+	@Override
+	public Page<${tableConfig.getEntityName()}> selectPage(Map<String, String[]> map, int pageNo, int pageSize) {
+		return this.dao.selectPage(map, pageNo, pageSize);
+	}
+
+	@Override
+	public Page<${tableConfig.getEntityName()}> selectPage(${tableConfig.getEntityName()} bean, int pageNo, int pageSize) {
+		return this.dao.selectPage(bean, pageNo, pageSize);
+	}
 }

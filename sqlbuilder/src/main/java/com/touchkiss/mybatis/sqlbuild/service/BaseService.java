@@ -13,6 +13,25 @@ import java.util.Map;
  * @create: 2019-06-20 17:08
  */
 public interface BaseService<T> {
+    /**
+     * 根据主键查询一条
+     */
+    T selectOneByID(Object... ids);
+
+    /**
+     * 根据主键删除一条
+     */
+    int deleteOneByID(Object...ids);
+
+    /**
+     * 根据主键更新一条
+     */
+    int updateOneByID(T bean);
+
+    /**
+     * 根据主键更新一条记录的非空字段
+     */
+    int updateOneSelectiveByID(T bean);
 
     /**
      * 全部插入
@@ -23,11 +42,6 @@ public interface BaseService<T> {
      * 指定插入
      */
     int insertSelective(T bean);
-
-    /**
-     * 按id查询
-     */
-    List<T> selectById(String id);
 
     /**
      * 查询所有
@@ -57,12 +71,12 @@ public interface BaseService<T> {
     /**
      * 根据bean查询单条
      */
-//    T selectRow(T bean);
+    T selectOne(T bean);
 
     /**
      * 根据Selector查询单条
      */
-//    T selectRow(Selector<T> selector);
+    T selectOne(Selector<T> selector);
 
     /**
      * 分页查询 - 适用于自动生成配置方法
@@ -78,19 +92,5 @@ public interface BaseService<T> {
      * 分页查询 - 适用于手动添加查询方法
      */
     Page<T> selectPage(T bean, int pageNo, int pageSize);
-
-    /**
-     * 根据id更新所有字段
-     */
-    int updateById(T bean);
-
-    /**
-     * 根据id更新非空字段
-     */
-    int updateSelectiveById(T bean);
-
-    /**
-     * 根据id删除
-     */
-    int deleteById(String id);
 }
+

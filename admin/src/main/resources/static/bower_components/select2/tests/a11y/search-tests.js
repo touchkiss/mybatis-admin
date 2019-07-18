@@ -21,7 +21,7 @@ test('aria-autocomplete attribute is present', function (assert) {
 
   assert.equal(
     $selection.find('input').attr('aria-autocomplete'),
-    'list',
+    'templates.admin.list',
     'The search box is marked as autocomplete'
   );
 });

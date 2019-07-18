@@ -20,9 +20,9 @@ public interface WriteBaseDao<T> {
 
     int delete(ICondition... iConditions);
 
-    int updateById(T bean);
+    int deleteOneByID(Object...ids);
 
-    int deleteById(String id);
+    int updateOneByID(T bean);
 
-    int updateSelectiveById(T bean);
+    int updateOneSelectiveByID(T bean);
 }

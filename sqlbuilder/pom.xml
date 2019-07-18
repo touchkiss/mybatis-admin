@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sqlbuilder</artifactId>
+    <packaging>jar</packaging>
     <dependencies>
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
@@ -40,7 +41,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.8.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
         <dependency>

@@ -27,7 +27,7 @@ import java.util.*;
  **/
 @Component<#if tableConfig.getSchema()??>("${tableConfig.getSchema()}${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl")</#if>
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl extends BaseAudoDaoImpl<${tableConfig.getEntityName()}> implements ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao {
+public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl implements ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao {
     @Resource(name = "${mapperBeanName}")
     private ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Mapper mapper;
 
@@ -72,24 +72,6 @@ public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl
         return this.select(selector);
     }
 
-<#if primaryKeyColumns??><#list primaryKeyColumns as keyColumn>
-
-    @Override
-    public List<${tableConfig.getEntityName()}> selectBy<#if keyColumn_index == 0>Id<#elseif keyColumn_index gt 0>${keyColumn.getJavaPropertyFirstUpper()}</#if>(<#if keyColumn_index == 0>String<#elseif keyColumn_index gt 0>${keyColumn.getJavaType()}</#if> ${keyColumn.getJavaProperty()}) {
-        return select(${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.${keyColumn.getJavaProperty()}.toEqCondition(<#if keyColumn_index == 0>${primaryKeyColumns[0].getJavaType()}.parse<#if primaryKeyColumns[0].getJavaType() == 'Integer'>Int<#elseif primaryKeyColumns[0].getJavaType() != 'Integer'>${primaryKeyColumns[0].getJavaType()}</#if>(${primaryKeyColumns[0].getJavaProperty()})<#elseif keyColumn_index gt 0>${keyColumn.getJavaProperty()}</#if>));
-    }
-</#list>
-<#if primaryKeyColumns?size gt 1>
-    @Override
-    public List<${tableConfig.getEntityName()}> selectBy<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>And</#if>${keyColumn.getJavaPropertyFirstUpper()}</#list>(<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>, </#if>${keyColumn.getJavaType()} ${keyColumn.getJavaProperty()}</#list>) {
-        ManyCondition manyCondition = new ManyCondition();
-    <#list primaryKeyColumns as keyColumn>
-        manyCondition.add(${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.${keyColumn.getJavaProperty()}.toEqCondition(${keyColumn.getJavaProperty()}));
-    </#list>
-        return this.mapper.select(new SelectResolver(manyCondition, ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.TABLE, ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.ALL_FIELDS).toMetadata());
-    }
-</#if></#if>
-
     @Override
     public <Output> List<Output> select(Selector<${tableConfig.getEntityName()}> selector, Handle<Map, Output> handle) {
         SelectResolver resolver = new SelectResolver(selector, ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.TABLE, ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.ALL_FIELDS);
@@ -103,6 +85,11 @@ public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl
     }
 
     @Override
+    public List<${tableConfig.getEntityName()}> selectAll() {
+        return this.mapper.selectAll();
+    }
+
+    @Override
     public List<${tableConfig.getEntityName()}> selectAll(QColumn column, Sort sort){
         Selector selector = new Selector();
         selector.order(column,sort);
@@ -110,12 +97,11 @@ public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl
         SelectMetadata metadata = resolver.toMetadata();
         return this.mapper.select(metadata);
     }
-
     @Override
-    public <Output> Output selectRow(Selector<${tableConfig.getEntityName()}> selector, Handle<Map, Output> handle) {
+    public ${tableConfig.getEntityName()} selectOne(Selector<${tableConfig.getEntityName()}> selector) {
         SelectResolver resolver = new SelectResolver(selector, ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.TABLE, ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.ALL_FIELDS);
-        Map map = this.mapper.selectForMap(resolver.toMetadata());
-        return handle.handle(map);
+        SelectMetadata metadata = resolver.toMetadata();
+        return this.mapper.selectOne(metadata);
     }
 
     @Override
@@ -185,58 +171,11 @@ public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl
     //endregion
 
     //region write data
-    <#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0><#list primaryKeyColumns as keyColumn>
-
+    <#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0>
     @Override
-    public int updateBy<#if keyColumn_index == 0>Id<#elseif keyColumn_index gt 0>${keyColumn.getJavaPropertyFirstUpper()}</#if>(${tableConfig.getEntityName()} bean) {
-        return this.mapper.update(bean, ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.${keyColumn.getJavaProperty()}.toEqCondition(bean.get${keyColumn.getJavaPropertyFirstUpper()}()).prepare());
+    public ${tableConfig.getEntityName()} selectOneByID(Object... ids) {
+        return this.mapper.selectOneByID(ids);
     }
-
-    @Override
-    public int updateSelectiveBy<#if keyColumn_index == 0>Id<#elseif keyColumn_index gt 0>${keyColumn.getJavaPropertyFirstUpper()}</#if>(${tableConfig.getEntityName()} bean) {
-        return this.mapper.updateSelective(bean, ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.${keyColumn.getJavaProperty()}.toEqCondition(bean.get${keyColumn.getJavaPropertyFirstUpper()}()).prepare());
-    }
-    </#list>
-      <#if primaryKeyColumns?size gt 1>
-
-    @Override
-    public int updateBy<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>And</#if>${keyColumn.getJavaPropertyFirstUpper()}</#list>(${tableConfig.getEntityName()} bean) {
-        ManyCondition conditions = new ManyCondition();
-        <#list primaryKeyColumns as keyColumn>
-        conditions.add(${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.${keyColumn.getJavaProperty()}
-            .toEqCondition(bean.get${keyColumn.getJavaPropertyFirstUpper()}()));
-        </#list>
-        return this.mapper.update(bean, conditions.prepare());
-    }
-
-    @Override
-    public int updateSelectiveBy<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>And</#if>${keyColumn.getJavaPropertyFirstUpper()}</#list>(${tableConfig.getEntityName()} bean) {
-        ManyCondition conditions = new ManyCondition();
-        <#list primaryKeyColumns as keyColumn>
-        conditions.add(${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.${keyColumn.getJavaProperty()}
-            .toEqCondition(bean.get${keyColumn.getJavaPropertyFirstUpper()}()));
-        </#list>
-        return this.mapper.updateSelective(bean, conditions.prepare());
-    }</#if>
-    </#if></#if>
-    <#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0><#list primaryKeyColumns as keyColumn>
-
-    @Override
-    public int deleteBy<#if keyColumn_index == 0>Id<#elseif keyColumn_index gt 0>${keyColumn.getJavaPropertyFirstUpper()}</#if>(<#if keyColumn_index == 0>String<#elseif keyColumn_index gt 0>${keyColumn.getJavaType()}</#if> ${keyColumn.getJavaProperty()}) {
-        return this.mapper.delete(${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.${keyColumn.getJavaProperty()}.toEqCondition(<#if keyColumn_index == 0>${primaryKeyColumns[0].getJavaType()}.parse<#if primaryKeyColumns[0].getJavaType() == 'Integer'>Int<#elseif primaryKeyColumns[0].getJavaType() != 'Integer'>${primaryKeyColumns[0].getJavaType()}</#if>(${primaryKeyColumns[0].getJavaProperty()})<#elseif keyColumn_index gt 0>${keyColumn.getJavaProperty()}</#if>).prepare());
-    }
-    </#list>
-      <#if primaryKeyColumns?size gt 1>
-
-    @Override
-    public int deleteBy<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>And</#if>${keyColumn.getJavaPropertyFirstUpper()}</#list>(<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0>, </#if>${keyColumn.getJavaType()} ${keyColumn.getJavaProperty()}</#list>) {
-        ManyCondition conditions = new ManyCondition();
-        <#list primaryKeyColumns as keyColumn>
-        conditions.add(${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.${keyColumn.getJavaProperty()}
-            .toEqCondition(${keyColumn.getJavaProperty()}));
-        </#list>
-        return this.mapper.delete(conditions.prepare());
-    }</#if>
     </#if></#if>
 
     @Override
@@ -264,6 +203,36 @@ public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl
             conditions.add(condition[i]);
         }
         return this.mapper.delete(conditions.prepare());
+    }
+
+    @Override
+    public ${tableConfig.getEntityName()} selectOne(${tableConfig.getEntityName()} bean) {
+        return this.mapper.selectOne(bean);
+    }
+
+    @Override
+    public int insert(${tableConfig.getEntityName()} bean) {
+        return this.mapper.insert(bean);
+    }
+
+    @Override
+    public int insertSelective(${tableConfig.getEntityName()} bean) {
+        return this.mapper.insertSelective(bean);
+    }
+
+    @Override
+    public int deleteOneByID(Object... ids) {
+        return this.mapper.deleteOneByID(ids);
+    }
+
+    @Override
+    public int updateOneByID(${tableConfig.getEntityName()} bean) {
+        return this.mapper.updateOneByID(bean);
+    }
+
+    @Override
+    public int updateOneSelectiveByID(${tableConfig.getEntityName()} bean) {
+        return this.mapper.updateOneSelectiveByID(bean);
     }
     //endregion
 }
