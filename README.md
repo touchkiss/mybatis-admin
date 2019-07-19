@@ -7,112 +7,37 @@ A toy project for mybatis generator and admin.实现部分django admin的功能�
 演示地址  http://mybatis.touchkiss.com/admin
 
 # 使用步骤
-1. 删除/base/src/main/目录下的内容
-2. 配置/base/src/test/java/Generator.java
-
-`  
-
-        String root = "D:\\document\\java\\mybatis-demo\\base\\src\\main";
-        //工程java根目录
-        String rootPath = root + File.separator + "java";
-        //工程resources根目录
-        String xmlPath = root + File.separator + "resources";//初始化数据库连接
-        JDBCConnectionConfiguration dataConfig = new JDBCConnectionConfiguration();
-        dataConfig.setDriverClass("com.mysql.jdbc.Driver");
-        dataConfig.setUrl("jdbc:mysql://127.0.0.1:3306/ai");
-        dataConfig.setUsername("root");
-        dataConfig.setPassword("mouse");
-        dataConfig.getProperties().put("remarks", "true");
-        dataConfig.getProperties().put("useInformationSchema", "true");
-
-        //自动生成文件Map对象
-        Map<String, String> packages = Maps.newHashMap();
-        packages.put(DaoGenerator.ROOTPATH, rootPath);
-        //service业务层接口
-        packages.put(ServiceGenerator.PACKAGE, "com.touchkiss.mybatis.base.service");
-        //service业务层接口实现
-        packages.put(ServiceGenerator.PACKAGEIMPL, "com.touchkiss.mybatis.base.service.impl");
-        //dao层接口
-        packages.put(DaoGenerator.PACKAGE, "com.touchkiss.mybatis.base.dao.auto");
-        //dao层接口实现
-        packages.put(DaoGenerator.PACKAGEIMPL, "com.touchkiss.mybatis.base.dao.auto.impl");
-        //mapper层根目录
-        packages.put(MappingGenerator.ROOTPATH, rootPath);
-        //mapper层接口
-        packages.put(MappingGenerator.PACKAGE, "com.touchkiss.mybatis.base.mapper.auto");
-        //XML文件根目录
-        packages.put(XmlGenerator.ROOTPATH, xmlPath);
-        //XML文件
-        packages.put(XmlGenerator.PACKAGE, "mapper.auto");
-
-        GeneratorContext context = GeneratorContext.createContext(
-                //自动生成的根目录
-                rootPath,
-                //自动生成的Bean
-                "com.touchkiss.mybatis.base.bean",
-                //需要生成的Map对象
-                packages);
-        context.setForceBigDecimals(false);
-        context.setUseMark(false);
-        List<TableConfig> tableConfigs = Lists.newArrayList();
-
-        tableConfigs.add(new TableConfig("d_table").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
-        tableConfigs.add(new TableConfig("category").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
-        tableConfigs.add(new TableConfig("t_user").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
-        tableConfigs.add(new TableConfig("user_group").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
-        tableConfigs.add(new TableConfig("user").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
-        /*tableConfigs.add(new TableConfig("zq_user_account_today").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));*/
-        //  tableConfigs.add(new TableConfig("zq_article_context").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
-        MyBatisGenerator myBatisGenerator = new MyBatisGenerator(dataConfig, tableConfigs.toArray(new TableConfig[tableConfigs.size()]), context);
+1. git clone https://github.com/touchkiss/mybatis-admin
+2. 使用intellij idea打开此项目，
+3. mvn install安装此项目
+4. 创建一个自己的maven项目，继承
 
 
-        myBatisGenerator.generator();
+ 	<parent>
+        <groupId>com.touchkiss.mybatis</groupId>
+        <artifactId>mybatis-demo</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath/> 
+    </parent>
+5. dependencies添加
 
-使用该文件自动生成mybatis的bean、mapper、dao、service和xml文件。
 
-3. 配置/demo/src/main/java/com/touchkiss/mybatis/demo/Config，将需要管理的类加入
+ 	<dependency>
+        <groupId>com.touchkiss.mybatis</groupId>
+        <artifactId>generator</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+        <groupId>com.touchkiss.mybatis</groupId>
+        <artifactId>sqlbuilder</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+        <groupId>com.touchkiss.mybatis</groupId>
+        <artifactId>admin</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
 
-`  
-
-        //自定义属性名
-        RegisterInfo userRegisterInfo = new RegisterInfo("users", "用户", "t_user", "用户信息", TUser.class, TUserServiceImpl.class);
-         userRegisterInfo.getBeanInfo().setBeanPropertyInfos(new BeanPropertyInfo[]{
-                 new BeanPropertyInfo("id", "id", "java.lang.Integer"),
-                 new BeanPropertyInfo("groupId", "组id", "java.lang.String"),
-                 new BeanPropertyInfo("userName", "姓名", "java.lang.String"),
-                 new BeanPropertyInfo("age", "年龄", "java.lang.Integer"),
-                 new BeanPropertyInfo("lastModifyTime", "上次修改时间", "java.util.Date"),
-                 new BeanPropertyInfo("createTime", "创建时间", "java.util.Date")
-         });
-         //显示所有列
-         userRegisterInfo.getBeanInfo().showAllFields();
-         registerInfoMap.put("user", userRegisterInfo);
-         RegisterInfo catetoryInfo = new RegisterInfo("categorys", "类目", "category", "分类信息", Category.class, CategoryServiceImpl.class);
-         //自定义外键属性
-         ForeignKeyInfo parentidForkeyInfo = new ForeignKeyInfo();
-         parentidForkeyInfo.setName("category");
-         parentidForkeyInfo.setKeyName("id");
-         parentidForkeyInfo.setValueName("name");
-         //为外键属性添加selector
-         Selector selector = new Selector().addField(CategoryAutoDao.id, CategoryAutoDao.name).distinct(true);
-         parentidForkeyInfo.setSelector(selector);
-         //设置外键是否可编辑添加
-         parentidForkeyInfo.setEditable(true);
-         catetoryInfo.getForeignKeyInfoMap().put("parentid", parentidForkeyInfo);
-         ForeignKeyInfo topSelectOptions = new ForeignKeyInfo();
-         topSelectOptions.setName("top");
-         //添加不可编辑外键属性
-         topSelectOptions.setOptions(new ArrayList() {{
-             add(new SelectOption("1", "是"));
-             add(new SelectOption("0", "否"));
-         }});
-         topSelectOptions.setEditable(false);
-         catetoryInfo.getForeignKeyInfoMap().put("top", topSelectOptions);
-         registerInfoMap.put("category", catetoryInfo);
-         registerInfoMap.put("userGroup", new RegisterInfo("users", "用户", "user_group", "用户组信息", UserGroup.class, UserGroupServiceImpl.class));
-         RegisterInfo user2RegisgerInfo = new RegisterInfo("users", "用户", "user", "用户信息", User.class, UserServiceImpl.class);
-         user2RegisgerInfo.getBeanInfo().setIdColumnName("uid");
-         registerInfoMap.put("user2", user2RegisgerInfo);
-                
-
-4. 修改application.properties运行DemoApplication.java即可使用。
+6. 参考/base/src/test/java/Generator.java创建自己的mybatis文件
+7. 参考/demo/src/main/java/com/touchkiss/mybatis/demo/Config配置自己的注册文件
+8. Application启动类添加注解@ComponentScan(basePackages = {"com.touchkiss.mybatis.admin","你自己的项目包名"})
