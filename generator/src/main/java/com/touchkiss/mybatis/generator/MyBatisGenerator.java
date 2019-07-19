@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Iterator;
@@ -250,16 +251,16 @@ public class MyBatisGenerator {
                     File file = result.getFile();
                     if (!file.exists()) {
                         log.info("created..." + result.getPackageClassName());
-                        FileUtils.writeStringToFile(file, result.getText());
+                        FileUtils.writeStringToFile(file, result.getText(), Charset.forName("utf-8"));
                     } else {
-                        String preContext = FileUtils.readFileToString(file);
+                        String preContext = FileUtils.readFileToString(file,Charset.forName("utf-8"));
                         if (overwrite) {
                             if (result.getText().equals(preContext)) {
                                 log.info("skipd..." + result.getPackageClassName() + "（无需覆盖）");
                             } else {
                                 log.info("changed..." + result.getPackageClassName());
                                 file.delete();
-                                FileUtils.writeStringToFile(file, result.getText());
+                                FileUtils.writeStringToFile(file, result.getText(), Charset.forName("utf-8"));
                             }
                         } else {
                             log.info("skipd..." + result.getPackageClassName() + (result.getText().equals(preContext) ? "" : "（已改变）"));
