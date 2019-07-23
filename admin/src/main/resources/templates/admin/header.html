@@ -35,7 +35,7 @@
                                         <li th:each="menuItem:${menuGroup.menuItems}">
                                             <a th:attr="href='/admin/'+${menuGroup.name}+'/'+${menuItem.name}+'/add'">
                                                 <i class="fa fa-users text-aqua"></i><span
-                                                    th:text="'添加'+${menuItem.name}"></span>
+                                                    th:text="'添加'+${menuItem.showName}"></span>
                                             </a>
                                         </li>
                                     </block>
