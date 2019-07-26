@@ -27,10 +27,6 @@ public class BeanInfo {
         for (BeanPropertyInfo beanPropertyInfo : beanPropertyInfos) {
             this.beanPropertyInfoMap.put(beanPropertyInfo.getPropertyName(), beanPropertyInfo);
         }
-//        Arrays.stream(beanPropertyInfos).map(beanPropertyInfo -> {
-//            this.beanPropertyInfoMap.put(beanPropertyInfo.getPropertyName(), beanPropertyInfo);
-//            return null;
-//        });
         this.showFields = showFields;
         this.filterFields = filterFields;
         this.searchFields = searchFields;
