@@ -1,7 +1,5 @@
 package com.touchkiss.mybatis.admin.bean;
 
-import lombok.Data;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +7,6 @@ import java.util.Map;
  * @Author Touchkiss
  * @create: 2019-06-22 22:15
  */
-@Data
 public class RegisterInfo {
     private String group;
     private String groupShowName ;
@@ -77,5 +74,85 @@ public class RegisterInfo {
         this.serviceClazz = serviceClazz;
         this.beanInfo = beanInfo;
         this.foreignKeyInfoMap=new HashMap<>();
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getGroupShowName() {
+        return groupShowName;
+    }
+
+    public void setGroupShowName(String groupShowName) {
+        this.groupShowName = groupShowName;
+    }
+
+    public String getGroupIconClass() {
+        return groupIconClass;
+    }
+
+    public void setGroupIconClass(String groupIconClass) {
+        this.groupIconClass = groupIconClass;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getShowName() {
+        return showName;
+    }
+
+    public void setShowName(String showName) {
+        this.showName = showName;
+    }
+
+    public String getNameIconClass() {
+        return nameIconClass;
+    }
+
+    public void setNameIconClass(String nameIconClass) {
+        this.nameIconClass = nameIconClass;
+    }
+
+    public Class getBeanClazz() {
+        return beanClazz;
+    }
+
+    public void setBeanClazz(Class beanClazz) {
+        this.beanClazz = beanClazz;
+    }
+
+    public Class getServiceClazz() {
+        return serviceClazz;
+    }
+
+    public void setServiceClazz(Class serviceClazz) {
+        this.serviceClazz = serviceClazz;
+    }
+
+    public BeanInfo getBeanInfo() {
+        return beanInfo;
+    }
+
+    public void setBeanInfo(BeanInfo beanInfo) {
+        this.beanInfo = beanInfo;
+    }
+
+    public Map<String, ForeignKeyInfo> getForeignKeyInfoMap() {
+        return foreignKeyInfoMap;
+    }
+
+    public void setForeignKeyInfoMap(Map<String, ForeignKeyInfo> foreignKeyInfoMap) {
+        this.foreignKeyInfoMap = foreignKeyInfoMap;
     }
 }

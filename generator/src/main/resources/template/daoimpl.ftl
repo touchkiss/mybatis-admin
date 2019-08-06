@@ -24,7 +24,7 @@ import java.util.*;
  * ${table.getRemarks()}.dao层接口实现
  *
  * @author Touchkiss
- **/
+ */
 @Component<#if tableConfig.getSchema()??>("${tableConfig.getSchema()}${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl")</#if>
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl implements ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao {

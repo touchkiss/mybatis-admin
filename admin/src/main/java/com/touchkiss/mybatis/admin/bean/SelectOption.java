@@ -1,12 +1,9 @@
 package com.touchkiss.mybatis.admin.bean;
 
-import lombok.Data;
-
 /**
  * @Author Touchkiss
  * @create: 2019-07-05 17:24
  */
-@Data
 public class SelectOption {
     private String value;
     private String text;
@@ -17,5 +14,21 @@ public class SelectOption {
     }
 
     public SelectOption() {
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

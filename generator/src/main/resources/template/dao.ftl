@@ -17,16 +17,24 @@ import com.touchkiss.mybatis.sqlbuild.query.QTable;
  * @author Touchkiss
  **/
 public interface ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao extends ReadBaseDao<${tableConfig.getEntityName()}>, WriteBaseDao<${tableConfig.getEntityName()}> {
-    QTable<${tableConfig.getEntityName()}> TABLE = new QTable<>(<#if tableConfig.getSchema()??>"${tableConfig.getSchema()}", </#if>"${table.getTableName()}");   //${table.getRemarks()}
-    //region filds
+    /**
+     * ${table.getRemarks()}
+     */
+    QTable<${tableConfig.getEntityName()}> TABLE = new QTable<>(<#if tableConfig.getSchema()??>"${tableConfig.getSchema()}", </#if>"${table.getTableName()}");
 <#list columns as column>
-    QColumn<${tableConfig.getEntityName()}, ${column.getJavaType()}> ${column.getJavaProperty()} = new QColumn<>(TABLE, "${column.getColumnName()}");    //${column.getRemarks()}
+    /**
+     * ${column.getRemarks()}
+     */
+    QColumn<${tableConfig.getEntityName()}, ${column.getJavaType()}> ${column.getJavaProperty()} = new QColumn<>(TABLE, "${column.getColumnName()}");
 </#list>
-    //所有字段
-    QColumn<${tableConfig.getEntityName()}, Object>[] ALL_FIELDS = new QColumn[]{<#list columns as column><#if column_index != 0> ,</#if> ${column.getJavaProperty()}</#list>};
-    //endregion
+    /**
+     * 所有字段
+     */
+    QColumn<${tableConfig.getEntityName()}, Object>[] ALL_FIELDS = new QColumn[]{<#list columns as column><#if column_index != 0>, </#if>${column.getJavaProperty()}</#list>};
 
-    //查询处理 handle
+    /**
+     * 查询处理 handle
+     */
     Handle<${tableConfig.getEntityName()}, ManyCondition> SELECT_WHERE_HANDLE = (bean) -> {
         ManyCondition conditions = new ManyCondition();
 <#list columns as column>

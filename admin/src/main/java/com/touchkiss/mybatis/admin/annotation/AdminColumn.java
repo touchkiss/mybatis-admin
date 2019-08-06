@@ -11,15 +11,13 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface AdminColumn {
-    String comment() default "";
+    String comment();
 
-    int length() default 0;
+    int length();
 
-    String jdbctype() default "";
+    String jdbctype();
 
-    boolean nullable() default true;
+    boolean nullable();
 
-    boolean autoIncrement() default false;
-
-    String defaultValue() default "";
+    boolean autoIncrement();
 }

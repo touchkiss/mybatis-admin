@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="${mapperPackage}">
     <#if tableConfig.getCache()??>
-        <cache<#if tableConfig.getCache().getType()??>
+    <cache<#if tableConfig.getCache().getType()??>
                 type="${tableConfig.getCache().getType()}"</#if><#if tableConfig.getCache().getEviction()??>
                 eviction="${tableConfig.getCache().getEviction()}"</#if><#if tableConfig.getCache().getFlushInterval()??>
                 flushInterval="${tableConfig.getCache().getFlushInterval()?c}"</#if><#if tableConfig.getCache().getReadOnly()??>
@@ -11,14 +11,12 @@
     <resultMap id="baseResultMap" type="${entityPackage}">
     <#list columns as column>
       <#if column.getIsPrimaryKey()>
-        <id column="${column.getColumnName()}" property="${column.getJavaProperty()}"
-            jdbcType="${column.getJdbcType()}"/>
+        <id column="${column.getColumnName()}" property="${column.getJavaProperty()}" jdbcType="${column.getJdbcType()}"/>
       </#if>
     </#list>
     <#list columns as column>
       <#if !column.getIsPrimaryKey()>
-        <result column="${column.getColumnName()}" property="${column.getJavaProperty()}"
-                jdbcType="${column.getJdbcType()}"/>
+        <result column="${column.getColumnName()}" property="${column.getJavaProperty()}" jdbcType="${column.getJdbcType()}"/>
       </#if>
     </#list>
     <#list tableConfig.customProperties as customProperty>
@@ -38,15 +36,11 @@
                 <otherwise>${r'$'}{item.field}</otherwise>
             </choose><#else>${r'$'}{item.field}</#if> </foreach>
         from
-        <if test="meta.from.getSchema() != null"><#if context.getUseMark()>"</#if>${r'$'}
-            {meta.from.getSchema()}<#if context.getUseMark()>"</#if>.
-        </if><#if context.getUseMark()>"</#if>${r'$'}{meta.from.table}<#if context.getUseMark()>"</#if>
-        <if test="meta.from.aliasTable != null">${r'$'}{meta.from.aliasTable}</if>
+        <if test="meta.from.getSchema() != null"><#if context.getUseMark()>"</#if>${r'$'}{meta.from.getSchema()}<#if context.getUseMark()>"</#if>.</if><#if context.getUseMark()>"</#if>${r'$'}{meta.from.table}<#if context.getUseMark()>"</#if> <if test="meta.from.aliasTable != null">${r'$'}{meta.from.aliasTable}</if>
         <if test="meta.joinTable != null">
             <foreach collection="meta.joinTable" item="item" index="index" separator=" ">
             ${r'$'}{item.join} join
-                <if test="item.getSchema() != null"><#if context.getUseMark()>"</#if>${r'$'}{item.getSchema()}<#if context.getUseMark()>"</#if>.
-                </if><#if context.getUseMark()>"</#if>${r'$'}{item.table}<#if context.getUseMark()>"</#if> ${r'$'}{item.aliasTable}
+                <if test="item.getSchema() != null"><#if context.getUseMark()>"</#if>${r'$'}{item.getSchema()}<#if context.getUseMark()>"</#if>.</if><#if context.getUseMark()>"</#if>${r'$'}{item.table}<#if context.getUseMark()>"</#if> ${r'$'}{item.aliasTable}
                 <if test="item.conditions != null">on
                     <foreach collection="item.conditions" item="condition" index="i">
                         <if test="i &gt; 0">${r'$'}{item.sqlLogic}</if>
@@ -110,35 +104,31 @@
             useCache="true"</#if>>
         <include refid="selectSql"/>
     </select>
+
     <select id="selectPage" parameterType="com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata"
             resultMap="baseResultMap" <#if tableConfig.getCache()?? && tableConfig.getCache().getSelectUseCache()>
             useCache="true"</#if>>
         <include refid="selectSql"/>
     </select>
+
     <select id="selectOne" parameterType="com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata"
             resultMap="baseResultMap" <#if tableConfig.getCache()?? && tableConfig.getCache().getSelectUseCache()>
             useCache="true"</#if>>
         <include refid="selectSql"/>
     </select>
 
-    <select id="selectForMapAll"
-            resultType="map" <#if tableConfig.getCache()?? && tableConfig.getCache().getSelectUseCache()>
-            useCache="true"</#if>>
-        SELECT <include refid="allFields"/>
-        FROM <#if tableConfig.getSchema()??><#if context.getUseMark()>
-        "</#if>${tableConfig.getSchema()}<#if context.getUseMark()>"</#if>.</#if><#if context.getUseMark()>
-        "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if>
-    </select>
     <select id="selectForMap" parameterType="com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata"
             resultType="map" <#if tableConfig.getCache()?? && tableConfig.getCache().getSelectUseCache()>
             useCache="true"</#if>>
         <include refid="selectSql"/>
     </select>
+
     <select id="selectForListMap" resultType="map"
             parameterType="com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata" <#if tableConfig.getCache()?? && tableConfig.getCache().getSelectUseCache()>
             useCache="true"</#if>>
         <include refid="selectSql"/>
     </select>
+
     <select id="selectPageForListMap" resultType="map"
             parameterType="com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata" <#if tableConfig.getCache()?? && tableConfig.getCache().getSelectUseCache()>
             useCache="true"</#if>>

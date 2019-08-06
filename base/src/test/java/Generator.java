@@ -20,7 +20,7 @@ public class Generator {
     }
 
     public static void DevGenerator() {
-        String root = "E:\\document\\java\\mybatis-demo\\base\\src\\main";
+        String root = "D:\\documents\\java\\mybatis-admin\\base\\src\\main";
         //工程java根目录
         String rootPath = root + File.separator + "java";
         //工程resources根目录
@@ -28,8 +28,8 @@ public class Generator {
 
         //初始化数据库连接
         JDBCConnectionConfiguration dataConfig = new JDBCConnectionConfiguration();
-        dataConfig.setDriverClass("com.mysql.jdbc.Driver");
-        dataConfig.setUrl("jdbc:mysql://127.0.0.1:3306/ai");
+        dataConfig.setDriverClass("com.mysql.cj.jdbc.Driver");
+        dataConfig.setUrl("jdbc:mysql://127.0.0.1:3306/ai?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true");
         dataConfig.setUsername("root");
         dataConfig.setPassword("mouse");
         dataConfig.getProperties().put("remarks", "true");

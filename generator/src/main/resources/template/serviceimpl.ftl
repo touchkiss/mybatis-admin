@@ -19,7 +19,7 @@ import java.util.Map;
  * ${table.getRemarks()}.service业务层实现
  *
  * @author ${tableConfig.getEntityName()}ouchkiss
- **/
+ */
 @Service
 public class ${tableConfig.getEntityName()}ServiceImpl implements ${tableConfig.getEntityName()}Service {
     @Autowired

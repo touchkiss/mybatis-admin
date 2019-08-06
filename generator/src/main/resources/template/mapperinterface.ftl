@@ -9,7 +9,7 @@ import com.touchkiss.mybatis.sqlbuild.mapper.BaseMapper;
  * ${table.getRemarks()}.mapper层接口
  *
  * @author Touchkiss
- **/
+ */
 <#if annotations??><#list annotations as annoName>@${annoName}
 </#list></#if>
 public interface ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Mapper extends BaseMapper<${tableConfig.getEntityName()}> {

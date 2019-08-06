@@ -9,6 +9,6 @@ import java.util.List;
  * ${table.getRemarks()}.service业务层接口
  *
  * @author Touchkiss
- **/
+ */
 public interface ${tableConfig.getEntityName()}Service extends BaseService<${tableConfig.getEntityName()}>{
 }
