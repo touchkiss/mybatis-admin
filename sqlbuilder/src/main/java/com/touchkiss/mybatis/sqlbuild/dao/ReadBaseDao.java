@@ -41,7 +41,7 @@ public interface ReadBaseDao<T> {
         }
     };
 
-    T selectOneByID(Object...ids);
+    T selectOneByID(Object... ids);
 
     List<T> selectAll();
 
@@ -57,19 +57,27 @@ public interface ReadBaseDao<T> {
 
     <Output> List<Output> select(Selector<T> selector, Handle<Map, Output> handle);
 
-    <Output> Page<Output> selectPage(Selector<T> selector, Handle<Map, Output> handle, int pageNo, int pageSize);
+    <Output> Page<Output> selectPage(Selector<T> selector, Handle<Map, Output> handle, int pageNum, int pageSize);
 
     Long selectCount(ICondition... iConditions);
 
     Long selectCount(T bean);
 
-    Page<T> selectPage(int pageNo, int pageSize, ICondition... iConditions);
+    Page<T> selectPage(int pageNum, int pageSize, ICondition... iConditions);
 
-    Page<T> selectPage(Selector<T> selector, int pageNo, int pageSize);
+//    Page<Map> selectPageForMap(int pageNum, int pageSize, ICondition... iConditions);
 
-    Page<T> selectPage(T bean, int pageNo, int pageSize);
+    Page<T> selectPage(Selector<T> selector, int pageNum, int pageSize);
 
-    Page<T> selectPage(Map<String, String[]> map, int pageNo, int pageSize);
+    Page<Map> selectPageForMap(Selector<T> selector, int pageNum, int pageSize);
+
+    Page<T> selectPage(T bean, int pageNum, int pageSize);
+
+//    Page<Map> selectPageForMap(T bean, int pageNum, int pageSize);
+
+    Page<T> selectPage(Map<String, String[]> map, int pageNum, int pageSize);
+
+//    Page<Map> selectPageForMap(Map<String, String[]> map, int pageNum, int pageSize);
 
     T selectOne(T bean);
 

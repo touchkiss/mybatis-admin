@@ -83,6 +83,8 @@ public interface BaseService<T> {
      */
     Page<T> selectPage(Selector<T> selector, int pageNo, int pageSize);
 
+    Page<Map> selectPageForMap(Selector<T> selector, int pageNo, int pageSize);
+
     /**
      * 分页查询 - 适用于手动添加查询方法
      */

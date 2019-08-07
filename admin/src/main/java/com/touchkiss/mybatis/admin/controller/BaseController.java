@@ -1,11 +1,13 @@
 package com.touchkiss.mybatis.admin.controller;
 
 import com.google.gson.internal.Primitives;
+import com.touchkiss.mybatis.admin.annotation.AdminColumn;
 import com.touchkiss.mybatis.admin.bean.ForeignKeyInfo;
 import com.touchkiss.mybatis.admin.bean.Menu;
 import com.touchkiss.mybatis.admin.bean.RegisterInfo;
 import com.touchkiss.mybatis.admin.bean.SelectOption;
 import com.touchkiss.mybatis.admin.config.AdminConfig;
+import com.touchkiss.mybatis.admin.config.Constants;
 import com.touchkiss.mybatis.admin.exception.ErrorCompareValueException;
 import com.touchkiss.mybatis.admin.exception.ErrorParseSelectorException;
 import com.touchkiss.mybatis.admin.exception.NoSuchTableConfigException;
@@ -48,7 +50,7 @@ public abstract class BaseController {
     protected HttpServletResponse response;
 
     final static String ENCODING = "utf-8";
-    final static DateFormat df = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+    final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     abstract <T> Selector getSelector(String tableName, Boolean strict) throws UnsupportedEncodingException, ErrorCompareValueException, ErrorParseSelectorException, NoSuchTableConfigException;
 
@@ -378,56 +380,56 @@ public abstract class BaseController {
                     Class fieldType = field.getType();
 //            得到成员变量类型的名字
                     String typeName = fieldType.getName();
-                    switch (typeName) {
-                        case "java.lang.Integer":
-                            if (StringUtils.isNotBlank(fieldInRequest)) {
+                    if (StringUtils.isNotBlank(fieldInRequest)) {
+                        switch (typeName) {
+                            case "java.lang.Integer":
                                 field.set(obj, Integer.valueOf(fieldInRequest));
-                            }
-                            break;
-                        case "java.lang.String":
-                            if (StringUtils.isNotBlank(fieldInRequest)) {
+                                break;
+                            case "java.lang.String":
                                 field.set(obj, fieldInRequest);
-                            } else if (setStringNull) {
-                                field.set(obj, "");
-                            }
-                            break;
-                        case "java.lang.Long":
-                            if (StringUtils.isNotBlank(fieldInRequest)) {
+                                break;
+                            case "java.lang.Long":
                                 field.set(obj, Long.valueOf(fieldInRequest));
-                            }
-                            break;
-                        case "java.lang.Double":
-                            if (StringUtils.isNotBlank(fieldInRequest)) {
+                                break;
+                            case "java.lang.Double":
                                 field.set(obj, Double.valueOf(fieldInRequest));
-                            }
-                            break;
-                        case "java.lang.Boolean":
-                            if (StringUtils.isNotBlank(fieldInRequest)) {
+                                break;
+                            case "java.lang.Boolean":
                                 field.set(obj, Boolean.valueOf(fieldInRequest));
-                            }
-                            break;
-                        case "java.lang.Float":
-                            if (StringUtils.isNotBlank(fieldInRequest)) {
+                                break;
+                            case "java.lang.Float":
                                 field.set(obj, Float.valueOf(fieldInRequest));
-                            }
-                            break;
-                        case "java.lang.Short":
-                            if (StringUtils.isNotBlank(fieldInRequest)) {
+                                break;
+                            case "java.lang.Short":
                                 field.set(obj, Short.valueOf(fieldInRequest));
-                            }
-                            break;
-                        case "java.lang.Byte":
-                            if (StringUtils.isNotBlank(fieldInRequest)) {
+                                break;
+                            case "java.lang.Byte":
                                 field.set(obj, Byte.valueOf(fieldInRequest));
-                            }
-                            break;
-                        case "java.util.Date":
-                            if (StringUtils.isNotBlank(fieldInRequest)) {
-                                field.set(obj, df.parse(fieldInRequest));
-                            }
-                            break;
-                        default:
-                            break;
+                                break;
+                            case "java.util.Date":
+                                if (field.isAnnotationPresent(AdminColumn.class)) {
+                                    AdminColumn adminColumn = field.getAnnotation(AdminColumn.class);
+                                    switch (adminColumn.jdbctype()) {
+                                        case "DATE":
+                                            field.set(obj, Constants.DEFAULT_DATE_FORMAT.parse(fieldInRequest));
+                                            break;
+                                        case "TIME":
+                                            field.set(obj, Constants.DEFAULT_TIME_FORMAT.parse(fieldInRequest));
+                                            break;
+                                        default:
+                                            field.set(obj, Constants.DEFAULT_DATETIME_FORMAT.parse(fieldInRequest));
+                                            break;
+                                    }
+                                } else {
+                                    field.set(obj, Constants.DEFAULT_DATETIME_FORMAT.parse(fieldInRequest));
+                                    break;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    } else if ("java.lang.String".equals(typeName) && StringUtils.isEmpty(fieldInRequest) && setStringNull) {
+                        field.set(obj, "");
                     }
                 } catch (SecurityException e) {
                     e.printStackTrace();

@@ -5,12 +5,18 @@ package com.touchkiss.mybatis.admin.bean;
  * @create: 2019-06-25 15:03
  */
 public class BeanPropertyInfo {
-    private Object value;
+    private String columnName;
+    private String remarks;
+    private int length;
+    private String jdbctype;
     private String propertyName;
     private String propertyShowName;
     private String propertyType;
     private boolean required;
     private boolean order;
+    private boolean isPrimaryKey;
+    private boolean nullable;
+    private boolean autoIncrement;
 
     public BeanPropertyInfo() {
     }
@@ -47,12 +53,36 @@ public class BeanPropertyInfo {
         this.order = order;
     }
 
-    public Object getValue() {
-        return value;
+    public String getColumnName() {
+        return columnName;
     }
 
-    public void setValue(Object value) {
-        this.value = value;
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public String getJdbctype() {
+        return jdbctype;
+    }
+
+    public void setJdbctype(String jdbctype) {
+        this.jdbctype = jdbctype;
     }
 
     public String getPropertyName() {
@@ -93,5 +123,29 @@ public class BeanPropertyInfo {
 
     public void setOrder(boolean order) {
         this.order = order;
+    }
+
+    public boolean isPrimaryKey() {
+        return isPrimaryKey;
+    }
+
+    public void setPrimaryKey(boolean primaryKey) {
+        isPrimaryKey = primaryKey;
+    }
+
+    public boolean isNullable() {
+        return nullable;
+    }
+
+    public void setNullable(boolean nullable) {
+        this.nullable = nullable;
+    }
+
+    public boolean isAutoIncrement() {
+        return autoIncrement;
+    }
+
+    public void setAutoIncrement(boolean autoIncrement) {
+        this.autoIncrement = autoIncrement;
     }
 }

@@ -3,7 +3,6 @@ package ${implPackageName};
 import com.touchkiss.mybatis.sqlbuild.Handle;
 import com.touchkiss.mybatis.sqlbuild.condition.ManyCondition;
 import com.touchkiss.mybatis.sqlbuild.condition.original.ICondition;
-import com.touchkiss.mybatis.sqlbuild.dao.impl.BaseAudoDaoImpl;
 import com.touchkiss.mybatis.sqlbuild.keyword.Sort;
 import com.touchkiss.mybatis.sqlbuild.query.QColumn;
 import com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata;
@@ -137,14 +136,14 @@ public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl
     }
 
     @Override
-    public Page<${tableConfig.getEntityName()}> selectPage(Map<String, String[]> map, int pageNo, int pageSize) {
+    public Page<${tableConfig.getEntityName()}> selectPage(Map<String, String[]> map, int pageNum, int pageSize) {
         Selector<${tableConfig.getEntityName()}> selector = new Selector<>();
         for (QColumn<${tableConfig.getEntityName()}, Object> field : ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.ALL_FIELDS) {
             if (map.containsKey(field.getColumnName())) {
                 selector.where(field, map.get(field.getColumnName())[0]);
             }
         }
-        return selectPage(selector, pageNo, pageSize);
+        return selectPage(selector, pageNum, pageSize);
     }
 
     @Override
@@ -160,6 +159,13 @@ public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl
         PageHelper.startPage(pageNum, pageSize);
         SelectResolver resolver = new SelectResolver(selector, ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.TABLE, ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.ALL_FIELDS);
         return this.mapper.selectPage(resolver.toMetadata());
+    }
+
+    @Override
+    public Page<Map> selectPageForMap(Selector<${tableConfig.getEntityName()}> selector, int pageNum, int pageSize){
+        PageHelper.startPage(pageNum, pageSize);
+        SelectResolver resolver = new SelectResolver(selector, ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.TABLE, ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.ALL_FIELDS);
+        return this.mapper.selectPageForListMap(resolver.toMetadata());
     }
 
     @Override

@@ -91,17 +91,22 @@ public class ${tableConfig.getEntityName()}ServiceImpl implements ${tableConfig.
 	}
 
 	@Override
-	public Page<${tableConfig.getEntityName()}> selectPage(Selector<${tableConfig.getEntityName()}> selector, int pageNo, int pageSize) {
-		return this.dao.selectPage(selector, pageNo, pageSize);
+	public Page<${tableConfig.getEntityName()}> selectPage(Selector<${tableConfig.getEntityName()}> selector, int pageNum, int pageSize) {
+		return this.dao.selectPage(selector, pageNum, pageSize);
 	}
 
 	@Override
-	public Page<${tableConfig.getEntityName()}> selectPage(Map<String, String[]> map, int pageNo, int pageSize) {
-		return this.dao.selectPage(map, pageNo, pageSize);
+	public Page<Map> selectPageForMap(Selector<${tableConfig.getEntityName()}> selector, int pageNum, int pageSize) {
+		return this.dao.selectPageForMap(selector, pageNum, pageSize);
 	}
 
 	@Override
-	public Page<${tableConfig.getEntityName()}> selectPage(${tableConfig.getEntityName()} bean, int pageNo, int pageSize) {
-		return this.dao.selectPage(bean, pageNo, pageSize);
+	public Page<${tableConfig.getEntityName()}> selectPage(Map<String, String[]> map, int pageNum, int pageSize) {
+		return this.dao.selectPage(map, pageNum, pageSize);
+	}
+
+	@Override
+	public Page<${tableConfig.getEntityName()}> selectPage(${tableConfig.getEntityName()} bean, int pageNum, int pageSize) {
+		return this.dao.selectPage(bean, pageNum, pageSize);
 	}
 }

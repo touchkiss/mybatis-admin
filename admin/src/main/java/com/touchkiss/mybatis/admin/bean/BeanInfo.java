@@ -1,5 +1,8 @@
 package com.touchkiss.mybatis.admin.bean;
 
+import com.touchkiss.mybatis.admin.annotation.AdminBean;
+import com.touchkiss.mybatis.admin.annotation.AdminColumn;
+
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -8,7 +11,8 @@ import java.util.*;
  * @create: 2019-06-22 22:37
  */
 public class BeanInfo {
-    private String idColumnName;
+    private List<String> idColumnList;
+    private String remarks;
     private BeanPropertyInfo[] beanPropertyInfos;
     private Map<String, BeanPropertyInfo> beanPropertyInfoMap;
     private String[] showFields;
@@ -17,8 +21,7 @@ public class BeanInfo {
     private Set<String> filterFieldSet;
     private Set<String> searchFieldSet;
 
-    public BeanInfo(String idColumnName, BeanPropertyInfo[] beanPropertyInfos, String[] showFields, String[] filterFields, String[] searchFields, Set<String> filterFieldSet, Set<String> searchFieldSet) {
-        this.idColumnName = idColumnName;
+    public BeanInfo(BeanPropertyInfo[] beanPropertyInfos, String[] showFields, String[] filterFields, String[] searchFields, Set<String> filterFieldSet, Set<String> searchFieldSet) {
         this.beanPropertyInfos = beanPropertyInfos;
         this.beanPropertyInfoMap = new HashMap<>();
         for (BeanPropertyInfo beanPropertyInfo : beanPropertyInfos) {
@@ -35,8 +38,13 @@ public class BeanInfo {
     }
 
     public BeanInfo(Class clazz) {
+        if (clazz.isAnnotationPresent(AdminBean.class)) {
+            AdminBean adminBean = (AdminBean) clazz.getAnnotation(AdminBean.class);
+            this.remarks = adminBean.value();
+        }
         Field[] fields = clazz.getDeclaredFields();
         int length = fields.length;
+        this.idColumnList = new ArrayList<>();
         this.beanPropertyInfos = new BeanPropertyInfo[length];
         this.beanPropertyInfoMap = new HashMap<>();
         this.showFields = new String[length];
@@ -45,11 +53,23 @@ public class BeanInfo {
         this.filterFields = new String[length];
         this.filterFieldSet = new HashSet<>(length * 2);
         if (length > 0) {
-            this.idColumnName = fields[0].getName();
             for (int i = 0; i < length; i++) {
                 Field field = fields[i];
                 String fieldName = field.getName();
                 BeanPropertyInfo beanPropertyInfo = new BeanPropertyInfo(fieldName, field.getType().getName());
+                if (field.isAnnotationPresent(AdminColumn.class)) {
+                    AdminColumn adminColumn = field.getAnnotation(AdminColumn.class);
+                    if (adminColumn.isPrimaryKey()){
+                        idColumnList.add(fieldName);
+                    }
+                    beanPropertyInfo.setColumnName(adminColumn.columnName());
+                    beanPropertyInfo.setPrimaryKey(adminColumn.isPrimaryKey());
+                    beanPropertyInfo.setRemarks(adminColumn.remarks());
+                    beanPropertyInfo.setLength(adminColumn.length());
+                    beanPropertyInfo.setJdbctype(adminColumn.jdbctype());
+                    beanPropertyInfo.setNullable(adminColumn.nullable());
+                    beanPropertyInfo.setAutoIncrement(adminColumn.autoIncrement());
+                }
                 this.beanPropertyInfoMap.put(fieldName, beanPropertyInfo);
                 this.beanPropertyInfos[i] = beanPropertyInfo;
                 this.showFields[i] = fieldName;
@@ -93,12 +113,20 @@ public class BeanInfo {
         this.searchFieldSet.addAll(Arrays.asList(searchFields));
     }
 
-    public String getIdColumnName() {
-        return idColumnName;
+    public List<String> getIdColumnList() {
+        return idColumnList;
     }
 
-    public void setIdColumnName(String idColumnName) {
-        this.idColumnName = idColumnName;
+    public void setIdColumnList(List<String> idColumnList) {
+        this.idColumnList = idColumnList;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public BeanPropertyInfo[] getBeanPropertyInfos() {

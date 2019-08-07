@@ -11,7 +11,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface AdminColumn {
-    String comment();
+    String columnName();
+
+    boolean isPrimaryKey();
+
+    String remarks();
 
     int length();
 

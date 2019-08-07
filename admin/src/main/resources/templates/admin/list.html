@@ -48,7 +48,8 @@
         ul.dropdown-menu li .input-group span.input-group-addon {
             width: 40px;
         }
-        table tbody tr td .fa{
+
+        table tbody tr td .fa {
             font-size: 20px;
         }
     </style>
@@ -394,7 +395,7 @@
                     </div>
                 </div>
                 <div class="box-body">
-                    <div class="dataTables_wrapper form-inline dt-bootstrap">
+                    <div class="dataTables_wrapper form-inline dt-bootstrap" style="overflow: auto;">
                         <div class="row">
                             <div class="col-sm-12">
                                 <table id="table"
@@ -466,16 +467,14 @@
 <script src="/js/demo.js"></script>
 <script th:inline="javascript">
     var selectAll = false;
-    // $(function () {
     var showFields = [[${registerInfo.beanInfo.showFields}]];
     var cols = new Array();
-    var selectAll = false;
-    var idColumnName = [[${registerInfo.beanInfo.idColumnName}]];
+    var idColumnList = [[${registerInfo.beanInfo.idColumnList}]];
     cols.push({
         "data": null,
         "defaultContent": "",
         "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-            var checkbox = $("<input/>").attr("type", "checkbox").css("display", "block").attr("data-id", sData[idColumnName]);
+            var checkbox = $("<input/>").attr("type", "checkbox").css("display", "block").attr("data-id", getIdColumnNames(sData));
             $(nTd).empty().append(checkbox);
         }
     });
@@ -490,10 +489,10 @@
         "defaultContent": "",
         "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
             $(nTd).empty();
-            var updateBtn = $("<a></a>").attr("href", "/admin/" + [[${group}]] + "/" + [[${name}]] + "/" + sData[idColumnName] + "/update").addClass("fa").addClass("fa-pencil").attr("title", "编辑").appendTo($(nTd));
+            var updateBtn = $("<a></a>").attr("href", "/admin/" + [[${group}]] + "/" + [[${name}]] + "/" + getIdColumnNames(sData) + "/update").addClass("fa").addClass("fa-pencil").attr("title", "编辑").appendTo($(nTd));
             $(nTd).append("&nbsp;").append("&nbsp;");
             var deleteBtn = $("<a></a>").attr("href", "#").click(function () {
-                deleteItem("/admin/" + [[${group}]] + "/" + [[${name}]] + "/" + sData[idColumnName] + "/delete");
+                deleteItem("/admin/" + [[${group}]] + "/" + [[${name}]] + "/" + getIdColumnNames(sData) + "/delete");
             }).addClass("fa").addClass("fa-trash").attr("title", "删除").appendTo($(nTd));
         }
     });
@@ -570,7 +569,7 @@
                         n++;
                         href += $(input).attr("id") + '=' + encodeURI(value);
                     }
-                })
+                });
                 $.each($("#searchBox select"), function (index, select) {
                     var selectedOptions = $(select).find("option:selected");
                     var values = new Array();
@@ -716,6 +715,19 @@
         if (r != null) return decodeURI(r[2]);
         return null;
     }
+
+    function getIdColumnNames(sData) {
+        if (idColumnList && idColumnList.length > 0) {
+            var idnames = new Array();
+            $.each(idColumnList, function (i, id) {
+                idnames.push(sData[id]);
+            });
+            return idnames.join(',');
+        }
+        alert("该表没有主键，不予处理");
+        return ''
+    }
+
 </script>
 </body>
 </html>

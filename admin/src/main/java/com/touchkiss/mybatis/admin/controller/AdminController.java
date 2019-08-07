@@ -1,11 +1,13 @@
 package com.touchkiss.mybatis.admin.controller;
 
 import com.github.pagehelper.Page;
+import com.touchkiss.mybatis.admin.annotation.AdminColumn;
 import com.touchkiss.mybatis.admin.bean.BeanPropertyInfo;
 import com.touchkiss.mybatis.admin.bean.ForeignKeyInfo;
 import com.touchkiss.mybatis.admin.bean.PageUtil;
 import com.touchkiss.mybatis.admin.bean.RegisterInfo;
 import com.touchkiss.mybatis.admin.config.AdminConfig;
+import com.touchkiss.mybatis.admin.config.Constants;
 import com.touchkiss.mybatis.admin.exception.ErrorCompareValueException;
 import com.touchkiss.mybatis.admin.exception.ErrorParseSelectorException;
 import com.touchkiss.mybatis.admin.exception.NoSuchTableConfigException;
@@ -15,16 +17,19 @@ import com.touchkiss.mybatis.sqlbuild.service.BaseService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @Author Touchkiss
@@ -33,6 +38,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("admin")
 public class AdminController extends JQueryDataTableController {
+    @Value("${kindeditor.imgupload.path:/admin/imgUpload}")
+    private String imgUploadPath;
+    @Value("${kindeditor.imageupload.storepath:default}")
+    private String imgStorePath;
 
     @RequestMapping("")
     public ModelAndView index(HttpSession httpSession) {
@@ -90,7 +99,48 @@ public class AdminController extends JQueryDataTableController {
             start = start / 10 + 1;
         }
         Page page = baseService.selectPage(selector, start, length);
-        return new PageUtil(draw, page);
+        Page<Map> result = new Page();
+        List resultList = page.getResult();
+        if (CollectionUtils.isNotEmpty(resultList)) {
+            for (Object o : resultList) {
+                Class<?> aClass = o.getClass();
+                Field[] declaredFields = aClass.getDeclaredFields();
+                Map<String, Object> valueMap = new HashMap<>(declaredFields.length * 2 + 1);
+                for (Field field : declaredFields) {
+                    try {
+                        field.setAccessible(true);
+                        Object value = field.get(o);
+                        String fieldName = field.getName();
+                        if (field.isAnnotationPresent(AdminColumn.class)) {
+                            AdminColumn adminColumn = field.getAnnotation(AdminColumn.class);
+                            if ("java.util.Date".equals(field.getType().getTypeName()) && value != null) {
+                                switch (adminColumn.jdbctype()) {
+                                    case "TIME":
+                                        valueMap.put(fieldName, Constants.DEFAULT_TIME_FORMAT.format(value));
+                                        break;
+                                    case "DATE":
+                                        valueMap.put(fieldName, Constants.DEFAULT_DATE_FORMAT.format(value));
+                                        break;
+                                    default:
+                                        valueMap.put(fieldName, Constants.DEFAULT_DATETIME_FORMAT.format(value));
+                                        break;
+                                }
+                            } else {
+                                valueMap.put(fieldName, value);
+                            }
+                        } else {
+                            valueMap.put(fieldName, value);
+                        }
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+                result.add(valueMap);
+            }
+        }
+        result.setTotal(page.getTotal());
+        System.out.println(this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+        return new PageUtil(draw, result);
     }
 
     @GetMapping("{group}/{name}/add")
@@ -105,6 +155,7 @@ public class AdminController extends JQueryDataTableController {
         modelAndView.addObject("menu", getMenu(httpSession));
         modelAndView.addObject("registerInfo", registerInfo);
         modelAndView.addObject("actionPath", "/admin/" + group + "/" + name + "/add");
+        modelAndView.addObject("imgUploadPath", imgUploadPath);
         generateSelectOptions(registerInfo, modelAndView);
         return modelAndView;
     }
@@ -157,14 +208,26 @@ public class AdminController extends JQueryDataTableController {
         Object o = baseService.selectOneByID(id);
         if (o != null) {
             Class<?> aClass = o.getClass();
+            Map<String, Object> valueMap = new HashMap<>();
             for (BeanPropertyInfo beanPropertyInfo : registerInfo.getBeanInfo().getBeanPropertyInfos()) {
                 try {
                     Field declaredField = aClass.getDeclaredField(beanPropertyInfo.getPropertyName());
                     declaredField.setAccessible(true);
-                    if ("java.util.Date".equals(beanPropertyInfo.getPropertyType())) {
-                        beanPropertyInfo.setValue(df.format(declaredField.get(o)));
+                    Object value = declaredField.get(o);
+                    if ("java.util.Date".equals(beanPropertyInfo.getPropertyType()) && value != null) {
+                        switch (beanPropertyInfo.getJdbctype()) {
+                            case "TIME":
+                                valueMap.put(beanPropertyInfo.getPropertyName(), Constants.DEFAULT_TIME_FORMAT.format(value));
+                                break;
+                            case "DATE":
+                                valueMap.put(beanPropertyInfo.getPropertyName(), Constants.DEFAULT_DATE_FORMAT.format(value));
+                                break;
+                            default:
+                                valueMap.put(beanPropertyInfo.getPropertyName(), Constants.DEFAULT_DATETIME_FORMAT.format(value));
+                                break;
+                        }
                     } else {
-                        beanPropertyInfo.setValue(declaredField.get(o));
+                        valueMap.put(beanPropertyInfo.getPropertyName(), value);
                     }
                 } catch (NoSuchFieldException e) {
                     e.printStackTrace();
@@ -178,6 +241,8 @@ public class AdminController extends JQueryDataTableController {
             modelAndView.addObject("menu", getMenu(httpSession));
             modelAndView.addObject("registerInfo", registerInfo);
             modelAndView.addObject("actionPath", "/admin/" + group + "/" + name + "/" + id + "/update");
+            modelAndView.addObject("valueMap", valueMap);
+            modelAndView.addObject("imgUploadPath", imgUploadPath);
             generateSelectOptions(registerInfo, modelAndView);
             return modelAndView;
         } else {
@@ -281,5 +346,53 @@ public class AdminController extends JQueryDataTableController {
         modelAndView.addObject("processResult", processResult);
         generateSelectOptions(registerInfo, modelAndView);
         return modelAndView;
+    }
+
+    @PostMapping("imgUpload")
+    public Map<String, Object> imgUpload(@RequestParam(name = "imgFile", required = false) MultipartFile imgFile) {
+        if (imgFile != null && imgFile.getSize() > 0) {
+            String imgId = UUID.randomUUID().toString();
+            try {
+                InputStream inputStream = imgFile.getInputStream();
+                String folderPath = "default".equals(imgStorePath) ? getImgStorePath() : imgStorePath;
+                File folder = new File(folderPath);
+                if (!folder.exists() || !folder.isDirectory()) {
+                    if (!folder.mkdirs()) {
+                        throw new IOException("无法创建文件夹");
+                    }
+                }
+                String filepath = folderPath + imgId + ".jpg";
+                File f = new File(filepath);
+                if (!f.exists()) {
+                    f.createNewFile();
+                }
+                FileOutputStream fos = new FileOutputStream(f);
+                byte[] b = new byte[1024];
+                int length;
+                while ((length = inputStream.read(b)) > 0) {
+                    fos.write(b, 0, length);
+                }
+                inputStream.close();
+                fos.close();
+                Map<String, Object> map = new HashMap();
+                map.put("error", 0);
+                System.out.println(filepath);
+                String sp = "classes" + (filepath.indexOf("\\")>-1?"\\":"/") + "static";
+                filepath = filepath.substring(filepath.indexOf(sp) + sp.length());
+                map.put("url", filepath.replaceAll("\\\\","/"));
+                return map;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    private String getImgStorePath() {
+        String classpath = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+        if (classpath.startsWith("/")) {
+            classpath = classpath.substring(1);
+        }
+        return classpath + "static/images/upload/";
     }
 }

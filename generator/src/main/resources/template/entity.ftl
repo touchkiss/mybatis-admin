@@ -1,5 +1,9 @@
 <#setting classic_compatible=true />
+<#setting number_format="0" />
 package ${tableConfig.getPackageName()};
+
+import com.touchkiss.mybatis.admin.annotation.AdminBean;
+import com.touchkiss.mybatis.admin.annotation.AdminColumn;
 
 <#list table.getImports() as im>import ${im};
 </#list>
@@ -9,11 +13,13 @@ package ${tableConfig.getPackageName()};
  *
  * @author Touchkiss
  */
+@AdminBean("${table.getRemarks()}")
 public class ${tableConfig.getEntityName()}<#if tableConfig.getSupportSerialize()> implements java.io.Serializable</#if> {
 <#list columns as column>
     /**
      * ${column.getRemarks()}
      */
+    @AdminColumn(columnName = "${column.getColumnName()}", isPrimaryKey = <#if column.getIsPrimaryKey()==true>true<#else>false</#if>, remarks = "${column.getRemarks()}", length = ${column.getColumnSize()}, jdbctype = "${column.getJdbcType()}", nullable = <#if column.getIsNullable()=='YES'>true<#else>false</#if>, autoIncrement = <#if column.getIsAutoincrement()=='YES'>true<#else>false</#if>)
     private ${column.getJavaType()} ${column.getJavaProperty()};
 </#list>
 <#list tableConfig.getCustomProperties() as customProperty>
