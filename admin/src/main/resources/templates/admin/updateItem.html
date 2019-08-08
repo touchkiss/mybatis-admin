@@ -84,7 +84,12 @@
                     <div class="box-body">
                         <th:block th:each="column:${registerInfo.beanInfo.beanPropertyInfos}">
                             <div th:unless="'java.lang.Boolean' eq ${column.propertyType}" class="form-group">
-                                <label th:attr="for=${column.propertyName}"><b th:text="${column.propertyShowName}"></b>&nbsp;&nbsp;<span th:if="${column.remarks != ''}" class="fa fa-info-circle" th:title="${column.remarks}"></span></label>
+                                <label th:attr="for=${column.propertyName}"><b th:text="${column.propertyShowName}"></b>&nbsp;&nbsp;<span
+                                        th:if="${column.remarks != ''}" class="fa fa-info-circle"
+                                        th:title="${column.remarks}"></span><span class="fa fa-eye" title="预览"
+                                                                                  th:attr="onclick='previewEditor(\''+${column.propertyName}+'\')'"
+                                                                                  th:if="'LONGVARCHAR' eq ${column.jdbctype} or 'LONGNVARCHAR' eq ${column.jdbctype}"
+                                                                                  style="cursor: pointer;"></span></label>
                                 <th:block
                                         th:if="${foreignInfoMap != null and foreignInfoMap.containsKey(column.propertyName)}">
                                     <select class="form-control select2"
@@ -150,7 +155,9 @@
                             <label th:if="'java.lang.Boolean' eq ${column.propertyType}">
                                 <input type="checkbox" th:attr="data-id=${column.propertyName}"
                                        th:checked="${valueMap.get(column.propertyName)}"/><b
-                                    th:text="${column.propertyShowName}"></b>&nbsp;&nbsp;<span th:if="${column.remarks != ''}" class="fa fa-info-circle" th:title="${column.remarks}"></span>
+                                    th:text="${column.propertyShowName}"></b>&nbsp;&nbsp;<span
+                                    th:if="${column.remarks != ''}" class="fa fa-info-circle"
+                                    th:title="${column.remarks}"></span>
                                 <input type="hidden" th:id="${column.propertyName}" th:name="${column.propertyName}"
                                        th:value="${valueMap.get(column.propertyName)}">
                             </label>
@@ -166,6 +173,19 @@
     </div>
     <div th:include="admin/footer::footer"></div>
     <div th:include="admin/aside::aside"></div>
+    <div id="editorPreviewModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="editorPreviewModalTitle"></h4>
+                </div>
+                <div class="modal-body" id="editorPreviewModalContent" style="overflow: auto;">
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 </div>
 <!-- ./wrapper -->
 
@@ -283,6 +303,12 @@
                 $("#" + id).val(window.editor[id].html());
             });
         }
+    }
+
+    function previewEditor(id) {
+        $("#editorPreviewModalTitle").text("预览 " + id);
+        $("#editorPreviewModalContent").html(window.editor[id].html());
+        $("#editorPreviewModal").modal();
     }
 
     /* ]]>*/

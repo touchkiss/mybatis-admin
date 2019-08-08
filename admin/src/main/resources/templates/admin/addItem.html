@@ -85,7 +85,10 @@
                             <div th:unless="'java.lang.Boolean' eq ${column.propertyType}" class="form-group">
                                 <label th:attr="for=${column.propertyName}"><b th:text="${column.propertyShowName}"></b>&nbsp;&nbsp;<span
                                         th:if="${column.remarks != ''}" class="fa fa-info-circle"
-                                        th:title="${column.remarks}"></span></label>
+                                        th:title="${column.remarks}"></span><span class="fa fa-eye" title="预览"
+                                                                                  th:attr="onclick='previewEditor(\''+${column.propertyName}+'\')'"
+                                                                                  th:if="'LONGVARCHAR' eq ${column.jdbctype} or 'LONGNVARCHAR' eq ${column.jdbctype}"
+                                                                                  style="cursor: pointer;"></span></label>
                                 <th:block
                                         th:if="${foreignInfoMap != null and foreignInfoMap.containsKey(column.propertyName)}">
                                     <select class="form-control select2"
@@ -271,6 +274,12 @@
                 $("#" + id).val(window.editor[id].html());
             });
         }
+    }
+
+    function previewEditor(id) {
+        $("#editorPreviewModalTitle").text("预览 " + id);
+        $("#editorPreviewModalContent").html(window.editor[id].html());
+        $("#editorPreviewModal").modal();
     }
 
     /* ]]>*/
