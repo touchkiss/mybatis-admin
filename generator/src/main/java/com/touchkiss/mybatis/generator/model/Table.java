@@ -66,6 +66,7 @@ public class Table {
         this.foreignTypeImportsAll = foreignTypeImportsAll;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (o == this) {
             return true;

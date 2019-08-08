@@ -106,6 +106,7 @@ public class CustomColumnType {
         return result;
     }
 
+    @Override
     public String toString() {
         return "CustomColumnType(columnName=" + this.getColumnName() + ", javaType=" + this.getJavaType() + ", dataType=" + this.getDataType() + ")";
     }

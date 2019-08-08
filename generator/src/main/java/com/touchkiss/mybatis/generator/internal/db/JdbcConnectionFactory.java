@@ -18,7 +18,7 @@ import java.util.Properties;
 public class JdbcConnectionFactory {
     private static final Logger log = LoggerFactory.getLogger(JdbcConnectionFactory.class);
     private static JdbcConnectionFactory instance;
-    private static final Object lock = new Object();
+    private static final Object LOCK = new Object();
     private JDBCConnectionConfiguration config;
 
     public static JdbcConnectionFactory getInstance(JDBCConnectionConfiguration config) {
@@ -26,8 +26,8 @@ public class JdbcConnectionFactory {
             throw new RuntimeException("数据库配置出错！");
         } else {
             if (instance == null) {
-                Object var1 = lock;
-                synchronized(lock) {
+                Object var1 = LOCK;
+                synchronized(LOCK) {
                     instance = new JdbcConnectionFactory(config);
                 }
             }

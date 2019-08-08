@@ -215,7 +215,7 @@ public abstract class BaseController {
     private ManyCondition getManyCondition(List<String> strings, CompareOperator compareOperator, QColumn<?, ?> field) throws ErrorCompareValueException, UnsupportedEncodingException {
         Stack<ManyCondition> conditionStack = new Stack<>();
         for (String item : strings) {
-            if (item.equals("^") || item.equals("+")) {
+            if ("^".equals(item) || "+".equals(item)) {
                 ManyCondition manyCondition = new ManyCondition();
                 manyCondition.add(conditionStack.pop());
                 manyCondition.add(conditionStack.pop());
@@ -343,7 +343,7 @@ public abstract class BaseController {
         if (size > 0) {
             for (int i = 0; i < size; i++) {
                 String pop = String.valueOf(operatorStack.pop());
-                if (pop.equals("(")) {
+                if ("(".equals(pop)) {
                     throw new ErrorCompareValueException("错误的搜索表达式，错误的‘(’");
                 }
                 behindList.add(pop);

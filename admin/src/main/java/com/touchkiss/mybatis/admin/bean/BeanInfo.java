@@ -59,7 +59,7 @@ public class BeanInfo {
                 BeanPropertyInfo beanPropertyInfo = new BeanPropertyInfo(fieldName, field.getType().getName());
                 if (field.isAnnotationPresent(AdminColumn.class)) {
                     AdminColumn adminColumn = field.getAnnotation(AdminColumn.class);
-                    if (adminColumn.isPrimaryKey()){
+                    if (adminColumn.isPrimaryKey()) {
                         idColumnList.add(fieldName);
                     }
                     beanPropertyInfo.setColumnName(adminColumn.columnName());
@@ -84,7 +84,7 @@ public class BeanInfo {
     public void setBeanPropertyInfos(BeanPropertyInfo[] beanPropertyInfos) {
         this.beanPropertyInfos = beanPropertyInfos;
         if (this.beanPropertyInfoMap == null) {
-            this.beanPropertyInfoMap = new HashMap<>();
+            this.beanPropertyInfoMap = new HashMap<>(beanPropertyInfos.length * 2 + 1);
         }
         this.beanPropertyInfoMap.clear();
         for (BeanPropertyInfo beanPropertyInfo : beanPropertyInfos) {

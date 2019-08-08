@@ -59,27 +59,29 @@ public class SingleCondition implements ICondition {
             if (j > 0) {
                 PreparedCondition pc = new PreparedCondition();
                 boolean bracket = false;
-                switch(operator) {
-                case IN:
-                    if (j == 1) {
-                        operator = CompareOperator.EQUAL;
-                    } else {
-                        bracket = true;
-                    }
-                    break;
-                case NOT_IN:
-                    if (j == 1) {
-                        operator = CompareOperator.NOT_EQUAL;
-                    } else {
-                        bracket = true;
-                    }
+                switch (operator) {
+                    case IN:
+                        if (j == 1) {
+                            operator = CompareOperator.EQUAL;
+                        } else {
+                            bracket = true;
+                        }
+                        break;
+                    case NOT_IN:
+                        if (j == 1) {
+                            operator = CompareOperator.NOT_EQUAL;
+                        } else {
+                            bracket = true;
+                        }
+                        break;
+                    default:
                 }
 
                 ret.add(pc.setPrefix(this.fieldToString(this.field) + operator).setValue(this.values[0]));
                 if (bracket) {
                     pc.setPrefix(pc.getPrefix() + "(");
 
-                    for(int i = 1; i < j; ++i) {
+                    for (int i = 1; i < j; ++i) {
                         pc = new PreparedCondition();
                         ret.add(pc.setPrefix(",").setValue(this.values[i]));
                     }
@@ -122,9 +124,9 @@ public class SingleCondition implements ICondition {
 
     private final SingleCondition setValues(Object value) {
         if (value != null && value.getClass().isArray()) {
-            this.values = (Object[])((Object[])value);
+            this.values = (Object[]) ((Object[]) value);
         } else if (value != null && value instanceof Collection) {
-            this.values = ((Collection)value).toArray();
+            this.values = ((Collection) value).toArray();
         } else if (value != null) {
             this.values = new Object[]{value};
         }

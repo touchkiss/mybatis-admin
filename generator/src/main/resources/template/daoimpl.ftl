@@ -30,12 +30,6 @@ public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl
     @Resource(name = "${mapperBeanName}")
     private ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Mapper mapper;
 
-    /**
-     * 根据条件查询
-     *
-     * @param conditions
-     * @return
-     */
     @Override
     public List<${tableConfig.getEntityName()}> select(ICondition... conditions) {
         ManyCondition manyCondition = new ManyCondition();
@@ -174,10 +168,8 @@ public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl
         SelectResolver resolver = new SelectResolver(${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.SELECT_WHERE_HANDLE.handle(bean), ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.TABLE, ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.ALL_FIELDS);
         return this.mapper.selectPage(resolver.toMetadata());
     }
-    //endregion
-
-    //region write data
     <#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0>
+
     @Override
     public ${tableConfig.getEntityName()} selectOneByID(Object... ids) {
         return this.mapper.selectOneByID(ids);
@@ -240,5 +232,4 @@ public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl
     public int updateOneSelectiveByID(${tableConfig.getEntityName()} bean) {
         return this.mapper.updateOneSelectiveByID(bean);
     }
-    //endregion
 }

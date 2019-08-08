@@ -67,7 +67,7 @@ public class AdminController extends JQueryDataTableController {
 
     void generateSelectOptions(RegisterInfo registerInfo, ModelAndView modelAndView) {
         if (MapUtils.isNotEmpty(registerInfo.getForeignKeyInfoMap())) {
-            Map<String, List> foreignInfoMap = new HashMap<>();
+            Map<String, List> foreignInfoMap = new HashMap<>(registerInfo.getForeignKeyInfoMap().size() * 2 + 1);
             for (Map.Entry<String, ForeignKeyInfo> stringForeignKeyInfoEntry : registerInfo.getForeignKeyInfoMap().entrySet()) {
                 ForeignKeyInfo foreignKeyInfo = stringForeignKeyInfoEntry.getValue();
                 String configName = foreignKeyInfo.getName();
@@ -208,7 +208,7 @@ public class AdminController extends JQueryDataTableController {
         Object o = baseService.selectOneByID(id);
         if (o != null) {
             Class<?> aClass = o.getClass();
-            Map<String, Object> valueMap = new HashMap<>();
+            Map<String, Object> valueMap = new HashMap<>(registerInfo.getBeanInfo().getBeanPropertyInfos().length * 2 + 1);
             for (BeanPropertyInfo beanPropertyInfo : registerInfo.getBeanInfo().getBeanPropertyInfos()) {
                 try {
                     Field declaredField = aClass.getDeclaredField(beanPropertyInfo.getPropertyName());
@@ -374,12 +374,12 @@ public class AdminController extends JQueryDataTableController {
                 }
                 inputStream.close();
                 fos.close();
-                Map<String, Object> map = new HashMap();
+                Map<String, Object> map = new HashMap(7);
                 map.put("error", 0);
                 System.out.println(filepath);
-                String sp = "classes" + (filepath.indexOf("\\")>-1?"\\":"/") + "static";
+                String sp = "classes" + (filepath.indexOf("\\") > -1 ? "\\" : "/") + "static";
                 filepath = filepath.substring(filepath.indexOf(sp) + sp.length());
-                map.put("url", filepath.replaceAll("\\\\","/"));
+                map.put("url", filepath.replaceAll("\\\\", "/"));
                 return map;
             } catch (IOException e) {
                 e.printStackTrace();

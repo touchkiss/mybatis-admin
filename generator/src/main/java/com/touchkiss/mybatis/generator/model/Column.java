@@ -371,6 +371,7 @@ public class Column {
         return result;
     }
 
+    @Override
     public String toString() {
         return "Column(columnName=" + this.getColumnName() + ", typeName=" + this.getTypeName() + ", dataType=" + this.getDataType() + ", columnSize=" + this.getColumnSize() + ", decimalDigits=" + this.getDecimalDigits() + ", isNullable=" + this.getIsNullable() + ", remarks=" + this.getRemarks() + ", isAutoincrement=" + this.getIsAutoincrement() + ", isGeneratedcolumn=" + this.getIsGeneratedcolumn() + ", table=" + this.getTable() + ", isPrimaryKey=" + this.getIsPrimaryKey() + ", foreignKey=" + this.getForeignKey() + ", javaType=" + this.getJavaType() + ", fullJavaType=" + this.getFullJavaType() + ")";
     }
