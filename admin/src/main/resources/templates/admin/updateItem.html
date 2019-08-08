@@ -100,7 +100,7 @@
                                                     selected="selected"
                                                     th:value="${option.value}" th:text="${option.text}"></option>
                                             <option th:unless="${valueMap.get(column.propertyName)} eq ${option.value}"
-                                                    th:value="${valueMap.get(column.propertyName)}"
+                                                    th:value="${option.value}"
                                                     th:text="${option.text}"></option>
                                         </th:block>
                                     </select>
