@@ -95,6 +95,9 @@ public class AdminController extends JQueryDataTableController {
         length = length == null ? 10 : length;
         if (length != null) {
             start = start / length + 1;
+            if (length.equals(-1)) {
+                length = 0;
+            }
         } else {
             start = start / 10 + 1;
         }

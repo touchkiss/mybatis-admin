@@ -9,7 +9,10 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="/plugins/dataTables/DataTables-1.10.18/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="/plugins/dataTables/Buttons-1.5.6/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="/plugins/dataTables/ColReorder-1.5.0/css/colReorder.dataTables.min.css">
+    <link rel="stylesheet" href="/plugins/dataTables/FixedHeader-3.1.4/css/fixedHeader.dataTables.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css"/>
     <!-- Ionicons -->
@@ -26,8 +29,7 @@
     <link rel="stylesheet" href="/bower_components/jvectormap/jquery-jvectormap.css"/>
     <!-- Date Picker -->
     <link rel="stylesheet" href="/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"/>
-    <!-- Daterange picker -->
-    <link rel="stylesheet" href="/bower_components/bootstrap-daterangepicker/daterangepicker.css"/>
+    <link rel="stylesheet" href="/plugins/timepicker/bootstrap-timepicker.min.css"/>
     <link rel="stylesheet"
           href="/bower_components/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css">
     <!-- bootstrap wysihtml5 - text editor -->
@@ -204,9 +206,21 @@
                                         <li>
                                             <div class="input-group">
                                                 <span class="input-group-addon" title="小于">&lt;</span>
-                                                <input type="text" class="form-control datetimepicker"
-                                                       th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                       th:attr="name='_p_'+${filter}+'_lt',id='_p_'+${filter}+'_lt'">
+                                                <th:block
+                                                        th:switch="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).jdbctype}">
+                                                    <input th:case="'DATE'" type="text"
+                                                           class="form-control datepicker"
+                                                           th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                                           th:attr="name='_p_'+${filter}+'_lt',id='_p_'+${filter}+'_lt'"/>
+                                                    <input th:case="'TIME'" type="text"
+                                                           class="form-control timepicker"
+                                                           th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                                           th:attr="name='_p_'+${filter}+'_lt',id='_p_'+${filter}+'_lt'"/>
+                                                    <input th:case="*" type="text"
+                                                           class="form-control datetimepicker"
+                                                           th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                                           th:attr="name='_p_'+${filter}+'_lt',id='_p_'+${filter}+'_lt'"/>
+                                                </th:block>
                                                 <span class="input-group-btn clear" title="清空" disabled="true">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
@@ -216,9 +230,21 @@
                                         <li>
                                             <div class="input-group input-group">
                                                 <span class="input-group-addon" title="大于">&gt;</span>
-                                                <input type="text" class="form-control datetimepicker"
-                                                       th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                       th:attr="name='_p_'+${filter}+'_gt',id='_p_'+${filter}+'_gt'">
+                                                <th:block
+                                                        th:switch="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).jdbctype}">
+                                                    <input th:case="'DATE'" type="text"
+                                                           class="form-control datepicker"
+                                                           th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                                           th:attr="name='_p_'+${filter}+'_gt',id='_p_'+${filter}+'_gt'"/>
+                                                    <input th:case="'TIME'" type="text"
+                                                           class="form-control timepicker"
+                                                           th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                                           th:attr="name='_p_'+${filter}+'_gt',id='_p_'+${filter}+'_gt'"/>
+                                                    <input th:case="*" type="text"
+                                                           class="form-control datetimepicker"
+                                                           th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                                           th:attr="name='_p_'+${filter}+'_gt',id='_p_'+${filter}+'_gt'"/>
+                                                </th:block>
                                                 <span class="input-group-btn clear" title="清空" disabled="true">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
@@ -228,9 +254,21 @@
                                         <li>
                                             <div class="input-group input-group">
                                                 <span class="input-group-addon" title="不等于">!=</span>
-                                                <input type="text" class="form-control datetimepicker"
-                                                       th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                       th:attr="name='_p_'+${filter}+'_ne',id='_p_'+${filter}+'_ne'">
+                                                <th:block
+                                                        th:switch="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).jdbctype}">
+                                                    <input th:case="'DATE'" type="text"
+                                                           class="form-control datepicker"
+                                                           th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                                           th:attr="name='_p_'+${filter}+'_ne',id='_p_'+${filter}+'_ne'"/>
+                                                    <input th:case="'TIME'" type="text"
+                                                           class="form-control timepicker"
+                                                           th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                                           th:attr="name='_p_'+${filter}+'_ne',id='_p_'+${filter}+'_ne'"/>
+                                                    <input th:case="*" type="text"
+                                                           class="form-control datetimepicker"
+                                                           th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                                           th:attr="name='_p_'+${filter}+'_ne',id='_p_'+${filter}+'_ne'"/>
+                                                </th:block>
                                                 <span class="input-group-btn clear" title="清空" disabled="true">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
@@ -295,12 +333,31 @@
                             </th:block>
                             <th:block
                                     th:unless="${foreignInfoMap !=null and foreignInfoMap.containsKey(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}">
-                                <input th:if="'java.util.Date' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
-                                       type="text"
-                                       th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                       th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'"
-                                       class="form-control datetimepicker"
-                                       aria-label="Text input with segmented button dropdown"/>
+                                <!--<input th:if="'java.util.Date' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"-->
+                                <!--type="text"-->
+                                <!--th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"-->
+                                <!--th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'"-->
+                                <!--class="form-control datetimepicker"-->
+                                <!--aria-label="Text input with segmented button dropdown"/>-->
+                                <th:block
+                                        th:if="'java.util.Date' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
+                                        th:switch="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).jdbctype}">
+                                    <input th:case="'DATE'" type="text"
+                                           class="form-control datepicker"
+                                           th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                           th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'"
+                                           aria-label="Text input with segmented button dropdown"/>
+                                    <input th:case="'TIME'" type="text"
+                                           class="form-control timepicker"
+                                           th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                           th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'"
+                                           aria-label="Text input with segmented button dropdown"/>
+                                    <input th:case="*" type="text"
+                                           class="form-control datetimepicker"
+                                           th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                           th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'"
+                                           aria-label="Text input with segmented button dropdown">
+                                </th:block>
                                 <input th:if="'java.lang.String' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
                                        type="text"
                                        th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
@@ -448,10 +505,9 @@
 <script src="/bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
 <script src="/bower_components/moment/min/moment.min.js"></script>
-<script src="/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
 <!-- datepicker -->
 <script src="/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-
+<script src="/plugins/timepicker/bootstrap-timepicker.min.js"></script>
 <script src="/bower_components/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
@@ -460,11 +516,14 @@
 <!-- FastClick -->
 <script src="/bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
-<script src="/js/adminlte.min.js"></script>
-<script src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script src="/plugins/dataTables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+<script src="/plugins/dataTables/Buttons-1.5.6/js/dataTables.buttons.min.js"></script>
+<script src="/plugins/dataTables/ColReorder-1.5.0/js/dataTables.colReorder.min.js"></script>
+<script src="/plugins/dataTables/FixedHeader-3.1.4/js/dataTables.fixedHeader.min.js"></script>
 <script src="/bower_components/select2/dist/js/select2.full.min.js"></script>
-<!-- AdminLTE for demo purposes -->
+<script src="/js/adminlte.min.js"></script>
 <script src="/js/demo.js"></script>
+<!-- AdminLTE for demo purposes -->
 <script th:inline="javascript">
     /* <![CDATA[*/
     var selectAll = false;
@@ -502,14 +561,34 @@
         $(".input-group-btn.clear").click(function () {
             $(this).prev("input").val("");
         });
-        //Date picker
+        //Datetime picker
         $('.datetimepicker').datetimepicker({
             autoclose: true,
-            timePicker: true,
+            timePicker: false,
             minuteStep: 5,
-            format: 'yyyy/mm/dd hh:ii:ss',
+            format: 'yyyy-mm-dd hh:ii:ss',
             todayBtn: 'linked',
             todayHighlight: true,
+            language: 'zh-CN'
+        });
+        //Date picker
+        $('.datepicker').datepicker({
+            autoclose: true,
+            timePicker: false,
+            minuteStep: 5,
+            format: 'yyyy-mm-dd',
+            todayBtn: 'linked',
+            todayHighlight: true,
+            language: 'zh-CN'
+        });
+        //Time picker
+        $('.timepicker').timepicker({
+            defaultTime: false,
+            autoclose: true,
+            timePicker: false,
+            minuteStep: 5,
+            showSeconds: true,
+            showMeridian: false,
             language: 'zh-CN'
         });
         $("#addItem").click(function () {
@@ -544,7 +623,19 @@
 
         $('.select2').select2();
 
+        var lengthMenu1 = [10, 20, 50, 100, -1], lengthMenu2 = [10, 20, 50, 100, '全部'];
+
         var table = $("#table").DataTable({
+            "dom": 'ClBfrtip',
+            "buttons": [
+                'copy', 'excel', 'pdf', 'csv'
+            ],
+            "fixedHeader": {
+                "headerOffset": $(".navbar").height()
+            },
+            "colReorder": true,
+            "pageLength": 10,
+            "lengthMenu": [lengthMenu1, lengthMenu2],
             "processing": true,
             "serverSide": true,
             "searching": false,
