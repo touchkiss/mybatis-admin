@@ -251,7 +251,7 @@
             <#if column_index gt 0>, </#if><#if context.getUseMark()>"</#if>${column.getColumnName()}<#if context.getUseMark()>"</#if> = ${r'#'}{record.${column.getJavaProperty()},jdbcType=${column.getJdbcType()}}
             </if>
         </#list>
-        WHERE<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0> AND</#if> ${keyColumn.getColumnName()} <if test="record.${keyColumn.getJavaProperty()} != null">= ${r'#'}{record.${keyColumn.getJavaProperty()},jdbcType=${keyColumn.getJdbcType()}}</if><if test="record.${keyColumn.getJavaProperty()} == null"> IS NULL</if> </#list>
+        <include refid="idWhere"/>
     </update>
 
     <update id="updateOneByID"<#if tableConfig.getCache()?? && tableConfig.getCache().deleteFlushCache>
@@ -263,7 +263,7 @@
           <#if column_index gt 0>,</#if><#if context.getUseMark()>
             "</#if>${column.getColumnName()}<#if context.getUseMark()>"</#if> = <if test="record.${column.getJavaProperty()} != null">${r'#'}{record.${column.getJavaProperty()},jdbcType=${column.getJdbcType()}}</if><if test="record.${column.getJavaProperty()} == null">null</if>
         </#list>
-        WHERE<#list primaryKeyColumns as keyColumn><#if keyColumn_index gt 0> AND</#if> ${keyColumn.getColumnName()} <if test="record.${keyColumn.getJavaProperty()} != null">= ${r'#'}{record.${keyColumn.getJavaProperty()},jdbcType=${keyColumn.getJdbcType()}}</if><if test="record.${keyColumn.getJavaProperty()} == null"> IS NULL</if> </#list>
+        <include refid="idWhere"/>
     </update>
     </#if></#if>
 </mapper>

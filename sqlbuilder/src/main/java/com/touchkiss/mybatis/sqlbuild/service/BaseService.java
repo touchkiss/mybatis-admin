@@ -21,17 +21,17 @@ public interface BaseService<T> {
     /**
      * 根据主键删除一条
      */
-    int deleteOneByID(Object...ids);
+    int deleteOneByID(Object... ids);
 
     /**
      * 根据主键更新一条
      */
-    int updateOneByID(T bean);
+    int updateOneByID(T bean, Object... ids);
 
     /**
      * 根据主键更新一条记录的非空字段
      */
-    int updateOneSelectiveByID(T bean);
+    int updateOneSelectiveByID(T bean, Object... ids);
 
     /**
      * 全部插入

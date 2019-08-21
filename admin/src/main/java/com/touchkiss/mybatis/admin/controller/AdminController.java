@@ -208,7 +208,7 @@ public class AdminController extends JQueryDataTableController {
             return null;
         }
         BaseService baseService = (BaseService) SpringUtil.getBean(registerInfo.getServiceClazz());
-        Object o = baseService.selectOneByID(id);
+        Object o = baseService.selectOneByID(id.split(","));
         if (o != null) {
             Class<?> aClass = o.getClass();
             Map<String, Object> valueMap = new HashMap<>(registerInfo.getBeanInfo().getBeanPropertyInfos().length * 2 + 1);
@@ -262,7 +262,7 @@ public class AdminController extends JQueryDataTableController {
         }
         Object obj = getParameter(registerInfo.getBeanClazz(), true);
         BaseService baseService = (BaseService) SpringUtil.getBean(registerInfo.getServiceClazz());
-        int success = baseService.updateOneByID(obj);
+        int success = baseService.updateOneByID(obj,id.split(","));
         ProcessResult processResult = null;
         if (success == 1) {
             processResult = ProcessResult.processSuccess(registerInfo.getShowName() + "更新成功");

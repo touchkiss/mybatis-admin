@@ -8,6 +8,7 @@ import com.touchkiss.mybatis.sqlbuild.query.QColumn;
 import com.touchkiss.mybatis.sqlbuild.selector.SelectMetadata;
 import com.touchkiss.mybatis.sqlbuild.selector.SelectResolver;
 import com.touchkiss.mybatis.sqlbuild.selector.Selector;
+<#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0><#else>import com.touchkiss.mybatis.sqlbuild.exceptions.NoPrimaryKeyException;</#if><#else>import com.touchkiss.mybatis.sqlbuild.exceptions.NoPrimaryKeyException;</#if>
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 <#if entityPackage??>import ${entityPackage};</#if>
@@ -168,13 +169,13 @@ public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl
         SelectResolver resolver = new SelectResolver(${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.SELECT_WHERE_HANDLE.handle(bean), ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.TABLE, ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao.ALL_FIELDS);
         return this.mapper.selectPage(resolver.toMetadata());
     }
-    <#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0>
 
     @Override
     public ${tableConfig.getEntityName()} selectOneByID(Object... ids) {
-        return this.mapper.selectOneByID(ids);
+        <#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0>return this.mapper.selectOneByID(ids);<#else>throw new NoPrimaryKeyException("该表无主键！");
+        return null;</#if><#else>throw new NoPrimaryKeyException("该表无主键！");
+        return null;</#if>
     }
-    </#if></#if>
 
     @Override
     public int update(${tableConfig.getEntityName()} bean, ICondition... condition) {
@@ -220,16 +221,22 @@ public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl
 
     @Override
     public int deleteOneByID(Object... ids) {
-        return this.mapper.deleteOneByID(ids);
+        <#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0>return this.mapper.deleteOneByID(ids);<#else>throw new NoPrimaryKeyException("该表无主键！");
+        return 0;</#if><#else>throw new NoPrimaryKeyException("该表无主键！");
+        return 0;</#if>
     }
 
     @Override
-    public int updateOneByID(${tableConfig.getEntityName()} bean) {
-        return this.mapper.updateOneByID(bean);
+    public int updateOneByID(${tableConfig.getEntityName()} bean, Object... ids) {
+        <#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0>return this.mapper.updateOneByID(bean, ids);<#else>throw new NoPrimaryKeyException("该表无主键！");
+        return 0;</#if><#else>throw new NoPrimaryKeyException("该表无主键！");
+        return 0;</#if>
     }
 
     @Override
-    public int updateOneSelectiveByID(${tableConfig.getEntityName()} bean) {
-        return this.mapper.updateOneSelectiveByID(bean);
+    public int updateOneSelectiveByID(${tableConfig.getEntityName()} bean, Object... ids) {
+        <#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0>return this.mapper.updateOneSelectiveByID(bean, ids);<#else>throw new NoPrimaryKeyException("该表无主键！");
+        return 0;</#if><#else>throw new NoPrimaryKeyException("该表无主键！");
+        return 0;</#if>
     }
 }

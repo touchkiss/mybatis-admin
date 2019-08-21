@@ -2,8 +2,6 @@ package com.touchkiss.mybatis.sqlbuild.dao;
 
 import com.touchkiss.mybatis.sqlbuild.condition.original.ICondition;
 
-import java.util.Map;
-
 /**
  * @Author Touchkiss
  * @date 2018/12/21
@@ -22,7 +20,7 @@ public interface WriteBaseDao<T> {
 
     int deleteOneByID(Object...ids);
 
-    int updateOneByID(T bean);
+    int updateOneByID(T bean, Object... ids);
 
-    int updateOneSelectiveByID(T bean);
+    int updateOneSelectiveByID(T bean, Object... ids);
 }

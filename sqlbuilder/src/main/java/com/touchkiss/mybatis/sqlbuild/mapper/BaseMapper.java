@@ -13,7 +13,6 @@ import java.util.Map;
  * @create: 2019-06-20 18:19
  */
 public interface BaseMapper<T> {
-    //region read
     T selectOneByID(@Param("ids") Object... ids);
 
     List<T> selectAll();
@@ -44,7 +43,7 @@ public interface BaseMapper<T> {
 
     T selectOne(@Param("meta") SelectMetadata metadata);
 
-    int updateOneByID(@Param("record") T bean);
+    int updateOneByID(@Param("record") T bean,@Param("ids") Object... ids);
 
-    int updateOneSelectiveByID(@Param("record") T bean);
+    int updateOneSelectiveByID(@Param("record") T bean,@Param("ids") Object... ids);
 }

@@ -9,6 +9,7 @@ import com.touchkiss.mybatis.sqlbuild.keyword.Sort;
 import com.touchkiss.mybatis.sqlbuild.query.QColumn;
 import com.touchkiss.mybatis.sqlbuild.selector.Selector;
 </#if>
+<#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0><#else>import com.touchkiss.mybatis.sqlbuild.exceptions.NoPrimaryKeyException;</#if><#else>import com.touchkiss.mybatis.sqlbuild.exceptions.NoPrimaryKeyException;</#if>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -27,22 +28,30 @@ public class ${tableConfig.getEntityName()}ServiceImpl implements ${tableConfig.
 
 	@Override
 	public ${tableConfig.getEntityName()} selectOneByID(Object... ids) {
-		return this.dao.selectOneByID(ids);
+		<#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0>return this.dao.selectOneByID(ids);<#else>throw new NoPrimaryKeyException("该表无主键！");
+		return null;</#if><#else>throw new NoPrimaryKeyException("该表无主键！");
+        return null;</#if>
 	}
 
 	@Override
 	public int deleteOneByID(Object... ids) {
-		return this.dao.deleteOneByID(ids);
+		<#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0>return this.dao.deleteOneByID(ids);<#else>throw new NoPrimaryKeyException("该表无主键！");
+		return 0;</#if><#else>throw new NoPrimaryKeyException("该表无主键！");
+        return 0;</#if>
 	}
 
 	@Override
-	public int updateOneByID(${tableConfig.getEntityName()} bean) {
-		return this.dao.updateOneByID(bean);
+	public int updateOneByID(${tableConfig.getEntityName()} bean, Object... ids) {
+		<#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0>return this.dao.updateOneByID(bean, ids);<#else>throw new NoPrimaryKeyException("该表无主键！");
+        return 0;</#if><#else>throw new NoPrimaryKeyException("该表无主键！");
+        return 0;</#if>
 	}
 
 	@Override
-	public int updateOneSelectiveByID(${tableConfig.getEntityName()} bean) {
-		return this.dao.updateOneSelectiveByID(bean);
+	public int updateOneSelectiveByID(${tableConfig.getEntityName()} bean, Object... ids) {
+		<#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0>return this.dao.updateOneSelectiveByID(bean, ids);<#else>throw new NoPrimaryKeyException("该表无主键！");
+		return 0;</#if><#else>throw new NoPrimaryKeyException("该表无主键！");
+		return 0;</#if>
 	}
 
 	@Override
