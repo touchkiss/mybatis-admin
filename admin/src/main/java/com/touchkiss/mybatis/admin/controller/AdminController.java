@@ -286,7 +286,7 @@ public class AdminController extends JQueryDataTableController {
             return null;
         }
         BaseService baseService = (BaseService) SpringUtil.getBean(registerInfo.getServiceClazz());
-        int success = baseService.deleteOneByID(id);
+        int success = baseService.deleteOneByID(id.split(","));
         ProcessResult processResult = null;
         if (success == 1) {
             processResult = ProcessResult.processSuccess(registerInfo.getShowName() + "删除成功");
@@ -321,11 +321,11 @@ public class AdminController extends JQueryDataTableController {
             return null;
         }
         BaseService baseService = (BaseService) SpringUtil.getBean(registerInfo.getServiceClazz());
-        String[] ids = StringUtils.isNotEmpty(idList) ? idList.split(",") : null;
+        String[] ids = StringUtils.isNotEmpty(idList) ? idList.split(",,") : null;
         int n = ids == null ? 0 : ids.length, count = 0;
         if (ids != null) {
             for (String id : ids) {
-                int success = baseService.deleteOneByID(id);
+                int success = baseService.deleteOneByID(id.split(","));
                 if (success == 1) {
                     count++;
                 }

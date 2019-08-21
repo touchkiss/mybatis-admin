@@ -776,7 +776,7 @@
             })
             if (idList.length > 0) {
                 if (confirm("真的要删除" + idList.length + "条信息吗？")) {
-                    window.location.href = "/admin/" + [[${group}]] + "/" + [[${name}]] + "/multiDelete/" + idList.join(",");
+                    window.location.href = "/admin/" + [[${group}]] + "/" + [[${name}]] + "/multiDelete/" + idList.join(",,");
                 }
             } else {
                 alert("未选择任何信息");
