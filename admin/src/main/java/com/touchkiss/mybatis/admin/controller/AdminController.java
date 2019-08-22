@@ -142,7 +142,6 @@ public class AdminController extends JQueryDataTableController {
             }
         }
         result.setTotal(page.getTotal());
-        System.out.println(this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
         return new PageUtil(draw, result);
     }
 
@@ -185,7 +184,7 @@ public class AdminController extends JQueryDataTableController {
         Object parameter = getParameter(registerInfo.getBeanClazz(), true);
         BaseService baseService = (BaseService) SpringUtil.getBean(registerInfo.getServiceClazz());
         int success = baseService.insertSelective(parameter);
-        ProcessResult processResult = null;
+        ProcessResult processResult;
         if (success == 1) {
             processResult = ProcessResult.processSuccess(registerInfo.getShowName() + "插入成功");
         } else {
@@ -232,9 +231,7 @@ public class AdminController extends JQueryDataTableController {
                     } else {
                         valueMap.put(beanPropertyInfo.getPropertyName(), value);
                     }
-                } catch (NoSuchFieldException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
+                } catch (NoSuchFieldException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
             }
@@ -262,8 +259,8 @@ public class AdminController extends JQueryDataTableController {
         }
         Object obj = getParameter(registerInfo.getBeanClazz(), true);
         BaseService baseService = (BaseService) SpringUtil.getBean(registerInfo.getServiceClazz());
-        int success = baseService.updateOneByID(obj,id.split(","));
-        ProcessResult processResult = null;
+        int success = baseService.updateOneByID(obj, id.split(","));
+        ProcessResult processResult;
         if (success == 1) {
             processResult = ProcessResult.processSuccess(registerInfo.getShowName() + "更新成功");
         } else {
@@ -287,7 +284,7 @@ public class AdminController extends JQueryDataTableController {
         }
         BaseService baseService = (BaseService) SpringUtil.getBean(registerInfo.getServiceClazz());
         int success = baseService.deleteOneByID(id.split(","));
-        ProcessResult processResult = null;
+        ProcessResult processResult;
         if (success == 1) {
             processResult = ProcessResult.processSuccess(registerInfo.getShowName() + "删除成功");
         } else {
@@ -325,13 +322,10 @@ public class AdminController extends JQueryDataTableController {
         int n = ids == null ? 0 : ids.length, count = 0;
         if (ids != null) {
             for (String id : ids) {
-                int success = baseService.deleteOneByID(id.split(","));
-                if (success == 1) {
-                    count++;
-                }
+                count += baseService.deleteOneByID(id.split(","));
             }
         }
-        ProcessResult processResult = null;
+        ProcessResult processResult;
         if (n == count) {
             if (n == 0) {
                 processResult = ProcessResult.processFailed("提交的id列表为空");
