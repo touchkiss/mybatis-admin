@@ -4,7 +4,7 @@ import com.github.pagehelper.Page;
 import com.touchkiss.mybatis.admin.annotation.AdminColumn;
 import com.touchkiss.mybatis.admin.bean.BeanPropertyInfo;
 import com.touchkiss.mybatis.admin.bean.ForeignKeyInfo;
-import com.touchkiss.mybatis.admin.bean.PageUtil;
+import com.touchkiss.mybatis.admin.bean.JQueryDatatablesPage;
 import com.touchkiss.mybatis.admin.bean.RegisterInfo;
 import com.touchkiss.mybatis.admin.config.AdminConfig;
 import com.touchkiss.mybatis.admin.config.Constants;
@@ -84,7 +84,7 @@ public class AdminController extends JQueryDataTableController {
     }
 
     @PostMapping("{group}/{name}")
-    public PageUtil list(@PathVariable("group") String group, @PathVariable("name") String name, Integer draw, Integer start, Integer length) throws ErrorCompareValueException, ErrorParseSelectorException, NoSuchTableConfigException, UnsupportedEncodingException {
+    public JQueryDatatablesPage list(@PathVariable("group") String group, @PathVariable("name") String name, Integer draw, Integer start, Integer length) throws ErrorCompareValueException, ErrorParseSelectorException, NoSuchTableConfigException, UnsupportedEncodingException {
         RegisterInfo registerInfo = verify(group, name);
         if (registerInfo == null) {
             return null;
@@ -142,7 +142,7 @@ public class AdminController extends JQueryDataTableController {
             }
         }
         result.setTotal(page.getTotal());
-        return new PageUtil(draw, result);
+        return new JQueryDatatablesPage(draw, result);
     }
 
     @GetMapping("{group}/{name}/add")
