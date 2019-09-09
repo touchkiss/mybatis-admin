@@ -14,7 +14,8 @@ import com.github.pagehelper.PageHelper;
 <#if entityPackage??>import ${entityPackage};</#if>
 <#if packageName!=implPackageName>import ${packageName}.${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao;</#if>
 <#if mapperPackage!=implPackageName>import ${mapperPackage}.${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Mapper;</#if>
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Component;<#if context.isUseLombok()>
+import lombok.AllArgsConstructor;</#if>
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -26,9 +27,10 @@ import java.util.*;
  * @author Touchkiss
  */
 @Component<#if tableConfig.getSchema()??>("${tableConfig.getSchema()}${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl")</#if>
-@SuppressWarnings({ "unchecked", "rawtypes" })
-public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl implements ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao {
-    @Resource(name = "${mapperBeanName}")
+@SuppressWarnings({ "unchecked", "rawtypes" })<#if context.isUseLombok()>
+@AllArgsConstructor</#if>
+public class ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}DaoImpl implements ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao {<#if !context.isUseLombok()>
+    @Resource(name = "${mapperBeanName}")</#if>
     private ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Mapper mapper;
 
     @Override

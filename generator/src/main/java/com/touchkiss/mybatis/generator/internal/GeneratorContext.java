@@ -22,6 +22,7 @@ public class GeneratorContext {
     private Map<String, String> javaTypeChange;
     private String beanNameSuffix;
     private boolean useMark;
+    private boolean useLombok;
 
     private void initDefaultParams() {
         this.generatorConfig.put("XMLGENERATOR_ANNOTATIONS", new String[]{"org.apache.ibatis.annotations.Mapper"});
@@ -34,6 +35,14 @@ public class GeneratorContext {
 
     public boolean getUseMark() {
         return this.useMark;
+    }
+
+    public boolean isUseLombok() {
+        return useLombok;
+    }
+
+    public void setUseLombok(boolean useLombok) {
+        this.useLombok = useLombok;
     }
 
     public void setBeanNameSuffix(String beanNameSuffix) {

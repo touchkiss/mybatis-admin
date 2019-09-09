@@ -148,12 +148,12 @@
             keyProperty="<#list primaryKeyColumns as col><#if col_index gt 0>, </#if>${col.getJavaProperty()}</#list>"</#if>>
         <#if tableConfig.selectKeys??><#list tableConfig.getSelectKeys() as selectKey><#if selectKey.getExistColumn()>
         <selectKey keyProperty="${selectKey.getJavaProperty()}" order="${selectKey.getOrder()}"
-                   resultType="${selectKey.getResultType()}"
-                   statementType="${selectKey.getStatementType()}">${selectKey.getStatement()}</selectKey>
+        resultType="${selectKey.getResultType()}"
+        statementType="${selectKey.getStatementType()}">${selectKey.getStatement()}</selectKey>
         </#if></#list></#if>
-        insert into <#if tableConfig.getSchema()??><#if context.getUseMark()>
-        "</#if>${tableConfig.getSchema()}<#if context.getUseMark()>"</#if>.</#if><#if context.getUseMark()>
-        "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if> (<#list columns as column><#if column_index gt 0>,</#if><#if context.getUseMark()>"</#if>${column.getColumnName()}<#if context.getUseMark()>"</#if></#list>)
+            insert into <#if tableConfig.getSchema()??><#if context.getUseMark()>
+            "</#if>${tableConfig.getSchema()}<#if context.getUseMark()>"</#if>.</#if><#if context.getUseMark()>
+            "</#if>${table.getTableName()}<#if context.getUseMark()>"</#if> (<#list columns as column><#if column_index gt 0>,</#if><#if context.getUseMark()>"</#if>${column.getColumnName()}<#if context.getUseMark()>"</#if></#list>)
         values (<#list columns as column><#if column_index gt 0>,</#if><if test="record.${column.getJavaProperty()} != null">${r'#'}{record.${column.getJavaProperty()},jdbcType=${column.getJdbcType()}}</if><if test="record.${column.getJavaProperty()} == null">null</if></#list>)
     </insert>
 

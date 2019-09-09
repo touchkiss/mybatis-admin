@@ -3,7 +3,8 @@
 package ${tableConfig.getPackageName()};
 
 import com.touchkiss.mybatis.admin.annotation.AdminBean;
-import com.touchkiss.mybatis.admin.annotation.AdminColumn;
+import com.touchkiss.mybatis.admin.annotation.AdminColumn;<#if context.isUseLombok()>
+import lombok.Data;</#if>
 
 <#list table.getImports() as im>import ${im};
 </#list>
@@ -13,7 +14,8 @@ import com.touchkiss.mybatis.admin.annotation.AdminColumn;
  *
  * @author Touchkiss
  */
-@AdminBean("${table.getRemarks()}")
+@AdminBean("${table.getRemarks()}")<#if context.isUseLombok()>
+@Data</#if>
 public class ${tableConfig.getEntityName()}<#if tableConfig.getSupportSerialize()> implements java.io.Serializable</#if> {
 <#list columns as column>
     /**
@@ -27,7 +29,7 @@ public class ${tableConfig.getEntityName()}<#if tableConfig.getSupportSerialize(
      * ${customProperty.getRemarks()} 自定义属性
      */
     private ${customProperty.getJavaType().getTypeName()} ${customProperty.getJavaName()};
-</#list>
+</#list><#if !context.isUseLombok()>
 <#list columns as column>
 
     /**
@@ -59,5 +61,5 @@ public class ${tableConfig.getEntityName()}<#if tableConfig.getSupportSerialize(
     public ${customProperty.getJavaType().getTypeName()} get${customProperty.getPropertyUpper()}() {
         return this.${customProperty.getJavaName()};
     }
-</#list>
+</#list></#if>
 }

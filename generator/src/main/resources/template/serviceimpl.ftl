@@ -11,7 +11,9 @@ import com.touchkiss.mybatis.sqlbuild.selector.Selector;
 </#if>
 <#if primaryKeyColumns??><#if primaryKeyColumns?size gt 0><#else>import com.touchkiss.mybatis.sqlbuild.exceptions.NoPrimaryKeyException;</#if><#else>import com.touchkiss.mybatis.sqlbuild.exceptions.NoPrimaryKeyException;</#if>
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Service;<#if context.isUseLombok()>
+import lombok.AllArgsConstructor;</#if>
+
 import java.util.List;
 import java.util.Map;
 <#list table.imports as im>import ${im};</#list>
@@ -21,9 +23,10 @@ import java.util.Map;
  *
  * @author ${tableConfig.getEntityName()}ouchkiss
  */
-@Service
-public class ${tableConfig.getEntityName()}ServiceImpl implements ${tableConfig.getEntityName()}Service {
-    @Autowired
+@Service<#if context.isUseLombok()>
+@AllArgsConstructor</#if>
+public class ${tableConfig.getEntityName()}ServiceImpl implements ${tableConfig.getEntityName()}Service {<#if !context.isUseLombok()>
+    @Autowired</#if>
     private ${tableConfig.getEntityName()}${context.getBeanNameSuffix()}Dao dao;
 
 	@Override
