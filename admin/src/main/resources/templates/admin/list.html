@@ -2,38 +2,38 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <link rel="shortcut icon" href="/img/favicon.ico"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <link href="/img/favicon.ico" rel="shortcut icon"/>
     <title th:text="${registerInfo.showName}"></title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
     <!-- Bootstrap 3.3.7 -->
-    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/plugins/dataTables/DataTables-1.10.18/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="/plugins/dataTables/Buttons-1.5.6/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="/plugins/dataTables/ColReorder-1.5.0/css/colReorder.dataTables.min.css">
-    <link rel="stylesheet" href="/plugins/dataTables/FixedHeader-3.1.4/css/fixedHeader.dataTables.min.css">
+    <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/plugins/dataTables/DataTables-1.10.18/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="/plugins/dataTables/Buttons-1.5.6/css/buttons.dataTables.min.css" rel="stylesheet">
+    <link href="/plugins/dataTables/ColReorder-1.5.0/css/colReorder.dataTables.min.css" rel="stylesheet">
+    <link href="/plugins/dataTables/FixedHeader-3.1.4/css/fixedHeader.dataTables.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css"/>
+    <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
     <!-- Ionicons -->
-    <link rel="stylesheet" href="/bower_components/Ionicons/css/ionicons.min.css"/>
-    <link rel="stylesheet" href="/bower_components/select2/dist/css/select2.min.css">
+    <link href="/bower_components/Ionicons/css/ionicons.min.css" rel="stylesheet"/>
+    <link href="/bower_components/select2/dist/css/select2.min.css" rel="stylesheet">
     <!-- Theme style -->
-    <link rel="stylesheet" href="/css/AdminLTE.min.css"/>
+    <link href="/css/AdminLTE.min.css" rel="stylesheet"/>
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="/css/skins/_all-skins.min.css"/>
+    <link href="/css/skins/_all-skins.min.css" rel="stylesheet"/>
     <!-- Morris chart -->
-    <link rel="stylesheet" href="/bower_components/morris.js/morris.css"/>
+    <link href="/bower_components/morris.js/morris.css" rel="stylesheet"/>
     <!-- jvectormap -->
-    <link rel="stylesheet" href="/bower_components/jvectormap/jquery-jvectormap.css"/>
+    <link href="/bower_components/jvectormap/jquery-jvectormap.css" rel="stylesheet"/>
     <!-- Date Picker -->
-    <link rel="stylesheet" href="/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"/>
-    <link rel="stylesheet" href="/plugins/timepicker/bootstrap-timepicker.min.css"/>
-    <link rel="stylesheet"
-          href="/bower_components/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css">
+    <link href="/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+    <link href="/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet"/>
+    <link href="/bower_components/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet">
     <!-- bootstrap wysihtml5 - text editor -->
-    <link rel="stylesheet" href="/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css"/>
+    <link href="/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet"/>
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -44,8 +44,8 @@
     <![endif]-->
 
     <!-- Google Font -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"
+          rel="stylesheet">
     <style>
         ul.dropdown-menu li .input-group span.input-group-addon {
             width: 40px;
@@ -75,14 +75,14 @@
         <section class="content">
             <th:block th:if="${processResult != null and processResult.status==processResult.PROCESS_SUCCEEE}">
                 <div class="alert alert-success alert-dismissible" id="alertTip">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <button aria-hidden="true" class="close" data-dismiss="alert" type="button">×</button>
                     <h4><i class="icon fa fa-check"></i> 提示</h4>
                     <b th:text="${processResult.message}"></b>
                 </div>
             </th:block>
             <th:block th:if="${processResult != null and processResult.status==processResult.PROCESS_FAILED}">
                 <div class="alert alert-warning alert-dismissible" id="alertTip">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <button aria-hidden="true" class="close" data-dismiss="alert" type="button">×</button>
                     <h4><i class="icon fa fa-warning"></i> 提示</h4>
                     <b th:text="${processResult.message}"></b>
                 </div>
@@ -92,11 +92,11 @@
                     <h3 class="box-title">搜索与过滤条件</h3>
 
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
-                                title="" data-original-title="Collapse">
+                        <button class="btn btn-box-tool" data-original-title="Collapse" data-toggle="tooltip" data-widget="collapse"
+                                title="" type="button">
                             <i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
-                                title="" data-original-title="Remove">
+                        <button class="btn btn-box-tool" data-original-title="Remove" data-toggle="tooltip" data-widget="remove"
+                                title="" type="button">
                             <i class="fa fa-times"></i></button>
                     </div>
                 </div>
@@ -105,8 +105,8 @@
                             th:each="filter:${registerInfo.beanInfo.filterFields}">
 
                         <div class="input-group col-xs-3 col-md-3 form-group col-sm-6"
-                             th:if="'java.lang.Boolean' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or ${foreignInfoMap != null and foreignInfoMap.containsKey(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}"
-                             style="float: left;padding-right: 15px">
+                             style="float: left;padding-right: 15px"
+                             th:if="'java.lang.Boolean' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or ${foreignInfoMap != null and foreignInfoMap.containsKey(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}">
                             <div class="input-group-addon"
                                  th:text="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"></div>
                             <th:block
@@ -115,7 +115,7 @@
                                         th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'">
                                     <option value="">全部</option>
                                     <option th:each="option:${foreignInfoMap.get(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}"
-                                            th:value="${option.value}" th:text="${option.text}"></option>
+                                            th:text="${option.text}" th:value="${option.value}"></option>
                                 </select>
                             </th:block>
                             <th:block
@@ -129,15 +129,15 @@
                             </th:block>
                         </div>
                         <div class="input-group col-xs-3 col-md-3 form-group col-sm-6"
-                             th:unless="'java.lang.Boolean' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or ${foreignInfoMap != null and foreignInfoMap.containsKey(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}"
-                             style="float: left;padding-right: 15px">
+                             style="float: left;padding-right: 15px"
+                             th:unless="'java.lang.Boolean' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or ${foreignInfoMap != null and foreignInfoMap.containsKey(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}">
                             <div class="input-group-addon"
                                  th:text="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"></div>
                             <div class="input-group-btn">
                                 <th:block
                                         th:if="'java.lang.Integer' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or 'java.lang.Long' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or 'java.lang.Double' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or 'java.lang.Byte' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
+                                    <button aria-expanded="false" aria-haspopup="true" class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown" type="button">
                                         <span>=</span>
                                         <span class="sr-only"></span>
                                     </button>
@@ -145,50 +145,50 @@
                                         <li>
                                             <div class="input-group">
                                                 <span class="input-group-addon">&lt;</span>
-                                                <input type="text" class="form-control"
-                                                       title="小于"
+                                                <input class="form-control" th:attr="name='_p_'+${filter}+'_lt',id='_p_'+${filter}+'_lt'"
                                                        th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                       th:attr="name='_p_'+${filter}+'_lt',id='_p_'+${filter}+'_lt'">
-                                                <span class="input-group-btn clear" title="清空" disabled="true">
+                                                       title="小于"
+                                                       type="text">
+                                                <span class="input-group-btn clear" disabled="true" title="清空">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
                                             </div>
                                         </li>
-                                        <li role="separator" class="divider"></li>
+                                        <li class="divider" role="separator"></li>
                                         <li>
                                             <div class="input-group input-group">
                                                 <span class="input-group-addon">&gt;</span>
-                                                <input type="text" class="form-control"
-                                                       title="大于"
+                                                <input class="form-control" th:attr="name='_p_'+${filter}+'_gt',id='_p_'+${filter}+'_gt'"
                                                        th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                       th:attr="name='_p_'+${filter}+'_gt',id='_p_'+${filter}+'_gt'">
-                                                <span class="input-group-btn clear" title="清空" disabled="true">
+                                                       title="大于"
+                                                       type="text">
+                                                <span class="input-group-btn clear" disabled="true" title="清空">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
                                             </div>
                                         </li>
-                                        <li role="separator" class="divider"></li>
+                                        <li class="divider" role="separator"></li>
                                         <li>
                                             <div class="input-group input-group">
                                                 <span class="input-group-addon">!=</span>
-                                                <input type="text" class="form-control"
-                                                       title="不等于"
+                                                <input class="form-control" th:attr="name='_p_'+${filter}+'_ne',id='_p_'+${filter}+'_ne'"
                                                        th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                       th:attr="name='_p_'+${filter}+'_ne',id='_p_'+${filter}+'_ne'">
-                                                <span class="input-group-btn clear" title="清空" disabled="true">
+                                                       title="不等于"
+                                                       type="text">
+                                                <span class="input-group-btn clear" disabled="true" title="清空">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
                                             </div>
                                         </li>
-                                        <li role="separator" class="divider"></li>
+                                        <li class="divider" role="separator"></li>
                                         <li>
                                             <div class="input-group input-group">
                                                 <span class="input-group-addon">re</span>
-                                                <input type="text" class="form-control re"
-                                                       title="正则表达式"
+                                                <input class="form-control re" th:attr="name='_p_'+${filter}+'_re',id='_p_'+${filter}+'_re'"
                                                        th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                       th:attr="name='_p_'+${filter}+'_re',id='_p_'+${filter}+'_re'">
-                                                <span class="input-group-btn clear" title="清空" disabled="true">
+                                                       title="正则表达式"
+                                                       type="text">
+                                                <span class="input-group-btn clear" disabled="true" title="清空">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
                                             </div>
@@ -197,8 +197,8 @@
                                 </th:block>
                                 <th:block
                                         th:if="'java.util.Date' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
+                                    <button aria-expanded="false" aria-haspopup="true" class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown" type="button">
                                         <span>=&nbsp;<span class="badge" style="display: none">0</span></span>
                                         <span class="sr-only"></span>
                                     </button>
@@ -208,68 +208,68 @@
                                                 <span class="input-group-addon" title="小于">&lt;</span>
                                                 <th:block
                                                         th:switch="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).jdbctype}">
-                                                    <input th:case="'DATE'" type="text"
-                                                           class="form-control datepicker"
+                                                    <input class="form-control datepicker" th:attr="name='_p_'+${filter}+'_lt',id='_p_'+${filter}+'_lt'"
+                                                           th:case="'DATE'"
                                                            th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                           th:attr="name='_p_'+${filter}+'_lt',id='_p_'+${filter}+'_lt'"/>
-                                                    <input th:case="'TIME'" type="text"
-                                                           class="form-control timepicker"
+                                                           type="text"/>
+                                                    <input class="form-control timepicker" th:attr="name='_p_'+${filter}+'_lt',id='_p_'+${filter}+'_lt'"
+                                                           th:case="'TIME'"
                                                            th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                           th:attr="name='_p_'+${filter}+'_lt',id='_p_'+${filter}+'_lt'"/>
-                                                    <input th:case="*" type="text"
-                                                           class="form-control datetimepicker"
+                                                           type="text"/>
+                                                    <input class="form-control datetimepicker" th:attr="name='_p_'+${filter}+'_lt',id='_p_'+${filter}+'_lt'"
+                                                           th:case="*"
                                                            th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                           th:attr="name='_p_'+${filter}+'_lt',id='_p_'+${filter}+'_lt'"/>
+                                                           type="text"/>
                                                 </th:block>
-                                                <span class="input-group-btn clear" title="清空" disabled="true">
+                                                <span class="input-group-btn clear" disabled="true" title="清空">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
                                             </div>
                                         </li>
-                                        <li role="separator" class="divider"></li>
+                                        <li class="divider" role="separator"></li>
                                         <li>
                                             <div class="input-group input-group">
                                                 <span class="input-group-addon" title="大于">&gt;</span>
                                                 <th:block
                                                         th:switch="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).jdbctype}">
-                                                    <input th:case="'DATE'" type="text"
-                                                           class="form-control datepicker"
+                                                    <input class="form-control datepicker" th:attr="name='_p_'+${filter}+'_gt',id='_p_'+${filter}+'_gt'"
+                                                           th:case="'DATE'"
                                                            th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                           th:attr="name='_p_'+${filter}+'_gt',id='_p_'+${filter}+'_gt'"/>
-                                                    <input th:case="'TIME'" type="text"
-                                                           class="form-control timepicker"
+                                                           type="text"/>
+                                                    <input class="form-control timepicker" th:attr="name='_p_'+${filter}+'_gt',id='_p_'+${filter}+'_gt'"
+                                                           th:case="'TIME'"
                                                            th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                           th:attr="name='_p_'+${filter}+'_gt',id='_p_'+${filter}+'_gt'"/>
-                                                    <input th:case="*" type="text"
-                                                           class="form-control datetimepicker"
+                                                           type="text"/>
+                                                    <input class="form-control datetimepicker" th:attr="name='_p_'+${filter}+'_gt',id='_p_'+${filter}+'_gt'"
+                                                           th:case="*"
                                                            th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                           th:attr="name='_p_'+${filter}+'_gt',id='_p_'+${filter}+'_gt'"/>
+                                                           type="text"/>
                                                 </th:block>
-                                                <span class="input-group-btn clear" title="清空" disabled="true">
+                                                <span class="input-group-btn clear" disabled="true" title="清空">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
                                             </div>
                                         </li>
-                                        <li role="separator" class="divider"></li>
+                                        <li class="divider" role="separator"></li>
                                         <li>
                                             <div class="input-group input-group">
                                                 <span class="input-group-addon" title="不等于">!=</span>
                                                 <th:block
                                                         th:switch="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).jdbctype}">
-                                                    <input th:case="'DATE'" type="text"
-                                                           class="form-control datepicker"
+                                                    <input class="form-control datepicker" th:attr="name='_p_'+${filter}+'_ne',id='_p_'+${filter}+'_ne'"
+                                                           th:case="'DATE'"
                                                            th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                           th:attr="name='_p_'+${filter}+'_ne',id='_p_'+${filter}+'_ne'"/>
-                                                    <input th:case="'TIME'" type="text"
-                                                           class="form-control timepicker"
+                                                           type="text"/>
+                                                    <input class="form-control timepicker" th:attr="name='_p_'+${filter}+'_ne',id='_p_'+${filter}+'_ne'"
+                                                           th:case="'TIME'"
                                                            th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                           th:attr="name='_p_'+${filter}+'_ne',id='_p_'+${filter}+'_ne'"/>
-                                                    <input th:case="*" type="text"
-                                                           class="form-control datetimepicker"
+                                                           type="text"/>
+                                                    <input class="form-control datetimepicker" th:attr="name='_p_'+${filter}+'_ne',id='_p_'+${filter}+'_ne'"
+                                                           th:case="*"
                                                            th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                           th:attr="name='_p_'+${filter}+'_ne',id='_p_'+${filter}+'_ne'"/>
+                                                           type="text"/>
                                                 </th:block>
-                                                <span class="input-group-btn clear" title="清空" disabled="true">
+                                                <span class="input-group-btn clear" disabled="true" title="清空">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
                                             </div>
@@ -278,8 +278,8 @@
                                 </th:block>
                                 <th:block
                                         th:if="'java.lang.String' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
+                                    <button aria-expanded="false" aria-haspopup="true" class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown" type="button">
                                         <span>包含<span class="badge" style="display: none">0</span></span>
                                         <span class="sr-only"></span>
                                     </button>
@@ -287,34 +287,34 @@
                                         <li>
                                             <div class="input-group">
                                                 <span class="input-group-addon" title="等于">=</span>
-                                                <input type="text" class="form-control"
+                                                <input class="form-control" th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'"
                                                        th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                       th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'">
-                                                <span class="input-group-btn clear" title="清空" disabled="true">
+                                                       type="text">
+                                                <span class="input-group-btn clear" disabled="true" title="清空">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
                                             </div>
                                         </li>
-                                        <li role="separator" class="divider"></li>
+                                        <li class="divider" role="separator"></li>
                                         <li>
                                             <div class="input-group input-group">
                                                 <span class="input-group-addon" title="不等于">!=</span>
-                                                <input type="text" class="form-control"
+                                                <input class="form-control" th:attr="name='_p_'+${filter}+'_ne',id='_p_'+${filter}+'_ne'"
                                                        th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                       th:attr="name='_p_'+${filter}+'_ne',id='_p_'+${filter}+'_ne'">
-                                                <span class="input-group-btn clear" title="清空" disabled="true">
+                                                       type="text">
+                                                <span class="input-group-btn clear" disabled="true" title="清空">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
                                             </div>
                                         </li>
-                                        <li role="separator" class="divider"></li>
+                                        <li class="divider" role="separator"></li>
                                         <li>
                                             <div class="input-group input-group">
                                                 <span class="input-group-addon" title="正则表达式">re</span>
-                                                <input type="text" class="form-control re"
+                                                <input class="form-control re" th:attr="name='_p_'+${filter}+'_re',id='_p_'+${filter}+'_re'"
                                                        th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
-                                                       th:attr="name='_p_'+${filter}+'_re',id='_p_'+${filter}+'_re'">
-                                                <span class="input-group-btn clear" title="清空" disabled="true">
+                                                       type="text">
+                                                <span class="input-group-btn clear" disabled="true" title="清空">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
                                             </div>
@@ -328,7 +328,7 @@
                                         th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'">
                                     <option value="">全部</option>
                                     <option th:each="option:${foreignInfoMap.get(registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyName)}"
-                                            th:value="${option.value}" th:text="${option.text}"></option>
+                                            th:text="${option.text}" th:value="${option.value}"></option>
                                 </select>
                             </th:block>
                             <th:block
@@ -342,33 +342,33 @@
                                 <th:block
                                         th:if="'java.util.Date' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
                                         th:switch="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).jdbctype}">
-                                    <input th:case="'DATE'" type="text"
-                                           class="form-control datepicker"
-                                           th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                    <input aria-label="Text input with segmented button dropdown" class="form-control datepicker"
                                            th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'"
-                                           aria-label="Text input with segmented button dropdown"/>
-                                    <input th:case="'TIME'" type="text"
-                                           class="form-control timepicker"
+                                           th:case="'DATE'"
                                            th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                           type="text"/>
+                                    <input aria-label="Text input with segmented button dropdown" class="form-control timepicker"
                                            th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'"
-                                           aria-label="Text input with segmented button dropdown"/>
-                                    <input th:case="*" type="text"
-                                           class="form-control datetimepicker"
+                                           th:case="'TIME'"
                                            th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                           type="text"/>
+                                    <input aria-label="Text input with segmented button dropdown" class="form-control datetimepicker"
                                            th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'"
-                                           aria-label="Text input with segmented button dropdown">
+                                           th:case="*"
+                                           th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                           type="text">
                                 </th:block>
-                                <input th:if="'java.lang.String' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
-                                       type="text"
-                                       th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                <input aria-label="Text input with segmented button dropdown"
+                                       class="form-control"
                                        th:attr="name='_p_'+${filter}+'_cn',id='_p_'+${filter}+'_cn'"
-                                       class="form-control" aria-label="Text input with segmented button dropdown"/>
-                                <input th:unless="'java.lang.String' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or 'java.util.Date' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
-                                       type="text"
-                                       th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                       th:if="'java.lang.String' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}"
+                                       th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}" type="text"/>
+                                <input aria-label="Text input with segmented button dropdown"
+                                       class="form-control"
                                        th:attr="name='_p_'+${filter}+'_eq',id='_p_'+${filter}+'_eq'"
-                                       class="form-control" aria-label="Text input with segmented button dropdown"/>
-                                <span class="input-group-btn clear" title="清空" disabled="true">
+                                       th:placeholder="${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyShowName}"
+                                       th:unless="'java.lang.String' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType} or 'java.util.Date' eq ${registerInfo.beanInfo.beanPropertyInfoMap.get(filter).propertyType}" type="text"/>
+                                <span class="input-group-btn clear" disabled="true" title="清空">
                                     <button class="btn btn-default" type="button">X</button>
                                 </span>
                             </th:block>
@@ -378,8 +378,8 @@
                          style="float: left;padding-right: 15px">
                         <div class="input-group-addon">全部字段</div>
                         <div class="input-group-btn">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
+                            <button aria-expanded="false" aria-haspopup="true" class="btn btn-default dropdown-toggle"
+                                    data-toggle="dropdown" type="button">
                                 <span>包含</span>
                                 <span class="sr-only"></span>
                             </button>
@@ -387,31 +387,31 @@
                                 <li>
                                     <div class="input-group">
                                         <span class="input-group-addon" title="等于">=</span>
-                                        <input type="text" class="form-control" placeholder="全部字段" name="_q_eq"
-                                               id="_q_eq">
-                                        <span class="input-group-btn clear" title="清空" disabled="true">
+                                        <input class="form-control" id="_q_eq" name="_q_eq" placeholder="全部字段"
+                                               type="text">
+                                        <span class="input-group-btn clear" disabled="true" title="清空">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
                                     </div>
                                 </li>
-                                <li role="separator" class="divider"></li>
+                                <li class="divider" role="separator"></li>
                                 <li>
                                     <div class="input-group input-group">
                                         <span class="input-group-addon" title="不等于">!=</span>
-                                        <input type="text" class="form-control" placeholder="全部字段" name="_q_ne"
-                                               id="_q_ne">
-                                        <span class="input-group-btn clear" title="清空" disabled="true">
+                                        <input class="form-control" id="_q_ne" name="_q_ne" placeholder="全部字段"
+                                               type="text">
+                                        <span class="input-group-btn clear" disabled="true" title="清空">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
                                     </div>
                                 </li>
-                                <li role="separator" class="divider"></li>
+                                <li class="divider" role="separator"></li>
                                 <li>
                                     <div class="input-group input-group">
                                         <span class="input-group-addon" title="正则表达式">re</span>
-                                        <input type="text" class="form-control re" placeholder="全部字段" name="_q_re"
-                                               id="_q_re">
-                                        <span class="input-group-btn clear" title="清空" disabled="true">
+                                        <input class="form-control re" id="_q_re" name="_q_re" placeholder="全部字段"
+                                               type="text">
+                                        <span class="input-group-btn clear" disabled="true" title="清空">
                                                     <button class="btn btn-default" type="button">X</button>
                                                 </span>
                                     </div>
@@ -420,21 +420,21 @@
 
                         </div>
 
-                        <input type="text" placeholder="全部字段" class="form-control"
-                               aria-label="Text input with segmented button dropdown" name="_q_cn" id="_q_cn">
-                        <span class="input-group-btn clear" title="清空" disabled="true">
+                        <input aria-label="Text input with segmented button dropdown" class="form-control" id="_q_cn"
+                               name="_q_cn" placeholder="全部字段" type="text">
+                        <span class="input-group-btn clear" disabled="true" title="清空">
                             <button class="btn btn-default" type="button">X</button>
                         </span>
                     </div>
                 </div>
                 <div class="box-footer">
-                    <button type="button" id="query" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;搜索
+                    <button class="btn btn-primary" id="query" type="button"><i class="fa fa-search"></i>&nbsp;搜索
                     </button>
                     &nbsp;&nbsp;&nbsp;
-                    <a type="button" class="btn btn-primary"
-                       th:attr="href='/admin/'+${group}+'/'+${name}+'/add'"><i class="fa fa-plus"></i>&nbsp;添加</a>
+                    <a class="btn btn-primary" th:attr="href='/admin/'+${group}+'/'+${name}+'/add'"
+                       type="button"><i class="fa fa-plus"></i>&nbsp;添加</a>
                     &nbsp;&nbsp;&nbsp;
-                    <button type="button" id="multiDelete" class="btn btn-danger"><i class="fa fa-trash"></i>&nbsp;批量删除
+                    <button class="btn btn-danger" id="multiDelete" type="button"><i class="fa fa-trash"></i>&nbsp;批量删除
                     </button>
                 </div>
             </div>
@@ -443,11 +443,11 @@
                 <div class="box-header with-border">
                     <h3 class="box-title" th:text="${registerInfo.showName}"></h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
-                                title="" data-original-title="Collapse">
+                        <button class="btn btn-box-tool" data-original-title="Collapse" data-toggle="tooltip" data-widget="collapse"
+                                title="" type="button">
                             <i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
-                                title="" data-original-title="Remove">
+                        <button class="btn btn-box-tool" data-original-title="Remove" data-toggle="tooltip" data-widget="remove"
+                                title="" type="button">
                             <i class="fa fa-times"></i></button>
                     </div>
                 </div>
@@ -455,12 +455,12 @@
                     <div class="dataTables_wrapper form-inline dt-bootstrap" style="overflow: auto;">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table id="table"
-                                       class="table table-bordered table-striped table-hover dataTable">
+                                <table class="table table-bordered table-striped table-hover dataTable"
+                                       id="table">
                                     <thead>
                                     <tr>
-                                        <th style="width: 15px;"><input type="checkbox" id="checkAll"
-                                                                        style="display: block;"/></th>
+                                        <th style="width: 15px;"><input id="checkAll" style="display: block;"
+                                                                        type="checkbox"/></th>
                                         <th th:each="field:${registerInfo.beanInfo.showFields}"
                                             th:text="${registerInfo.beanInfo.beanPropertyInfoMap.get(field).propertyShowName}"></th>
                                         <th>操作</th>

@@ -2,36 +2,36 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <link rel="shortcut icon" href="/img/favicon.ico"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <link href="/img/favicon.ico" rel="shortcut icon"/>
     <title th:text="'更新'+${registerInfo.showName}"></title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
     <!-- Bootstrap 3.3.7 -->
-    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+    <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css"/>
+    <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
     <!-- Ionicons -->
-    <link rel="stylesheet" href="/bower_components/Ionicons/css/ionicons.min.css"/>
-    <link rel="stylesheet" href="/bower_components/select2/dist/css/select2.min.css">
+    <link href="/bower_components/Ionicons/css/ionicons.min.css" rel="stylesheet"/>
+    <link href="/bower_components/select2/dist/css/select2.min.css" rel="stylesheet">
     <!-- Theme style -->
-    <link rel="stylesheet" href="/css/AdminLTE.min.css"/>
+    <link href="/css/AdminLTE.min.css" rel="stylesheet"/>
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="/css/skins/_all-skins.min.css"/>
+    <link href="/css/skins/_all-skins.min.css" rel="stylesheet"/>
     <!-- Morris chart -->
-    <link rel="stylesheet" href="/bower_components/morris.js/morris.css"/>
+    <link href="/bower_components/morris.js/morris.css" rel="stylesheet"/>
     <!-- jvectormap -->
-    <link rel="stylesheet" href="/bower_components/jvectormap/jquery-jvectormap.css"/>
+    <link href="/bower_components/jvectormap/jquery-jvectormap.css" rel="stylesheet"/>
     <!-- Date Picker -->
-    <link rel="stylesheet" href="/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"/>
+    <link href="/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
     <!-- Daterange picker -->
-    <link rel="stylesheet" href="/plugins/timepicker/bootstrap-timepicker.min.css"/>
-    <link rel="stylesheet"
-          href="/bower_components/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css">
+    <link href="/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet"/>
+    <link href="/bower_components/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet">
     <!-- bootstrap wysihtml5 - text editor -->
-    <link rel="stylesheet" href="/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css"/>
+    <link href="/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet"/>
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -42,8 +42,8 @@
     <![endif]-->
 
     <!-- Google Font -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"
+          rel="stylesheet">
     <style>
         ul.dropdown-menu li .input-group span.input-group-addon {
             width: 40px;
@@ -72,36 +72,36 @@
                 <div class="box-header with-border">
                     <h3 class="box-title" th:text="'更新'+${registerInfo.showName}"></h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
-                                title="" data-original-title="Collapse">
+                        <button class="btn btn-box-tool" data-original-title="Collapse" data-toggle="tooltip" data-widget="collapse"
+                                title="" type="button">
                             <i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
-                                title="" data-original-title="Remove">
+                        <button class="btn btn-box-tool" data-original-title="Remove" data-toggle="tooltip" data-widget="remove"
+                                title="" type="button">
                             <i class="fa fa-times"></i></button>
                     </div>
                 </div>
-                <form role="form" th:id="mainForm" th:action="${actionPath}" method="post">
+                <form method="post" role="form" th:action="${actionPath}" th:id="mainForm">
                     <div class="box-body">
                         <th:block th:each="column:${registerInfo.beanInfo.beanPropertyInfos}">
-                            <div th:unless="'java.lang.Boolean' eq ${column.propertyType}" class="form-group">
+                            <div class="form-group" th:unless="'java.lang.Boolean' eq ${column.propertyType}">
                                 <label th:attr="for=${column.propertyName}"><b th:text="${column.propertyShowName}"></b>&nbsp;&nbsp;<span
-                                        th:if="${column.remarks != ''}" class="fa fa-info-circle"
-                                        th:title="${column.remarks}"></span><span class="fa fa-eye" title="预览"
+                                        class="fa fa-info-circle" th:if="${column.remarks != ''}"
+                                        th:title="${column.remarks}"></span><span class="fa fa-eye" style="cursor: pointer;"
                                                                                   th:attr="onclick='previewEditor(\''+${column.propertyName}+'\')'"
                                                                                   th:if="'LONGVARCHAR' eq ${column.jdbctype} or 'LONGNVARCHAR' eq ${column.jdbctype}"
-                                                                                  style="cursor: pointer;"></span></label>
+                                                                                  title="预览"></span></label>
                                 <th:block
                                         th:if="${foreignInfoMap != null and foreignInfoMap.containsKey(column.propertyName)}">
                                     <select class="form-control select2"
                                             th:name="${column.propertyName}">
                                         <option value="">请选择</option>
                                         <th:block th:each="option:${foreignInfoMap.get(column.propertyName)}">
-                                            <option th:if="${valueMap.get(column.propertyName)} eq ${option.value}"
-                                                    selected="selected"
-                                                    th:value="${option.value}" th:text="${option.text}"></option>
-                                            <option th:unless="${valueMap.get(column.propertyName)} eq ${option.value}"
-                                                    th:value="${option.value}"
-                                                    th:text="${option.text}"></option>
+                                            <option selected="selected"
+                                                    th:if="${valueMap.get(column.propertyName)} eq ${option.value}"
+                                                    th:text="${option.text}" th:value="${option.value}"></option>
+                                            <option th:text="${option.text}"
+                                                    th:unless="${valueMap.get(column.propertyName)} eq ${option.value}"
+                                                    th:value="${option.value}"></option>
                                         </th:block>
                                     </select>
                                 </th:block>
@@ -111,60 +111,60 @@
                                         <th:block
                                                 th:if="'LONGVARCHAR' eq ${column.jdbctype} or 'LONGNVARCHAR' eq ${column.jdbctype}">
                                             <div class="form-control editor"
-                                                 th:utext="${valueMap.get(column.propertyName)}"
                                                  th:attr="data-id=${column.propertyName}"
-                                                 th:id="${'editor-'+column.propertyName}"></div>
-                                            <input type="hidden" th:id="${column.propertyName}"
-                                                   th:name="${column.propertyName}"
-                                                   th:value="${valueMap.get(column.propertyName)}"/>
+                                                 th:id="${'editor-'+column.propertyName}"
+                                                 th:utext="${valueMap.get(column.propertyName)}"></div>
+                                            <input th:id="${column.propertyName}" th:name="${column.propertyName}"
+                                                   th:value="${valueMap.get(column.propertyName)}"
+                                                   type="hidden"/>
                                         </th:block>
-                                        <input th:unless="'LONGVARCHAR' eq ${column.jdbctype} or 'LONGNVARCHAR' eq ${column.jdbctype}"
-                                               type="text"
-                                               class="form-control" th:id="${column.propertyName}"
-                                               th:name="${column.propertyName}"
+                                        <input class="form-control"
+                                               th:id="${column.propertyName}"
+                                               th:maxlength="${column.length}" th:name="${column.propertyName}"
+                                               th:placeholder="${column.propertyShowName}"
+                                               th:unless="'LONGVARCHAR' eq ${column.jdbctype} or 'LONGNVARCHAR' eq ${column.jdbctype}"
                                                th:value="${valueMap.get(column.propertyName)}"
-                                               th:maxlength="${column.length}"
-                                               th:placeholder="${column.propertyShowName}"/>
+                                               type="text"/>
                                     </th:block>
                                     <th:block th:if="'java.util.Date' eq ${column.propertyType}"
                                               th:switch="${column.jdbctype}">
-                                        <input th:case="'DATE'" type="text"
-                                               class="form-control datepicker" th:id="${column.propertyName}"
-                                               th:name="${column.propertyName}"
+                                        <input class="form-control datepicker" th:case="'DATE'"
+                                               th:id="${column.propertyName}" th:name="${column.propertyName}"
+                                               th:placeholder="${column.propertyShowName}"
                                                th:value="${valueMap.get(column.propertyName)}"
-                                               th:placeholder="${column.propertyShowName}">
-                                        <input th:case="'TIME'" type="text"
-                                               class="form-control timepicker" th:id="${column.propertyName}"
-                                               th:name="${column.propertyName}"
+                                               type="text">
+                                        <input class="form-control timepicker" th:case="'TIME'"
+                                               th:id="${column.propertyName}" th:name="${column.propertyName}"
+                                               th:placeholder="${column.propertyShowName}"
                                                th:value="${valueMap.get(column.propertyName)}"
-                                               th:placeholder="${column.propertyShowName}">
-                                        <input th:case="*" type="text"
-                                               class="form-control datetimepicker" th:id="${column.propertyName}"
-                                               th:name="${column.propertyName}"
+                                               type="text">
+                                        <input class="form-control datetimepicker" th:case="*"
+                                               th:id="${column.propertyName}" th:name="${column.propertyName}"
+                                               th:placeholder="${column.propertyShowName}"
                                                th:value="${valueMap.get(column.propertyName)}"
-                                               th:placeholder="${column.propertyShowName}">
+                                               type="text">
                                     </th:block>
-                                    <input th:if="'java.lang.Integer' eq ${column.propertyType} or 'java.lang.Long' eq ${column.propertyType} or 'java.lang.Double' eq ${column.propertyType} or 'java.lang.Byte' eq ${column.propertyType} or 'java.lang.Short' eq ${column.propertyType}"
-                                           type="number" class="form-control" th:id="${column.propertyName}"
+                                    <input class="form-control"
+                                           th:id="${column.propertyName}" th:if="'java.lang.Integer' eq ${column.propertyType} or 'java.lang.Long' eq ${column.propertyType} or 'java.lang.Double' eq ${column.propertyType} or 'java.lang.Byte' eq ${column.propertyType} or 'java.lang.Short' eq ${column.propertyType}" th:maxlength="${column.length}"
                                            th:name="${column.propertyName}"
+                                           th:placeholder="${column.propertyShowName}"
                                            th:value="${valueMap.get(column.propertyName)}"
-                                           th:maxlength="${column.length}"
-                                           th:placeholder="${column.propertyShowName}">
+                                           type="number">
                                 </th:block>
                             </div>
                             <label th:if="'java.lang.Boolean' eq ${column.propertyType}">
-                                <input type="checkbox" th:attr="data-id=${column.propertyName}"
-                                       th:checked="${valueMap.get(column.propertyName)}"/><b
+                                <input th:attr="data-id=${column.propertyName}" th:checked="${valueMap.get(column.propertyName)}"
+                                       type="checkbox"/><b
                                     th:text="${column.propertyShowName}"></b>&nbsp;&nbsp;<span
-                                    th:if="${column.remarks != ''}" class="fa fa-info-circle"
+                                    class="fa fa-info-circle" th:if="${column.remarks != ''}"
                                     th:title="${column.remarks}"></span>
-                                <input type="hidden" th:id="${column.propertyName}" th:name="${column.propertyName}"
-                                       th:value="${valueMap.get(column.propertyName)}">
+                                <input th:id="${column.propertyName}" th:name="${column.propertyName}" th:value="${valueMap.get(column.propertyName)}"
+                                       type="hidden">
                             </label>
                         </th:block>
                     </div>
                     <div class="box-footer">
-                        <button type="submit" onclick="return checkSubmit();" class="btn btn-primary">保存</button>
+                        <button class="btn btn-primary" onclick="return checkSubmit();" type="submit">保存</button>
                     </div>
                 </form>
             </div>
@@ -173,11 +173,11 @@
     </div>
     <div th:include="admin/footer::footer"></div>
     <div th:include="admin/aside::aside"></div>
-    <div id="editorPreviewModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal fade" id="editorPreviewModal" role="dialog" tabindex="-1">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                             aria-hidden="true">×</span></button>
                     <h4 class="modal-title" id="editorPreviewModalTitle"></h4>
                 </div>

@@ -29,7 +29,7 @@ public class Generator {
         //初始化数据库连接
         JDBCConnectionConfiguration dataConfig = new JDBCConnectionConfiguration();
         dataConfig.setDriverClass("com.mysql.cj.jdbc.Driver");
-        dataConfig.setUrl("jdbc:mysql://127.0.0.1:3306/ai?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true");
+        dataConfig.setUrl("jdbc:mysql://127.0.0.1:3306/ai?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true");
         dataConfig.setUsername("root");
         dataConfig.setPassword("mouse");
         dataConfig.getProperties().put("remarks", "true");
@@ -64,6 +64,7 @@ public class Generator {
                 packages);
         context.setForceBigDecimals(false);
         context.setUseMark(false);
+        context.setUseLombok(true);
         List<TableConfig> tableConfigs = Lists.newArrayList();
 
 //        tableConfigs.add(new TableConfig("d_table").overwrite(true).supportSerialize(true).useGeneratedKeys(true).cache(new Cache()));
